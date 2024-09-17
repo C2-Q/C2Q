@@ -2,9 +2,14 @@ from qiskit.algorithms.minimum_eigensolvers import VQE
 from qiskit.algorithms.optimizers import SLSQP, SPSA, COBYLA
 from qiskit.primitives import Estimator
 from qiskit.quantum_info import SparsePauliOp
+from qiskit import transpile
+from qiskit_aer import AerSimulator
+
+from qiskit.visualization import plot_distribution
 
 from qiskit.circuit.library import EfficientSU2
 
+import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
@@ -106,6 +111,12 @@ for i in range(len(adjacency_matrix[0])):
             Q[i][j] = 1
     Q[i][i] = -sum
 
+edge_list = list(graph.edges())
+pos = nx.spring_layout(graph)
+nx.draw(graph, pos, with_labels=True, node_size=500, font_size=10)
+plt.title("Graph read from the adjacency matrix")
+plt.show()
+
 # Define an ansatz circuit for VQE
 ansatz = EfficientSU2(len(Q))
 
@@ -115,4 +126,28 @@ hamiltonian, offset = convert_qubo_to_ising(Q)
 vqe = VQE(Estimator(), ansatz, SLSQP())
 vqe_result = vqe.compute_minimum_eigenvalue(hamiltonian)
 
-print('Result:', vqe_result.eigenvalue + offset)
+print("Result:", vqe_result.eigenvalue + offset)
+
+backend = AerSimulator()
+
+qc_assigned_parameters = vqe_result.optimal_circuit.assign_parameters(vqe_result.optimal_parameters)
+qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
+qc_transpiled.measure_all()
+
+counts = backend.run(qc_transpiled, shots=50000).result().get_counts()
+
+highest_possible_solution = 0
+max_count = 0
+for key, count in counts.items():
+    if count > max_count:
+        max_count = count
+        highest_possible_solution = key
+print(f"Highest possible solution: {highest_possible_solution}")
+
+# Convert string to array
+X = np.fromstring(highest_possible_solution, np.int8) - 48
+
+# Calculate the result using the highest possible solution
+E = X.T @ Q @ X
+
+print(f"Result: {E}")

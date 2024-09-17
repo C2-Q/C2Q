@@ -274,8 +274,6 @@ X = np.fromstring(highest_possible_solution, np.int8) - 48
 
 # Calculate the result using the highest possible solution
 E = X.T @ Q @ X
-
-print(f"Highest possible solution: {highest_possible_solution}")
 print(f"Result: {E}")
 
 # Solve using a classical solver
