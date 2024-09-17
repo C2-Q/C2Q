@@ -1,4 +1,7 @@
-# C2|Q> Project
+# C2Q-Project
+old project URL: https://github.com/Bossy-Ye/C2Q
+
+C2Q is aiming to bridge the gap between classical and quantum computing.
 
 ## Algorithms Pools
 - QAOA
@@ -6,11 +9,6 @@
 - VQE
 ## Parser
 training of model of our parser here: https://github.com/Bossy-Ye/C2Q-Parser
-
-# C2Q-Project
-old project URL: https://github.com/Bossy-Ye/C2Q
-
-C2Q is aiming to bridge the gap between classical and quantum computing.
 
 # How to contribute
 
