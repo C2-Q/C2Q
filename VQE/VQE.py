@@ -12,9 +12,6 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-
-
-
 # qubo to ising
 def convert_qubo_to_ising(qubo):
     # Number of qubits
