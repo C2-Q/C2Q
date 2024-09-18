@@ -8,12 +8,12 @@ from qiskit_aer import AerSimulator
 from qiskit.visualization import plot_distribution
 
 from qiskit.circuit.library import EfficientSU2
-
-
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
+
+# qubo to ising
 def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
