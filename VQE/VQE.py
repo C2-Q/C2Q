@@ -13,6 +13,7 @@ import networkx as nx
 import numpy as np
 
 # qubo to ising
+# test
 def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
