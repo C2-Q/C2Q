@@ -10,10 +10,10 @@ from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator
 
 from src.graph import Graph
-from src.grover import grover
-from src.parser import Parser, CodeVisitor
+from src.algorithms.grover import grover
+from src.parser.parser import Parser, CodeVisitor
 from src.problems.independent_set import IS
-from src.reducer import *
+from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
 

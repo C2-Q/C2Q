@@ -145,13 +145,3 @@ def sat_to_3sat(cnf):
         new_clauses.append(clause)
 
     return CNF(from_clauses=new_clauses)
-
-
-def cnf_to_qubo(cnf, method="Chancellor"):
-    """
-    """
-    return 1
-
-
-def qubo_to_ising(cnf):
-    return 1
