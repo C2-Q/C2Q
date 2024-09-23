@@ -3,17 +3,10 @@ from qiskit_aer import AerSimulator
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import PauliEvolutionGate
 from qiskit.quantum_info import SparsePauliOp
-from qiskit.visualization import plot_distribution
 
 from scipy.optimize import minimize
 
 import numpy as np
-import matplotlib.pyplot as plt
-import networkx as nx
-
-from gurobi_optimods.qubo import solve_qubo
-
-backend = AerSimulator()
 
 def convert_qubo_to_ising(qubo):
     # Number of qubits
@@ -90,7 +83,7 @@ def initialize_parameters(layers):
     return theta
 
 # Calculate the expectation value using the QUBO matrix. We are trying to minimize this expectation value.
-def calculate_expectation_value(theta, qc, qubo, parameters, exp_value_list, shots=10000):
+def calculate_expectation_value(theta, qc, qubo, parameters, exp_value_list, backend, shots=10000):
     # Assign the gammas and the betas to the circuit
     qc_assigned_parameters = qc.assign_parameters({parameters:theta})
     # Transpile the circuit for the backend and measure the qubits
@@ -125,11 +118,12 @@ def calculate_expectation_value(theta, qc, qubo, parameters, exp_value_list, sho
     
     return exp_value
 
-def optimize_parameters(qc, qubo, parameters, theta):
+def optimize_parameters(qc, qubo, parameters, theta, backend):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
-    min_minimized_optimization = minimize(calculate_expectation_value, theta, method="Powell", args=(qc, qubo, parameters, exp_value_list))
+    # Here we can change the optimization method etc.
+    min_minimized_optimization = minimize(calculate_expectation_value, theta, method="Powell", args=(qc, qubo, parameters, exp_value_list, backend))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
@@ -137,7 +131,56 @@ def optimize_parameters(qc, qubo, parameters, theta):
 
     return min_minimized_optimization.x, minimum_objective_value, min_exp_value_list
 
-def qaoa(qubo, layers):
+def qaoa_no_optimization(qubo, layers):
+    """
+    Implements QAOA with given QUBO without optimization. Circuit can be optimized later.
+
+    Parameters:
+    - qubo (numpy.ndarray): A QUBO matrix which defines the problem to be solved.
+    - layers (int): The number of QAOA layers to apply.
+
+    Returns:
+    - qc (QuantumCircuit): Complete QAOA circuit.
+    - parameters (ParameterVector): A list of parameters used in the QAOA circuit.
+    - theta (numpy.ndarray): An array of initial parameters for the QAOA
+    """
+
+    # Number of qubits = length of the QUBO matrix
+    n = len(qubo)
+
+    # Initialize circuit
+    qc = initialize_qaoa(n)
+
+    # Initialize parameters
+    parameters = ParameterVector('theta', 2*layers)
+    theta = initialize_parameters(layers)
+
+    # Convert the QUBO matrix to the Ising Hamiltonian
+    ising, offset = convert_qubo_to_ising(qubo)
+
+    # Apply the QAOA layers
+    add_qaoa_layer(qc, ising, parameters, layers, n)
+
+    # Return QAOA circuit, parameter list and initial values for the parameters
+    return qc, parameters, theta
+
+def qaoa_optimize(qubo, layers, backend=AerSimulator()):
+    """
+    Implements QAOA with given QUBO.
+
+    Parameters:
+    - qubo (numpy.ndarray): A QUBO matrix which defines the problem to be solved.
+    - layers (int): The number of QAOA layers to apply.
+    - backend: The backend to run the QAOA on.
+
+    Returns:
+    - qc (QuantumCircuit): Complete QAOA circuit.
+    - parameters (ParameterVector): A list of parameters used in the QAOA circuit.
+    - theta (numpy.ndarray): An array of optimized parameters
+    - minimum_objective_value (float): Minimum objective value at the end of the optimization
+    - exp_value_list (list): A list of expectation values in every QAOA layer
+    """
+
     # Number of qubits = length of the QUBO matrix
     n = len(qubo)
 
@@ -155,107 +198,7 @@ def qaoa(qubo, layers):
     add_qaoa_layer(qc, ising, parameters, layers, n)
 
     # Optimize the parameters
-    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta)
+    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
 
-    return qc, theta, minimum_objective_value, exp_value_list, parameters
-
-# Define MaxCut problem with an adjacency matrix and turn it into a QUBO matrix
-
-adjacency_matrix = [[0, 1, 1, 1, 1, 1],
-                    [1, 0, 0, 1, 0, 0],
-                    [1, 0, 0, 1, 0, 0],
-                    [1, 1, 1, 0, 1, 1],
-                    [1, 0, 0, 1, 0, 1],
-                    [1, 0, 0, 1, 1, 0]]
-
-#adjacency_matrix = [[0, 1, 1, 1, 1, 1],
-#                    [1, 0, 1, 1, 1, 1],
-#                    [1, 1, 0, 1, 1, 1],
-#                    [1, 1, 1, 0, 1, 1],
-#                    [1, 1, 1, 1, 0, 1],
-#                    [1, 1, 1, 1, 1, 0]]
-
-#adjacency_matrix = [[0, 1, 0, 1, 0, 0, 0, 0],
-#                    [1, 0, 1, 1, 0, 0, 0, 0],
-#                    [0, 1, 0, 0, 0, 0, 1, 0],
-#                    [1, 1, 0, 0, 0, 1, 0, 0],
-#                    [0, 0, 0, 0, 0, 1, 0, 0],
-#                    [0, 0, 0, 1, 1, 0, 0, 0],
-#                    [0, 0, 1, 0, 0, 0, 0, 1],
-#                    [0, 0, 0, 0, 0, 0, 1, 0]]
-
-#adjacency_matrix = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-#                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]]
-
-graph = nx.Graph()
-vertex_number = len(adjacency_matrix)
-vertex_list = []
-for i in range(vertex_number):
-    vertex_list.append(i)
-    for j in range(vertex_number):
-        if adjacency_matrix[i][j] == 1:
-            graph.add_edge(i, j)
-
-num_nodes = graph.number_of_nodes()
-qubo = np.eye(num_nodes)
-
-for i in range(len(adjacency_matrix[0])):
-    sum = 0
-    for j in range(len(adjacency_matrix[0])):
-        sum = sum + adjacency_matrix[i][j]
-        if adjacency_matrix[i][j] == 1 and not i == j:
-            qubo[i][j] = 1
-    qubo[i][i] = -sum
-
-edge_list = list(graph.edges())
-pos = nx.spring_layout(graph)
-nx.draw(graph, pos, with_labels=True, node_size=500, font_size=10)
-plt.title("Graph read from the adjacency matrix")
-plt.show()
-
-# Run the QAOA and define the number of layers
-qc, theta, minimum_objective_value, exp_value_list, parameters = qaoa(qubo, 2)
-
-print("Result:", minimum_objective_value)
-
-print("Result with a classical solver: ", solve_qubo(qubo))
-
-qc_assigned_parameters = qc.assign_parameters({parameters:theta})
-qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
-qc_transpiled.measure_all()
-
-counts = backend.run(qc_transpiled, shots=50000).result().get_counts()
-
-highest_possible_solution = 0
-max_count = 0
-for key, count in counts.items():
-    if count > max_count:
-        max_count = count
-        highest_possible_solution = key
-print(f"Highest possible solution: {highest_possible_solution}")
-
-# Convert string to array
-X = np.fromstring(highest_possible_solution, np.int8) - 48
-
-# Calculate the result using the highest possible solution
-E = X.T @ Q @ X
-
-print(f"Result: {E}")
+    # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
+    return qc, parameters, theta, minimum_objective_value, exp_value_list
