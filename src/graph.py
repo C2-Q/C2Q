@@ -13,7 +13,7 @@ class Graph:
         :param input_data: Either a distance matrix (2D array) or a list of edges [(node1, node2, weight), ...]
         """
         self.input_data = input_data
-        self.graph = nx.Graph()  # Create a networkx graph object
+        self.G = nx.Graph()  # Create a networkx graph object
 
         # Determine whether input_data is a distance matrix or a list of edges
         if self._is_matrix(input_data):
@@ -76,7 +76,7 @@ class Graph:
         for i in range(num_nodes):
             for j in range(i + 1, num_nodes):  # Use i + 1 to avoid duplicating edges
                 if matrix[i][j] > 0:  # Only add edges where the weight is greater than 0
-                    self.graph.add_edge(i, j, weight=matrix[i][j])
+                    self.G.add_edge(i, j, weight=matrix[i][j])
 
     def _build_graph_from_edges(self):
         """
@@ -86,27 +86,27 @@ class Graph:
         """
         for edge in self.input_data:
             if len(edge) == 2:  # If only (node1, node2) is provided, assign weight 1
-                self.graph.add_edge(edge[0], edge[1], weight=1)
+                self.G.add_edge(edge[0], edge[1], weight=1)
             elif len(edge) == 3:  # If (node1, node2, weight) is provided, use the given weight
-                self.graph.add_edge(edge[0], edge[1], weight=edge[2])
+                self.G.add_edge(edge[0], edge[1], weight=edge[2])
 
     def visualize(self):
         """
         Visualize the graph using matplotlib.
         """
-        pos = nx.spring_layout(self.graph)  # Layout for node positioning
-        nx.draw(self.graph, pos, with_labels=True, node_color="lightblue", node_size=500, font_size=15)
+        pos = nx.spring_layout(self.G)  # Layout for node positioning
+        nx.draw(self.G, pos, with_labels=True, node_color="lightblue", node_size=500, font_size=15)
 
         # Draw edge labels (weights)
-        edge_labels = nx.get_edge_attributes(self.graph, 'weight')
-        nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=edge_labels)
+        edge_labels = nx.get_edge_attributes(self.G, 'weight')
+        nx.draw_networkx_edge_labels(self.G, pos, edge_labels=edge_labels)
 
         plt.show()
 
-    def get_graph(self):
+    def get_G(self):
         """
         Return the networkx graph object.
         """
-        return self.graph
+        return self.G
 
 

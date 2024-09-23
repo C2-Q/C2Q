@@ -311,7 +311,7 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.is_snippet)
         print(problem_type, data)
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.graph, 2)
+        independent_set_cnf = independent_set_to_sat(data.G, 2)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
         combined_circuit = QuantumCircuit(oracle.num_qubits)
         # combined_circuit.h(range(formula.nv))
@@ -332,7 +332,7 @@ class MyTestCase(unittest.TestCase):
         G = nx.Graph()
         G.add_edges_from([(0, 1), (0, 2), (1, 2), (1, 3)])
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.graph, 2)
+        independent_set_cnf = independent_set_to_sat(data.G, 2)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
         grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3], iterations=1)
         from qiskit.circuit.library import GroverOperator
