@@ -26,26 +26,36 @@ class Graph:
     @staticmethod
     def random_graph(num_nodes=5, edge_prob=0.5, weighted=True, max_weight=10):
         """
-        Generate a random graph either by using a random distance matrix or random edges.
+        Generate a random graph by creating random edges between nodes.
 
         :param num_nodes: Number of nodes in the graph.
         :param edge_prob: Probability of creating an edge between two nodes.
         :param weighted: Whether to assign random weights to the edges.
         :param max_weight: Maximum weight of the edges if weighted.
-        :return: A Graph object with random edges or a random distance matrix.
+        :return: A Graph object with random edges.
         """
+        # Initialize the graph
+        graph = nx.Graph()
+
+        # Add all nodes to the graph
+        for i in range(num_nodes):
+            graph.add_node(i)
+
         # Create random edges with probabilities
-        edges = []
         for i in range(num_nodes):
             for j in range(i + 1, num_nodes):
                 if np.random.rand() < edge_prob:
-                    weight = np.random.randint(1, max_weight) if weighted else 1
-                    edges.append((i, j, weight) if weighted else (i, j))
+                    if weighted:
+                        weight = np.random.randint(1, max_weight)
+                        graph.add_edge(i, j, weight=weight)
+                    else:
+                        graph.add_edge(i, j)
 
-        if len(edges) == 0:
+        # Check if any edges were added
+        if len(graph.edges()) == 0:
             raise ValueError("No edges were generated for the graph. Try increasing edge_prob.")
 
-        return Graph(input_data=edges)
+        return graph
 
     def _is_matrix(self, data):
         """

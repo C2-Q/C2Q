@@ -4,6 +4,7 @@ from typing import Optional, Union, List, Dict
 
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
+import matplotlib.pyplot as plt
 
 
 class Clique(NP):
@@ -29,12 +30,18 @@ class Clique(NP):
             raise TypeError("The graph must be a NetworkX graph or an adjacency list/array.")
 
         self.size = size  # The desired clique size (K)
+        # Store nodes and mappings
+        self.nodes = list(self.graph.nodes())
+        self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
+        self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
 
     def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
         """
         Converts the clique problem into a QUBO problem represented by a QUBO class instance
         based on the Hamiltonian H = A(K - sum_v x_v)^2 + B(K(K-1)/2 - sum_{(u,v)∈E} x_u x_v)
-
+        Preliminary: A > KB, so we set B = 1 and A = KB+10
+        !!! notice the index of matrix row and column represents the index of nodes in nodes list
+        For example: in list [3,4,5,2,1] node_i = 3 represents node with number 2 here!!!
         Args:
             A: Penalty weight for the clique size constraint.
             B: Penalty weight for the edge constraint.
@@ -42,9 +49,8 @@ class Clique(NP):
         Returns:
             An instance of the QUBO class representing the problem.
         """
-        n = self.graph.number_of_nodes()
-        nodes = list(self.graph.nodes())
-        node_indices = {node: idx for idx, node in enumerate(nodes)}  # Map node to index
+        A = self.size * B + 10
+        n = len(self.nodes)
         Q = np.zeros((n, n))
 
         K = self.size  # Desired clique size
@@ -56,13 +62,13 @@ class Clique(NP):
 
         # Add quadratic terms (upper triangular part only)
         for i in range(n):
-            for j in range(i+1, n):
+            for j in range(i + 1, n):
                 # From H1: 2A for all pairs
                 Q[i, j] += 2 * A
 
                 # From H2: -B if (i, j) is an edge in E
-                node_i = nodes[i]
-                node_j = nodes[j]
+                node_i = self.nodes[i]
+                node_j = self.nodes[j]
                 if self.graph.has_edge(node_i, node_j):
                     Q[i, j] += -B
                 # Else, no change needed (we only modify upper triangular part)
@@ -82,30 +88,32 @@ class Clique(NP):
         """
         x = np.array(result)
         nodes_in_clique = []
-        nodes = list(self.graph.nodes())
         for idx, val in enumerate(x):
             if val == 1:
-                nodes_in_clique.append(nodes[idx])
+                node_label = self.indices_node[idx]
+                nodes_in_clique.append(node_label)
         return nodes_in_clique
 
     def draw_result(self, result: Union[np.ndarray, List[int]], pos: Optional[Dict[int, np.ndarray]] = None) -> None:
         """
         Draw the graph with nodes in the clique highlighted.
-
         Args:
             result: The calculated result for the problem (binary vector).
             pos: The positions of nodes (optional).
         """
-        import matplotlib.pyplot as plt
-
         x = np.array(result)
-        nodes = list(self.graph.nodes())
-        color_map = []
-        for idx in range(len(nodes)):
-            if x[idx] == 1:
-                color_map.append('red')  # Nodes in the clique are red
+        # Create a mapping from node labels to their corresponding x values
+        node_colors = {}
+        for idx, val in enumerate(x):
+            node_label = self.indices_node[idx]
+            if val == 1:
+                node_colors[node_label] = 'red'  # Nodes in the clique are red
             else:
-                color_map.append('gray')  # Other nodes are gray
+                node_colors[node_label] = 'gray'  # Other nodes are gray
+
+        # Get the nodes in the order that nx.draw will use
+        graph_nodes = list(self.graph.nodes())
+        color_map = [node_colors[node] for node in graph_nodes]
 
         plt.figure(figsize=(8, 6))
         nx.draw(

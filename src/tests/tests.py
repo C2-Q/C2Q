@@ -81,9 +81,9 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
         print(problem_type, data)
         self.assertEqual(problem_type, 'MaxCut')  # add assertion here
-        self.assertIsInstance(data.graph, nx.Graph)
+        self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
-        self.assertEqual(nx.is_weighted(data.graph), True)
+        self.assertEqual(nx.is_weighted(data.G), True)
 
     def test_tsp_snippet(self):
         problem_type, data = self.parser.parse(self.tsp_snippet)

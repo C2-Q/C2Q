@@ -1,5 +1,6 @@
 import unittest
 
+import networkx
 import numpy as np
 
 from src.graph import Graph
@@ -22,11 +23,18 @@ class MyTestCase(unittest.TestCase):
             value = qubo.evaluate(x_array)
             print(f"{x_array} : {value}")
         self.assertEqual(True, True)
+
     def test_cliques(self):
-        graph = Graph.random_graph()
-        clique_problem = Clique(graph.G, size=3)
+        graph = Graph.random_graph(num_nodes=5)
+        clique_problem = Clique(graph, size=3)
+        #graph.visualize()
         qubo_instance = clique_problem.to_qubo()
         qubo_instance.display()
+        qubo_instance.display_matrix()
+        result = qubo_instance.solve_brute_force()
+        list = clique_problem.interpret(result[0])
+        clique_problem.draw_result(result[0])
+
 
 if __name__ == '__main__':
     unittest.main()

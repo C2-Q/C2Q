@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class QUBO:
     """
     A class to represent and solve Quadratic Unconstrained Binary Optimization (QUBO) problems.
@@ -38,7 +39,7 @@ class QUBO:
             # Diagonal terms
             value += self.Q[i, i] * x[i]
             # Off-diagonal terms
-            for j in range(i+1, self.n):
+            for j in range(i + 1, self.n):
                 value += self.Q[i, j] * x[i] * x[j]
         return value
 
@@ -65,34 +66,6 @@ class QUBO:
 
         return best_x, best_value
 
-    def solve_heuristic(self, max_iter=1000):
-        """
-        Solve the QUBO problem using a simple heuristic (greedy local search).
-
-        Parameters:
-        max_iter (int): Maximum number of iterations.
-
-        Returns:
-        tuple: A tuple containing an approximate binary vector and its value.
-        """
-        # Start with a random binary vector
-        x = np.random.choice([0, 1], size=self.n)
-        current_value = self.evaluate(x)
-
-        for _ in range(max_iter):
-            # Flip a random bit
-            i = np.random.randint(0, self.n)
-            x_new = x.copy()
-            x_new[i] = 1 - x_new[i]  # Flip bit i
-            new_value = self.evaluate(x_new)
-
-            # Accept the new state if it improves the objective
-            if new_value < current_value:
-                x = x_new
-                current_value = new_value
-
-        return x, current_value
-
     def display(self):
         """
         Display the QUBO problem in a readable format.
@@ -112,13 +85,13 @@ class QUBO:
             # Diagonal terms
             coeff = self.Q[i, i]
             if coeff != 0:
-                term = f"{coeff}*x{i+1}"
+                term = f"{coeff}*x{i + 1}"
                 terms.append(term)
             # Off-diagonal terms
-            for j in range(i+1, self.n):
+            for j in range(i + 1, self.n):
                 coeff = self.Q[i, j]
                 if coeff != 0:
-                    term = f"{coeff}*x{i+1}*x{j+1}"
+                    term = f"{coeff}*x{i + 1}*x{j + 1}"
                     terms.append(term)
         if terms:
             formula = " + ".join(terms)
@@ -127,6 +100,9 @@ class QUBO:
             print(f"f(x) = {formula}")
         else:
             print("f(x) = 0")
+
+    def display_matrix(self):
+        print(self.Q)
 
     def __str__(self):
         return f"QUBO Problem with {self.n} variables."
