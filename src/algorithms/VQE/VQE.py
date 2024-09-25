@@ -18,7 +18,7 @@ def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
 
-    # Calculate the offset also, this is not important for the optimization
+    # Calculate the offset also, this is not important for the QAOA optimization
     offset = 0
     
     operator_list = []
@@ -27,20 +27,22 @@ def convert_qubo_to_ising(qubo):
         for j in range(i, n):
             # Initialize the Pauli operator with all I's
             pauli_operator = list("I"*n)
-            
-            if i == j:
-                pauli_operator[i] = "Z"
-                ising_value = -(1/2)*np.sum(qubo[i])
-            else:
-                pauli_operator[i] = "Z"
-                pauli_operator[j] = "Z"
-                ising_value = (1/2)*qubo[i][j]
 
-            if not ising_value == 0:
-                ising_pauli_op = (''.join(pauli_operator), ising_value)
-                operator_list.append(ising_pauli_op)
+            # Use only the upper triangular part of the matrix
+            if j >= i:
+                if i == j:
+                    pauli_operator[i] = "Z"
+                    ising_value = -(1/2)*np.sum(qubo[i])
+                else:
+                    pauli_operator[i] = "Z"
+                    pauli_operator[j] = "Z"
+                    ising_value = (1/2)*qubo[i][j]
 
-            offset += (1/2)*qubo[i][j]
+                if not ising_value == 0:
+                    ising_pauli_op = (''.join(pauli_operator), ising_value)
+                    operator_list.append(ising_pauli_op)
+
+                offset += (1/2)*qubo[i][j]
 
     operators = SparsePauliOp.from_list(operator_list)
 
