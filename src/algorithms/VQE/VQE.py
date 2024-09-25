@@ -17,8 +17,7 @@ import numpy as np
 def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
-
-    # Calculate the offset also, this is not important for the QAOA optimization
+    
     offset = 0
     
     operator_list = []
