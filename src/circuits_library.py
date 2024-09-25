@@ -106,6 +106,7 @@ def cnf_to_quantum_oracle_optimized(cnf_formula):
     # Create an empty quantum circuit to hold the full oracle operations
     qc_tmp = QuantumCircuit(qc.num_qubits)
 
+
     qc_tmp.barrier()
     # Prepare the final ancilla qubit in the |-> state
     qc_tmp.x(qc.num_qubits - 1)

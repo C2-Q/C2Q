@@ -9,9 +9,11 @@ from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator
 
+from src.QAOA.QAOA import convert_qubo_to_ising
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
+from src.problems.clique import Clique
 from src.problems.independent_set import IS
 from src.reduction import *
 from src.sat_to_qubo import *
@@ -125,18 +127,17 @@ class MyTestCase(unittest.TestCase):
     def test_clique_snippet(self):
         problem_type, data = self.parser.parse(self.clique_snippet)
         print(problem_type, data)
-        cnf = clique_to_sat(data.graph, 3)
+        clique = Clique(data.G, 3)
+        cnf = clique_to_sat(data.G, 3)
         data.visualize()
         sat = sat_to_3sat(cnf)
-        print(f'clauses before conversion: {len(cnf.clauses)}')
-        print(f'clauses after conversion: {len(sat.clauses)}')
-        print(cnf.clauses)
-        print(sat.clauses)
         print(solve_all_cnf_solutions(cnf))
         cha = Chancellor(sat)
         cha.fillQ()
-        #cha.solveQ()
-
+        qubo = clique.to_qubo()
+        qubo.display_matrix()
+        op, offset = convert_qubo_to_ising(qubo.Q)
+        print(op, offset)
     def test_clique(self):
         self.assertEqual(True, True)
 
