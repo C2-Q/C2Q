@@ -5,6 +5,7 @@ import numpy as np
 
 from src.graph import Graph
 from src.problems.clique import Clique
+from src.problems.maximal_independent_set import MIS
 from src.problems.qubo import QUBO
 
 
@@ -26,7 +27,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_cliques(self):
         graph = Graph.random_graph(num_nodes=5)
-        clique_problem = Clique(graph, size=3)
+        clique_problem = Clique(graph, size=4)
         #graph.visualize()
         qubo_instance = clique_problem.to_qubo()
         qubo_instance.display()
@@ -34,6 +35,17 @@ class MyTestCase(unittest.TestCase):
         result = qubo_instance.solve_brute_force()
         list = clique_problem.interpret(result[0])
         clique_problem.draw_result(result[0])
+
+    def test_ims(self):
+        graph = Graph.random_graph(num_nodes=6)
+        mis = MIS(graph)
+        # graph.visualize()
+        qubo_instance = mis.to_qubo()
+        qubo_instance.display()
+        qubo_instance.display_matrix()
+        result = qubo_instance.solve_brute_force()
+        list = mis.interpret(result[0])
+        mis.draw_result(result[0])
 
 
 if __name__ == '__main__':
