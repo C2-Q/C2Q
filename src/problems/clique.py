@@ -12,7 +12,7 @@ class Clique(NP):
     An application class for the clique problem based on a NetworkX graph.
     """
 
-    def __init__(self, graph: Union[nx.Graph, np.ndarray, List], size: int) -> None:
+    def __init__(self, graph:nx.Graph, size: int) -> None:
         """
         Args:
             graph: A graph representing the problem. It can be specified directly as a
@@ -23,9 +23,6 @@ class Clique(NP):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
-        elif isinstance(graph, (np.ndarray, List)):
-            self.graph = nx.Graph()
-            self.graph.add_edges_from(graph)
         else:
             raise TypeError("The graph must be a NetworkX graph or an adjacency list/array.")
 

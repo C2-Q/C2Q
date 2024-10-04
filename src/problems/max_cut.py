@@ -1,4 +1,3 @@
-import networkx
 import numpy as np
 import networkx as nx
 from typing import Optional, Union, List, Dict
@@ -8,9 +7,9 @@ from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
 
-class MIS(NP):
+class MaxCut(NP):
     """
-    An application class for the maximal independent set problem based on a NetworkX graph.
+    An application class for the maximum cut problem based on a NetworkX graph.
     """
 
     def __init__(self, graph: nx.Graph) -> None:
@@ -18,9 +17,8 @@ class MIS(NP):
         Args:
             graph: A graph representing the problem. It can be specified directly as a
                    NetworkX graph, or as an array or list format suitable to build a NetworkX graph.
-            size: The desired size of the clique (K).
         """
-        # If the graph is not a NetworkX graph, convert it
+        # supported Graph or List of edges
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
@@ -32,43 +30,33 @@ class MIS(NP):
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
 
-    def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
+    def to_qubo(self) -> 'QUBO':
         """
-        Converts the clique problem into a QUBO problem represented by a QUBO class instance
-        based on the Hamiltonian H = H_A + H_B
-        Was done intuitively...
-         H_A = A*sum_((u,v)\in E)(x_u*x_v)
-         H_B = -B*sum_x_v
-        Args:
-            A: Penalty weight
-            B: Penalty weight.
+        Converts the MaxCut problem into a QUBO problem represented by a QUBO class instance.
 
         Returns:
             An instance of the QUBO class representing the problem.
         """
         n = len(self.nodes)
         Q = np.zeros((n, n))
-        A = 2*B
-
-        # Add linear terms to Q diagonal
-        for idx in range(n):
-            Q[idx, idx] -= B
-
-        # Add quadratic terms (upper triangular part only)
+        # Construct the QUBO matrix
         for i in range(n):
+            node_i = self.nodes[i]
             for j in range(i + 1, n):
-                node_i = self.nodes[i]
                 node_j = self.nodes[j]
                 if self.graph.has_edge(node_i, node_j):
-                    Q[i, j] += A
-                # Else, no change needed (we only modify upper triangular part)
+                    # Default weight is 1
+                    weight = self.graph[node_i].get(node_j).get("weight", 1)
 
-        # Return an instance of the QUBO class with an upper triangular matrix
+                    # negative weights since we are minimizing
+                    Q[i, i] -= weight
+                    Q[j, j] -= weight
+                    Q[i, j] -= -2 * weight
         return QUBO(Q)
 
     def interpret(self, result: Union[np.ndarray, List[int]]) -> List[int]:
         """
-        Interpret a result as a list of node indices forming the clique.
+        Interpret a result as a list of node indices forming the maximum cut problem.
 
         Args:
             result: The calculated result of the problem (binary vector).
@@ -77,16 +65,17 @@ class MIS(NP):
             The list of node indices whose corresponding variable is 1.
         """
         x = np.array(result)
-        nodes_in_mis = []
+        nodes_in_clique = []
         for idx, val in enumerate(x):
             if val == 1:
                 node_label = self.indices_node[idx]
-                nodes_in_mis.append(node_label)
-        return nodes_in_mis
+                nodes_in_clique.append(node_label)
+        return nodes_in_clique
 
     def draw_result(self, result: Union[np.ndarray, List[int]], pos: Optional[Dict[int, np.ndarray]] = None) -> None:
         """
-        Draw the graph with nodes in the clique highlighted.
+        Draw the graph with nodes in the maximum cut highlighted and show the weights of the edges.
+
         Args:
             result: The calculated result for the problem (binary vector).
             pos: The positions of nodes (optional).
@@ -97,7 +86,7 @@ class MIS(NP):
         for idx, val in enumerate(x):
             node_label = self.indices_node[idx]
             if val == 1:
-                node_colors[node_label] = 'red'  # Nodes in the clique are red
+                node_colors[node_label] = 'red'  # Nodes in one set of the cut are red
             else:
                 node_colors[node_label] = 'gray'  # Other nodes are gray
 
@@ -105,15 +94,28 @@ class MIS(NP):
         graph_nodes = list(self.graph.nodes())
         color_map = [node_colors[node] for node in graph_nodes]
 
+        # Get the positions of the nodes if not provided
+        if pos is None:
+            pos = nx.spring_layout(self.graph)
+
         plt.figure(figsize=(8, 6))
+
+        # Draw the graph
         nx.draw(
             self.graph,
-            node_color=color_map,
             pos=pos,
+            node_color=color_map,
             with_labels=True,
             node_size=500,
             font_size=12,
             font_color='white',
             edge_color='black'
         )
+
+        # Get edge weights for labeling
+        edge_labels = nx.get_edge_attributes(self.graph, 'weight')
+
+        # Draw the edge labels (weights)
+        nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=edge_labels)
+
         plt.show()

@@ -3,6 +3,8 @@ from src.recommender.recommender_engine import recommender
 from src.problems.clique import Clique
 from src.graph import Graph
 
+
+
 # Define the problem (in the future comes from the parser)
 graph = Graph.random_graph(num_nodes=5)
 clique_problem = Clique(graph, size=4)
