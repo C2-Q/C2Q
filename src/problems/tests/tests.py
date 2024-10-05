@@ -5,8 +5,10 @@ import numpy as np
 
 from src.graph import Graph
 from src.problems.clique import Clique
+from src.problems.kcolor import KColor
 from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
+from src.problems.minimum_vertex_cover import MVC
 from src.problems.qubo import QUBO
 from src.problems.tsp import TSP
 
@@ -28,20 +30,25 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)
 
     def test_cliques(self):
-        graph = Graph.random_graph(num_nodes=5)
-        clique_problem = Clique(graph, size=4)
+        graph = networkx.Graph()
+        graph.add_nodes_from([5, 2, 3, 4, 6])
+        graph.add_edges_from(([(5, 2), (4, 3), (2, 3), (5, 3), (3, 6), (4, 6)]))
+        #graph = Graph.random_graph(num_nodes=5)
+        clique_problem = Clique(graph, size=3)
         #graph.visualize()
         qubo_instance = clique_problem.to_qubo()
         qubo_instance.display()
         qubo_instance.display_matrix()
         result = qubo_instance.solve_brute_force()
         list = clique_problem.interpret(result[0])
+        print(result[0])
+        print(list)
         clique_problem.draw_result(result[0])
 
     def test_ims(self):
         graph = Graph.random_graph(num_nodes=6)
         print(graph.nodes)
-        weight = graph[1] # Default weight is 1
+        weight = graph[1]  # Default weight is 1
         print(weight)
         mis = MIS(graph)
         # graph.visualize()
@@ -63,16 +70,43 @@ class MyTestCase(unittest.TestCase):
         maxcut.draw_result(result[0])
 
     def test_tsp(self):
-        graph = Graph.random_graph(num_nodes=3)
+        graph = Graph.random_graph(num_nodes=4)
         print(graph.adj)
         self.assertEqual(True, True)
         tsp = TSP(graph)
         qubo = tsp.to_qubo()
         qubo.display_matrix()
-        # result = qubo.solve_brute_force()
-        # print(result)
-        # list = tsp.interpret(result[0])
-        # tsp.draw_result(result[0])
+        result = qubo.solve_brute_force()
+        print(result[0])
+        list = tsp.interpret(result[0])
+        print(list)
+        tsp.draw_result(result[0])
+
+    def test_vc(self):
+        graph = Graph.random_graph(num_nodes=6)
+        vc = MVC(graph)
+        # graph.visualize()
+        qubo_instance = vc.to_qubo()
+        qubo_instance.display()
+        qubo_instance.display_matrix()
+        result = qubo_instance.solve_brute_force()
+        list = vc.interpret(result[0])
+        vc.draw_result(result[0])
+
+    def test_k_coloring(self):
+        graph = networkx.Graph()
+        graph.add_nodes_from([5, 2, 3, 4, 6])
+        graph.add_edges_from(([(5, 2), (4, 3), (2, 3), (5, 3), (3, 6), (4, 6)]))
+        graph = Graph.random_graph(num_nodes=6)
+        self.assertEqual(True, True)
+        kc = KColor(graph, 3)
+        qubo = kc.to_qubo()
+        qubo.display_matrix()
+        result = qubo.solve_brute_force()
+        list = kc.interpret(result[0])
+        print(result[0])
+        print(list)
+        kc.draw_result(result[0])
 
 
 if __name__ == '__main__':

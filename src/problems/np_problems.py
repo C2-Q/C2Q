@@ -24,6 +24,7 @@ class NP(Problem):
         raise NotImplementedError("should be implemented in subclass")
 
     def reduce_to_3sat(self):
+        # if sat is not none
         self.three_sat = sat_to_3sat(self.sat)
         # further reduce literals, <= 3
         chancellor = Chancellor(self.three_sat)

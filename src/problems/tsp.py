@@ -15,7 +15,7 @@ class TSP(NP):
     def __init__(self, graph: nx.Graph) -> None:
         """
         Args:
-            distance_matrix: A graph representing the distance between cities. It can be specified directly as a
+            graph: A graph representing the distance between cities. It can be specified directly as a
                              NetworkX graph, or as an array or list format suitable to build a NetworkX graph.
         """
         # If the input is not a NetworkX graph, convert it
@@ -59,18 +59,18 @@ class TSP(NP):
         for v in range(n):
             for u in range(n):
                 # take the index like in nodes list [2,3,4,1], 0 is node 2
-                i = self.nodes[v]
-                j = self.nodes[u]
-                if i != j and self.graph.has_edge(i, j):  # Ensure (i, j) is a valid edge
-                    weight = self.graph[i][j].get('weight', 1)  # Get the edge weight or default to 1
+                index_i = self.nodes[v]
+                index_j = self.nodes[u]
+                if index_i != index_j and self.graph.has_edge(index_i, index_j):  # Ensure (i, j) is a valid edge
+                    weight = self.graph[index_i][index_j].get('weight', 1)  # Get the edge weight or default to 1
                     for p in range(n - 1):
-                        Q[i * n + p, j * n + (p + 1)] += B * weight  # Add distance cost
+                        Q[v * n + p, u * n + (p + 1)] += B * weight
 
-        # start to construct H_A
+                        # start to construct H_A
         # 2. Add penalty terms to ensure each position in the tour is assigned exactly one city
         for v in range(n):
             for j in range(n):
-                v = self.nodes[v]
+                #v = self.nodes[v]
                 Q[v * n + j, v * n + j] -= A
                 for k in range(j + 1, n):
                     Q[v * n + j, v * n + k] += 2 * A
@@ -78,21 +78,21 @@ class TSP(NP):
         # 3. Add penalty terms to ensure each city is visited exactly once
         for j in range(n):
             for v in range(n):
-                v = self.nodes[v]
+                #v = self.nodes[v]
                 Q[v * n + j, v * n + j] -= A
                 for u in range(v + 1, n):
-                    u = self.nodes[u]
+                    #u = self.nodes[u]
                     Q[v * n + j, u * n + j] += 2 * A
 
         # 4. last part of H_A
         for v in range(n):
             for u in range(n):
                 # take the index like in nodes list [2,3,4,1], 0 is node 2
-                i = self.nodes[v]
-                j = self.nodes[u]
-                if i != j and not self.graph.has_edge(i, j):  # Ensure edge (i, j) doesnt exist
+                index_i = self.nodes[v]
+                index_j = self.nodes[u]
+                if index_i != index_j and not self.graph.has_edge(index_i, index_j):  # Ensure edge (i, j) doesnt exist
                     for p in range(n - 1):
-                        Q[i * n + p, j * n + (p + 1)] += A  # Add distance cost
+                        Q[v * n + p, u * n + (p + 1)] += A  # Add distance cost
         return QUBO(Q)
 
     def _get_max_weight(self):
@@ -103,6 +103,7 @@ class TSP(NP):
                 if weight > max_weight:
                     max_weight = weight
         return max_weight
+
     def interpret(self, result: Union[np.ndarray, List[int]]) -> List[int]:
         """
         Interpret a result as a sequence of node indices forming the optimal TSP route.
@@ -122,11 +123,11 @@ class TSP(NP):
 
     def draw_result(self, result: Union[np.ndarray, List[int]], pos: Optional[Dict[int, np.ndarray]] = None) -> None:
         """
-        Draw the graph with the optimal TSP tour highlighted.
+        Draw the graph with the optimal TSP tour highlighted using arrows to depict the route and showing edge weights.
 
         Args:
             result: The calculated result for the problem (binary vector).
-            pos: The positions of nodes (optional).
+            pos: The positions of nodes (optional). If not provided, NetworkX will calculate a layout.
         """
         x = np.array(result).reshape((len(self.nodes), len(self.nodes)))
         tour_edges = []
@@ -156,7 +157,21 @@ class TSP(NP):
             edge_color='black'
         )
 
-        # Draw the TSP tour
-        nx.draw_networkx_edges(self.graph, pos, edgelist=tour_edges, edge_color='red', width=2)
+        # Draw the TSP tour with arrows
+        nx.draw_networkx_edges(
+            self.graph,
+            pos,
+            edgelist=tour_edges,
+            edge_color='red',
+            width=2,
+            arrows=True,
+            arrowstyle='-|>',
+            arrowsize=20,
+            connectionstyle='arc3,rad=0.2'  # Adds curvature to the arrows
+        )
+
+        # Draw edge weights (for all edges)
+        edge_labels = nx.get_edge_attributes(self.graph, 'weight')
+        nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=edge_labels)
 
         plt.show()

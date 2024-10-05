@@ -23,7 +23,7 @@ class MaxCut(NP):
         if isinstance(graph, nx.Graph):
             self.graph = graph
         else:
-            raise TypeError("The graph must be a NetworkX graph or an adjacency list/array.")
+            raise TypeError("The graph must be a NetworkX graph")
 
         # Store nodes and mappings
         self.nodes = list(self.graph.nodes())

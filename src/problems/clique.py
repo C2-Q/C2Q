@@ -24,7 +24,7 @@ class Clique(NP):
         if isinstance(graph, nx.Graph):
             self.graph = graph
         else:
-            raise TypeError("The graph must be a NetworkX graph or an adjacency list/array.")
+            raise TypeError("The graph must be a NetworkX graph")
 
         self.size = size  # The desired clique size (K)
         # Store nodes and mappings
