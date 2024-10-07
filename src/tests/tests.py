@@ -370,8 +370,13 @@ class MyTestCase(unittest.TestCase):
         formula = CNF(from_clauses=cnf)
         print(solve_all_cnf_solutions(formula))
         oracle = cnf_to_quantum_oracle_optimized(formula)
+        state_prep = QuantumCircuit(oracle.num_qubits)
+        state_prep.h([0, 1, 2, 3, 4])
         grover_circuit = grover(oracle, iterations=3,
-                                objective_qubits=[0, 1, 2, 3, 4])
+                                objective_qubits=[0, 1, 2, 3, 4],
+                                state_pre=state_prep,
+                                working_qubits=[0, 1, 2, 3, 4]
+                                )
         backend = AerSimulator()
         transpiled_circuit = transpile(grover_circuit, backend=backend)
         counts = backend.run(transpiled_circuit, shots=50000).result().get_counts()
@@ -388,7 +393,6 @@ class MyTestCase(unittest.TestCase):
         counts = backend.run(transpiled_circuit, shots=50000).result().get_counts()
         plot_histogram(counts)
         plt.show()
-
 
 
 if __name__ == '__main__':
