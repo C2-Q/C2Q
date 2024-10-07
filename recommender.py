@@ -2,6 +2,8 @@ from src.algorithms.QAOA.QAOA import qaoa_no_optimization
 from src.recommender.recommender_engine import recommender
 from src.problems.clique import Clique
 from src.graph import Graph
+# for test
+
 
 # Define the problem (in the future comes from the parser)
 graph = Graph.random_graph(num_nodes=5)

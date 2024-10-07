@@ -8,9 +8,10 @@ from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
 
-class MIS(NP):
+class MVC(NP):
     """
-    An application class for the maximal independent set problem based on a NetworkX graph.
+    An application class for the vertex cover problem based on a NetworkX graph.
+    reference: https://arxiv.org/pdf/1302.5843
     """
 
     def __init__(self, graph: nx.Graph) -> None:
@@ -18,14 +19,13 @@ class MIS(NP):
         Args:
             graph: A graph representing the problem. It can be specified directly as a
                    NetworkX graph, or as an array or list format suitable to build a NetworkX graph.
-            size: The desired size of the clique (K).
         """
         # If the graph is not a NetworkX graph, convert it
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
         else:
-            raise TypeError("The graph must be a NetworkX graph")
+            raise TypeError("The graph must be a NetworkX graph.")
 
         # Store nodes and mappings
         self.nodes = list(self.graph.nodes())
@@ -37,7 +37,7 @@ class MIS(NP):
         Converts the clique problem into a QUBO problem represented by a QUBO class instance
         based on the Hamiltonian H = H_A + H_B
         Was done intuitively...
-         H_A = A*sum_((u,v)\in E)(x_u*x_v)
+         H_A = A*sum_((u,v)\in E)(1-x_u)*(1-x_v)
          H_B = -B*sum_x_v
         Args:
             A: Penalty weight
@@ -48,11 +48,12 @@ class MIS(NP):
         """
         n = len(self.nodes)
         Q = np.zeros((n, n))
-        A = 2*B
+        A = 2 * B
 
         # Add linear terms to Q diagonal
-        for idx in range(n):
-            Q[idx, idx] -= B
+        for i in range(n):
+            idx = self.nodes[i]
+            Q[idx, idx] += B
 
         # Add quadratic terms (upper triangular part only)
         for i in range(n):
@@ -60,6 +61,8 @@ class MIS(NP):
                 node_i = self.nodes[i]
                 node_j = self.nodes[j]
                 if self.graph.has_edge(node_i, node_j):
+                    Q[i, i] += -A
+                    Q[j, j] += -A
                     Q[i, j] += A
 
         return QUBO(Q)

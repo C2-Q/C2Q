@@ -16,7 +16,6 @@ PROBLEM_TAGS = {
     "ADD": 6,  # Addition
     "MUL": 7,  # Multiplication
     "SUB": 8,  # Subtraction
-
     "Unknown": 9
 }
 GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor"]

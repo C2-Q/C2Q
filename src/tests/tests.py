@@ -9,7 +9,7 @@ from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator
 
-from src.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize
+from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
