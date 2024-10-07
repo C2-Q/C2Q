@@ -2,8 +2,10 @@ import unittest
 
 import networkx
 import numpy as np
+from qiskit_aer.primitives import Sampler
 
 from src.graph import Graph
+from src.problems.basic_arithmetic.multiplication import Mul
 from src.problems.clique import Clique
 from src.problems.kcolor import KColor
 from src.problems.max_cut import MaxCut
@@ -108,6 +110,15 @@ class MyTestCase(unittest.TestCase):
         print(list)
         kc.draw_result(result[0])
 
+    def test_mul(self):
+        mul = Mul(7, 5)
+        self.assertEqual(True, True)
+        qc = mul.quantum_circuit()
+        sampler = Sampler()
+        result = sampler.run(qc).result()
+        result_counts = result.quasi_dists[0]
+        result_value = max(result_counts, key=result_counts.get)
+        print(result_value)
 
 if __name__ == '__main__':
     unittest.main()

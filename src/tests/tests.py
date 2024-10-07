@@ -3,17 +3,18 @@ import unittest
 
 import networkx as nx
 from matplotlib import pyplot as plt
-from qiskit import QuantumCircuit, transpile, QuantumRegister, ClassicalRegister
+from qiskit import QuantumCircuit, transpile, QuantumRegister, ClassicalRegister, execute
 from qiskit.circuit.library import GroverOperator, MCMT, ZGate, MCXGate
 from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_histogram, plot_state_city
-from qiskit_aer import AerSimulator
+from qiskit_aer import AerSimulator, Aer
 
 from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
 from src.problems.clique import Clique
+from src.problems.factorization import Factor, GroverWrapper
 from src.problems.maximal_independent_set import MIS
 from src.reduction import *
 from src.sat_to_qubo import *
@@ -369,12 +370,25 @@ class MyTestCase(unittest.TestCase):
         formula = CNF(from_clauses=cnf)
         print(solve_all_cnf_solutions(formula))
         oracle = cnf_to_quantum_oracle_optimized(formula)
-        grover_circuit = grover(oracle, iterations=3, objective_qubits=[0, 1, 2, 3, 4])
+        grover_circuit = grover(oracle, iterations=3,
+                                objective_qubits=[0, 1, 2, 3, 4])
         backend = AerSimulator()
         transpiled_circuit = transpile(grover_circuit, backend=backend)
         counts = backend.run(transpiled_circuit, shots=50000).result().get_counts()
+        print(counts)
         plot_histogram(counts)
         plt.show()
+
+    def test_factor(self):
+        factor = Factor(35)
+        qc = factor.grover(iterations=1)
+        print(qc)
+        backend = AerSimulator()
+        transpiled_circuit = transpile(qc, backend=backend)
+        counts = backend.run(transpiled_circuit, shots=50000).result().get_counts()
+        plot_histogram(counts)
+        plt.show()
+
 
 
 if __name__ == '__main__':
