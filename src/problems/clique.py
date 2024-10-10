@@ -6,13 +6,15 @@ from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
+from src.reduction import clique_to_sat
+
 
 class Clique(NP):
     """
     An application class for the clique problem based on a NetworkX graph.
     """
 
-    def __init__(self, graph:nx.Graph, size: int) -> None:
+    def __init__(self, graph: nx.Graph, size: int) -> None:
         """
         Args:
             graph: A graph representing the problem. It can be specified directly as a
@@ -31,6 +33,9 @@ class Clique(NP):
         self.nodes = list(self.graph.nodes())
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
+
+    def reduce_to_sat(self):
+        self.sat = clique_to_sat(self.graph, self.size)
 
     def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
         """

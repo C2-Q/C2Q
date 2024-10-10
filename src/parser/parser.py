@@ -1,7 +1,6 @@
 import ast
 import torch
 from transformers import RobertaTokenizer, AutoModelForSequenceClassification
-
 from src.graph import Graph
 
 # labels = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "Factor","ADD", "MUL", "SUB", "Unknown"]

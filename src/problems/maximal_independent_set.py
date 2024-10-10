@@ -7,6 +7,8 @@ from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
+from src.reduction import independent_set_to_sat
+
 
 class MIS(NP):
     """
@@ -32,6 +34,10 @@ class MIS(NP):
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
 
+    def reduce_to_sat(self):
+        n = len(self.nodes)
+        self.sat = independent_set_to_sat(self.graph, int(n/2))
+
     def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
         """
         Converts the clique problem into a QUBO problem represented by a QUBO class instance
@@ -48,7 +54,7 @@ class MIS(NP):
         """
         n = len(self.nodes)
         Q = np.zeros((n, n))
-        A = 2*B
+        A = 2 * B
 
         # Add linear terms to Q diagonal
         for idx in range(n):
