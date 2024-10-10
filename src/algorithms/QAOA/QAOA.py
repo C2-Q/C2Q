@@ -246,4 +246,9 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
         if count > max_count:
             max_count = count
             highest_possible_solution = key
-    print(f'Most probable solution: {highest_possible_solution}')
+            
+    # Convert string to array
+    X = np.fromstring(highest_possible_solution, np.int8) - 48
+
+    #print(f'Most probable solution: {highest_possible_solution}')
+    return X
