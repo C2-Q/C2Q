@@ -111,7 +111,7 @@ def vqe_optimization(qubo, layers):
     return vqe_dict
 
 def sample_results(qc, parameters, theta, backend=AerSimulator()):
-    qc_assigned_parameters = qc.assign_parameters({parameters:theta})
+    qc_assigned_parameters = qc.assign_parameters(theta)
     qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
     qc_transpiled.measure_all()
 
