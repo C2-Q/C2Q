@@ -9,7 +9,7 @@ clique_problem = Clique(graph, size=4)
 
 # Convert the problem to a QUBO matrix
 clique_qubo_instance = clique_problem.to_qubo()
-Q = clique_qubo_instance.get_matrix()
+Q = clique_qubo_instance.Q
 
 # Obtain the QAOA circuit
 qaoa_dict = qaoa_no_optimization(Q, 1)
