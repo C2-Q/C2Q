@@ -14,8 +14,6 @@ Q = clique_qubo_instance.Q
 # Obtain the QAOA circuit
 qaoa_dict = qaoa_no_optimization(Q, 1)
 qc = qaoa_dict["qc"]
-# Measure all qubits
-qc.measure_all()
 
 # Run the recommender
 recommender(qc)

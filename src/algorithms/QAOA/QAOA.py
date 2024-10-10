@@ -172,6 +172,9 @@ def qaoa_no_optimization(qubo, layers):
 
     # Apply the QAOA layers
     add_qaoa_layer(qc, ising, parameters, layers, n)
+
+    # Add measurements for accurate gate numbers for the recommender system
+    qc.measure_all()
     
     qaoa_dict = {
         "qc": qc,
