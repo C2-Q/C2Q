@@ -1,13 +1,14 @@
+import math
 from itertools import combinations
 
 import networkx as nx
 import qiskit.qasm2
 from matplotlib import pyplot as plt
 from pysat.formula import CNF
-from qiskit.circuit.library import PhaseOracle
+from qiskit.circuit.library import PhaseOracle, RGQFTMultiplier
 
 import numpy as np
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, QuantumRegister
 import matplotlib.pyplot as plt
 # Example CNF Formula using PySAT
 from qiskit.circuit.library import OR
@@ -77,8 +78,9 @@ def cnf_to_quantum_circuit_optimized(cnf_formula):
             #qc.ccx(clause_ancilla, count_ancillas[j - 1], count_ancillas[j])
         qc.cx(clause_ancilla, count_ancillas[0])
         # Uncompute the OR gate
-        qc.append(or_gate.inverse(), clause_qubits + [clause_ancilla])
-
+        # qc.append(or_gate.inverse(), clause_qubits + [clause_ancilla])
+        # just apply reset
+        qc.reset(final_ancilla)
         # Revert any negations
         if clause_negations:
             qc.x(clause_negations)
@@ -106,7 +108,6 @@ def cnf_to_quantum_oracle_optimized(cnf_formula):
     # Create an empty quantum circuit to hold the full oracle operations
     qc_tmp = QuantumCircuit(qc.num_qubits)
 
-
     qc_tmp.barrier()
     # Prepare the final ancilla qubit in the |-> state
     qc_tmp.x(qc.num_qubits - 1)
@@ -131,3 +132,50 @@ def clique_oracle(graph: nx.Graph, k):
     :param k:
     :return:
     """
+    # TODO
+
+
+def quantum_factor_mul_oracle(n):
+    num_result_qubits = n.bit_length()
+    num_state_qubits = math.ceil(num_result_qubits / 2)
+
+    obj_bits = list(range(0, num_state_qubits))
+
+    # Create Quantum and Classical Registers, one more ancilla bit
+    q = QuantumRegister(num_state_qubits * 2 + num_result_qubits + 1, 'q')
+    #c = ClassicalRegister(num_result_qubits + 1, 'c')
+    circuit = QuantumCircuit(q)
+    prep_state = QuantumCircuit(q)
+    working_bits = list(range(num_state_qubits * 2))
+    prep_state.h(working_bits)
+
+    multiplier_circuit = RGQFTMultiplier(num_state_qubits=num_state_qubits, num_result_qubits=num_result_qubits)
+    # super position
+    #circuit.h(list(range(num_state_qubits * 2)))
+
+    # flip bit
+    circuit.x(q[circuit.num_qubits - 1])
+    circuit.h(q[circuit.num_qubits - 1])
+
+    # compose
+    circuit = circuit.compose(multiplier_circuit)
+
+    binary_n = format(n, f'0{num_result_qubits}b')
+    # Flip the 0s
+    for i in range(num_result_qubits):
+        if binary_n[num_result_qubits - i - 1] == '0':
+            circuit.x(q[i + num_state_qubits * 2])
+
+    # Apply multi-controlled Z (or CNOT) to flip the ancilla qubit if the result matches `n`
+    circuit.mcx(list(range(num_state_qubits * 2, num_state_qubits * 2 + num_result_qubits)),
+                q[circuit.num_qubits - 1])
+
+    # Uncompute the X gates applied earlier
+    for i in range(num_result_qubits):
+        if binary_n[num_result_qubits - i - 1] == '0':
+            circuit.x(q[i + num_state_qubits * 2])
+
+    # Uncompute mul
+    circuit = circuit.compose(multiplier_circuit.inverse())
+
+    return circuit, prep_state, obj_bits, working_bits
