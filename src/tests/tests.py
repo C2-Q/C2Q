@@ -3,19 +3,20 @@ import unittest
 
 import networkx as nx
 from matplotlib import pyplot as plt
-from qiskit import QuantumCircuit, transpile, QuantumRegister, ClassicalRegister, execute
+from qiskit import QuantumCircuit, transpile, QuantumRegister, ClassicalRegister
 from qiskit.circuit.library import GroverOperator, MCMT, ZGate, MCXGate
 from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator, Aer
 
-from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize
+from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize, qaoa_no_optimization, sample_results
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
 from src.problems.clique import Clique
-from src.problems.factorization import Factor, GroverWrapper
+from src.problems.factorization import Factor
 from src.problems.maximal_independent_set import MIS
+from src.recommender.recommender_engine import recommender
 from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
@@ -87,7 +88,28 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
+        clique = Clique(data.G, 4)
+        qubo = clique.to_qubo()
+        qubo.display_matrix()
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+        # Run the recommender
+        recommender(qc)
 
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        clique.draw_result(highest_possible_solution)
     def test_tsp_snippet(self):
         problem_type, data = self.parser.parse(self.tsp_snippet)
         self.assertEqual(problem_type, 'TSP')
@@ -200,7 +222,18 @@ class MyTestCase(unittest.TestCase):
         print("Original CNF solutions:", original_solutions)
         print("Converted CNF solutions:", converted_solutions)
         cha.printQ()
-
+    def test_cnf_circuit(self):
+        clauses = [
+            [1, 2, 3],
+            [1, -2, 3],
+            [1, -3],
+        ]
+        formula = CNF(from_clauses=clauses)
+        circuit = cnf_to_quantum_circuit_optimized(formula)
+        circuit2 = cnf_to_quantum_oracle_optimized(formula)
+        circuit2.draw(output="mpl", plot_barriers=False)
+        plt.show()
+        # circuit2.draw(output="latex")
     def test_chancellor(self):
         # Define CNF formula using clauses
         clauses = [

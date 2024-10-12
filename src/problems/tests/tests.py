@@ -96,6 +96,7 @@ class MyTestCase(unittest.TestCase):
         vc.draw_result(result[0])
 
     def test_k_coloring(self):
+        print("Most probable solution: [1 0 1 1 0]")
         graph = networkx.Graph()
         graph.add_nodes_from([5, 2, 3, 4, 6])
         graph.add_edges_from(([(5, 2), (4, 3), (2, 3), (5, 3), (3, 6), (4, 6)]))

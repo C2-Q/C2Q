@@ -78,8 +78,9 @@ def cnf_to_quantum_circuit_optimized(cnf_formula):
             #qc.ccx(clause_ancilla, count_ancillas[j - 1], count_ancillas[j])
         qc.cx(clause_ancilla, count_ancillas[0])
         # Uncompute the OR gate
-        qc.append(or_gate.inverse(), clause_qubits + [clause_ancilla])
-
+        # qc.append(or_gate.inverse(), clause_qubits + [clause_ancilla])
+        # just apply reset
+        qc.reset(final_ancilla)
         # Revert any negations
         if clause_negations:
             qc.x(clause_negations)
