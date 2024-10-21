@@ -349,14 +349,16 @@ def recommender(qc):
 
     Args:
         qc (QuantumCircuit): The quantum circuit which is to be examined.
+    Returns:
+        recommender_output (string): String containing recommended quantum devices.
     """
 
     # Number of shots per execution and number of iterations of QAOA optimization
     num_shots = 1000
     num_iterations = 50
 
-    print(
-        "!!! Testing phase! The results below might be very inaccurate, do not use these to pick a quantum device !!!\n")
+    #print(
+    #    "!!! Testing phase! The results below might be very inaccurate, do not use these to pick a quantum device !!!\n")
 
     # Three metrics: minimum error, minimum time and minimum price
     min_error_device = []
@@ -365,8 +367,8 @@ def recommender(qc):
 
     for index_p, provider in enumerate(provider_list):
         device_list, price_list_shots = select_provider(provider)
-        print(f"Provider: {provider}")
-        print("")
+        #print(f"Provider: {provider}")
+        #print("")
         for index_d, device in enumerate(device_list):
             device_dict = select_device(device)
             if device_dict["device_qubits"] >= qc.num_qubits:
@@ -452,32 +454,25 @@ def recommender(qc):
                 if price_total < min_price_device[4]:
                     min_price_device = [device, provider, total_average_error, time_to_execute, price_total]
 
-                print(f"{device}:")
+                #print(f"{device}:")
                 #print(f" - Single-qubit gate error: {round(device_dict["errors"]["single_qubit"]*100, 3)}%")
                 #print(f" - Two-qubit gate error: {round(device_dict["errors"]["two_qubit"]*100, 3)}%")
-                print(f" - Quantum volume: {device_dict['quantum_volume']}")
-                print(f" - Calculated error when executing the circuit: {round(total_average_error * 100, 2)}%")
+                #print(f" - Quantum volume: {device_dict['quantum_volume']}")
+                #print(f" - Calculated error when executing the circuit: {round(total_average_error * 100, 2)}%")
                 #print(f" - Total number of gates: {num_operations}")
-                print(f" - Number of single-qubit gates: {circuit_dict['gates']['single_qubit']}")
-                print(f" - Number of two-qubit gates: {circuit_dict['gates']['two_qubit']}")
-                print(f" - Number of measurement gates: {circuit_dict['gates']['measurement']}")
+                #print(f" - Number of single-qubit gates: {circuit_dict['gates']['single_qubit']}")
+                #print(f" - Number of two-qubit gates: {circuit_dict['gates']['two_qubit']}")
+                #print(f" - Number of measurement gates: {circuit_dict['gates']['measurement']}")
                 #print(f" - SWAP gates: {num_swap_gates}")
                 #print(f" - Depth of the circuit: {depth}")
-                print(
-                    f" - Time to execute on the quantum computer with {num_iterations} iterations and {num_shots} shots: {round(time_to_execute, 6)} seconds")
-                print(f" - Coherence T1: {coherence_t1}")
-                print(f" - Coherence T2: {coherence_t2}")
-                print(f" - Price with {num_iterations} iterations and {num_shots} shots: ${round(price_total, 2)}\n")
+                #print(
+                #    f" - Time to execute on the quantum computer with {num_iterations} iterations and {num_shots} shots: {round(time_to_execute, 6)} seconds")
+                #print(f" - Coherence T1: {coherence_t1}")
+                #print(f" - Coherence T2: {coherence_t2}")
+                #print(f" - Price with {num_iterations} iterations and {num_shots} shots: ${round(price_total, 2)}\n")
 
-        print("--------------------------------------------\n")
+        #print("--------------------------------------------\n")
 
-    print("Final results \n")
+    recommender_output = f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}. \n - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}. \n - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}."
 
-    print(
-        f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}.")
-    print(
-        f" - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}.")
-    print(
-        f" - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}.")
-    print(
-        "\n!!! Testing phase! The results above might be very inaccurate, do not use these to pick a quantum device !!!\n")
+    return recommender_output

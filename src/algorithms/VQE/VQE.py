@@ -127,5 +127,8 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
     # Convert string to array
     X = np.fromstring(highest_possible_solution, np.int8) - 48
 
+    # Flip the bitstring to fix the order
+    X = X[::-1]
+
     #print(f'Most probable solution: {highest_possible_solution}')
     return X
