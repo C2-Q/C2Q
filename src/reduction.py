@@ -4,8 +4,30 @@ from pysat.solvers import Solver
 from collections import defaultdict
 from itertools import combinations
 
+def independent_set_to_sat(graph: nx.Graph) -> CNF:
+    """
+    Converts the Independent Set problem to a SAT problem.
 
-def independent_set_to_sat(graph: nx.Graph, k: int) -> CNF:
+    Parameters:
+        graph (nx.Graph): The input graph.
+        k (int): The desired size of the independent set.
+
+    Returns:
+        CNF: The SAT formula in CNF representing the Independent Set problem.
+    """
+    cnf = CNF()
+    n = len(graph.nodes)
+
+    # Variables: x_v where v is the vertex in the graph
+    var = lambda v: v + 1  # Create unique variables (v is 0-based)
+
+    # Clause 1: No two adjacent vertices can be in the independent set
+    # For each edge (u, v) in the graph, add the clause ¬x_u ∨ ¬x_v
+    for u, v in graph.edges:
+        cnf.append([-var(u), -var(v)])
+
+    return cnf
+def independent_set_to_k_sat(graph: nx.Graph, k: int) -> CNF:
     """
     Converts the Independent Set problem to a SAT problem.
 

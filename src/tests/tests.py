@@ -10,11 +10,13 @@ from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator, Aer
 
 from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize, qaoa_no_optimization, sample_results
+from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
+from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
 from src.recommender.recommender_engine import recommender
 from src.reduction import *
@@ -30,7 +32,7 @@ class MyTestCase(unittest.TestCase):
         """
         self.mul_snippet = "def a(p, q):\n    return p * q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
         self.maxCut_snippet = "def simple_cut_strategy(edges, n):\n    A, B = set(), set()\n    for node in range(n):\n        if len(A) < len(B):\n            A.add(node)\n        else:\n            B.add(node)\n    return sum(1 for u, v in edges if (u in A and v in B)), A, B\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\ncut_value, A, B = simple_cut_strategy(edges, 4)\nprint(cut_value, A, B)"
-        self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3),(3,4),(4,5),(5,0)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)"
+        self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
         self.matrix_define = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nnx.add_edges_from([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 2 , 3, matrix)"
         self.sub_snippet = "def a(p, q):\n    return p - q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
         self.parser = Parser(model_path="../../others/saved_models")
@@ -81,6 +83,26 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.mul_snippet)
         self.assertEqual(problem_type, 'MUL')  # add assertion here
 
+    def test_pdf_generation(self):
+        problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
+        print(problem_type, data)
+        self.assertEqual(problem_type, 'MaxCut')  # add assertion here
+        self.assertIsInstance(data.G, nx.Graph)
+        data.visualize()
+        self.assertEqual(nx.is_weighted(data.G), True)
+        mc = MaxCut(data.G)
+        mc.report()
+
+    def test_is_pdf_generation(self):
+        problem_type, data = self.parser.parse(self.is_snippet)
+        print(problem_type, data)
+        self.assertEqual(problem_type, 'MIS')  # add assertion here
+        self.assertIsInstance(data.G, nx.Graph)
+        data.visualize()
+        self.assertEqual(nx.is_weighted(data.G), True)
+        mis = MIS(data.G)
+        mis.report()
+
     def test_max_cut(self):
         problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
         print(problem_type, data)
@@ -111,6 +133,38 @@ class MyTestCase(unittest.TestCase):
         highest_possible_solution = sample_results(qc, parameters, theta)
         print(f"Most probable solution: {highest_possible_solution}")
         clique.draw_result(highest_possible_solution)
+
+    def test_max_cut_vqe(self):
+        problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
+        print(problem_type, data)
+        self.assertEqual(problem_type, 'MaxCut')  # add assertion here
+        self.assertIsInstance(data.G, nx.Graph)
+        data.visualize()
+        self.assertEqual(nx.is_weighted(data.G), True)
+        clique = Clique(data.G, 4)
+        qubo = clique.to_qubo()
+        qubo.display_matrix()
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        # qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        # qc = qaoa_dict["qc"]
+        # # Run the recommender
+        # recommender(qc)
+
+        # Run QAOA on local simulator
+        vqe_dict = vqe_optimization(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = vqe_dict["qc"]
+        parameters = vqe_dict["parameters"]
+        theta = vqe_dict["theta"]
+        recommender(qc)
+        from src.algorithms.VQE.VQE import sample_results
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        clique.draw_result(highest_possible_solution)
+
     def test_tsp_snippet(self):
         problem_type, data = self.parser.parse(self.tsp_snippet)
         self.assertEqual(problem_type, 'TSP')
@@ -223,6 +277,7 @@ class MyTestCase(unittest.TestCase):
         print("Original CNF solutions:", original_solutions)
         print("Converted CNF solutions:", converted_solutions)
         cha.printQ()
+
     def test_cnf_circuit(self):
         clauses = [
             [1, 2, 3],
@@ -235,6 +290,7 @@ class MyTestCase(unittest.TestCase):
         circuit2.draw(output="mpl", plot_barriers=False)
         plt.show()
         # circuit2.draw(output="latex")
+
     def test_chancellor(self):
         # Define CNF formula using clauses
         clauses = [
@@ -372,19 +428,13 @@ class MyTestCase(unittest.TestCase):
         G = nx.Graph()
         G.add_edges_from([(0, 1), (0, 2), (1, 2), (1, 3)])
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.G, 2)
+        independent_set_cnf = independent_set_to_sat(data.G)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
-        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3], iterations=1)
-        from qiskit.circuit.library import GroverOperator
-        op = GroverOperator(oracle,
-                            reflection_qubits=[0, 1, 2, 3])
-        qr = QuantumRegister(op.num_qubits)
-        cr = ClassicalRegister(4)
-        circuit = QuantumCircuit(qr, cr)
-        circuit.h([0, 1, 2, 3])
-
-        circuit = circuit.compose(op)
-        circuit.measure([0, 1, 2, 3], cr)
+        state_prep = QuantumCircuit(oracle.num_qubits)
+        state_prep.h([0, 1, 2, 3])
+        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3],
+                                working_qubits=[0, 1, 2, 3], state_pre=state_prep
+                                , iterations=1)
         print(solve_all_cnf_solutions(independent_set_cnf))
         #print(op.decompose())
         print(grover_circuit)
