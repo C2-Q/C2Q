@@ -2,7 +2,7 @@ from pysat.formula import CNF
 from src.problems.problem import *
 
 
-def _grover(sat, iterations=3):
+def _grover(sat, iterations=2):
     oracle = cnf_to_quantum_oracle_optimized(sat)
     grover_circuit = grover(oracle,
                             objective_qubits=list(range(sat.nv)),
@@ -31,7 +31,7 @@ class NP(Problem):
         chancellor.fillQ()
         chancellor.visualizeQ()
 
-    def grover(self, iterations=3):
+    def grover_sat(self, iterations=3):
         return _grover(self.sat, iterations)
 
     def grover_3sat(self, iterations=3):
