@@ -175,7 +175,7 @@ def qaoa_no_optimization(qubo, layers):
 
     # Add measurements for accurate gate numbers for the recommender system
     qc.measure_all()
-    
+
     qaoa_dict = {
         "qc": qc,
         "parameters": parameters,
@@ -233,8 +233,9 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
     return qaoa_dict
 
+
 def sample_results(qc, parameters, theta, backend=AerSimulator()):
-    qc_assigned_parameters = qc.assign_parameters({parameters:theta})
+    qc_assigned_parameters = qc.assign_parameters({parameters: theta})
     qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
     qc_transpiled.measure_all()
 
@@ -246,7 +247,7 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
         if count > max_count:
             max_count = count
             highest_possible_solution = key
-            
+
     # Convert string to array
     X = np.fromstring(highest_possible_solution, np.int8) - 48
 
