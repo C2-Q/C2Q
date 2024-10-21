@@ -7,13 +7,15 @@ from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
+from src.reduction import independent_set_to_sat
+
 
 class MIS(NP):
     """
     An application class for the maximal independent set problem based on a NetworkX graph.
     """
 
-    def __init__(self, graph: Union[nx.Graph, np.ndarray, List]) -> None:
+    def __init__(self, graph: nx.Graph) -> None:
         """
         Args:
             graph: A graph representing the problem. It can be specified directly as a
@@ -24,16 +26,17 @@ class MIS(NP):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
-        elif isinstance(graph, (np.ndarray, List)):
-            self.graph = nx.Graph()
-            self.graph.add_edges_from(graph)
         else:
-            raise TypeError("The graph must be a NetworkX graph or an adjacency list/array.")
+            raise TypeError("The graph must be a NetworkX graph")
 
         # Store nodes and mappings
         self.nodes = list(self.graph.nodes())
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
+
+    def reduce_to_sat(self):
+        n = len(self.nodes)
+        self.sat = independent_set_to_sat(self.graph, int(n/2))
 
     def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
         """
@@ -51,7 +54,7 @@ class MIS(NP):
         """
         n = len(self.nodes)
         Q = np.zeros((n, n))
-        A = 2*B
+        A = 2 * B
 
         # Add linear terms to Q diagonal
         for idx in range(n):
@@ -64,9 +67,7 @@ class MIS(NP):
                 node_j = self.nodes[j]
                 if self.graph.has_edge(node_i, node_j):
                     Q[i, j] += A
-                # Else, no change needed (we only modify upper triangular part)
 
-        # Return an instance of the QUBO class with an upper triangular matrix
         return QUBO(Q)
 
     def interpret(self, result: Union[np.ndarray, List[int]]) -> List[int]:
@@ -80,12 +81,12 @@ class MIS(NP):
             The list of node indices whose corresponding variable is 1.
         """
         x = np.array(result)
-        nodes_in_clique = []
+        nodes_in_mis = []
         for idx, val in enumerate(x):
             if val == 1:
                 node_label = self.indices_node[idx]
-                nodes_in_clique.append(node_label)
-        return nodes_in_clique
+                nodes_in_mis.append(node_label)
+        return nodes_in_mis
 
     def draw_result(self, result: Union[np.ndarray, List[int]], pos: Optional[Dict[int, np.ndarray]] = None) -> None:
         """

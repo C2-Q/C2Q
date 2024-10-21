@@ -1,7 +1,6 @@
 import ast
 import torch
 from transformers import RobertaTokenizer, AutoModelForSequenceClassification
-
 from src.graph import Graph
 
 # labels = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "Factor","ADD", "MUL", "SUB", "Unknown"]
@@ -16,10 +15,10 @@ PROBLEM_TAGS = {
     "ADD": 6,  # Addition
     "MUL": 7,  # Multiplication
     "SUB": 8,  # Subtraction
-
-    "Unknown": 9
+    "VC": 9,  # Vertex Cover
+    "Unknown": 10
 }
-GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor"]
+GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"]
 ARITHMETIC_TAGS = ["ADD", "MUL", "SUB"]
 
 # Reverse mapping, e.g., PROBLEM_POOLS[2] = "TSP"
@@ -59,12 +58,17 @@ class Parser:
         :param classical_code: str - The input classical code snippet.
         :return: problem_type: str, data: any - Returns the identified problem type and associated data.
         """
+        try:
+            # Check if the classical code is syntactically correct
+            tree = ast.parse(classical_code)
+        except SyntaxError as e:
+            print(f"Syntax Error in the provided code: {e}")
+            return "Unknown", None
         # predict labels of problem
         prediction = self._predict_classical_code(classical_code=classical_code)
         problem_class = self._recognize_problem_class(prediction)
         # ast traverse and extract data
         visitor = CodeVisitor()
-        tree = ast.parse(classical_code)
         visitor.visit(tree)
         vars, calls = visitor.get_extracted_data()
         # Use extracted data for specific problem types (e.g., graph-related or arithmetic problems)
