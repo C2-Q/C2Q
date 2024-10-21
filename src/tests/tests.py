@@ -115,10 +115,11 @@ class MyTestCase(unittest.TestCase):
         qubo.display_matrix()
         # Obtain the QAOA circuit
         qubo = qubo.Q
-        # qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        # qc = qaoa_dict["qc"]
-        # # Run the recommender
-        # recommender(qc)
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
 
         # Run QAOA on local simulator
         qaoa_dict = qaoa_optimize(qubo, layers=1)
@@ -127,12 +128,11 @@ class MyTestCase(unittest.TestCase):
         qc = qaoa_dict["qc"]
         parameters = qaoa_dict["parameters"]
         theta = qaoa_dict["theta"]
-        recommender(qc)
+
         # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
         highest_possible_solution = sample_results(qc, parameters, theta)
         print(f"Most probable solution: {highest_possible_solution}")
         clique.draw_result(highest_possible_solution)
-        clique.report()
 
     def test_max_cut_vqe(self):
         problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
