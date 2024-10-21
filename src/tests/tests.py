@@ -96,7 +96,8 @@ class MyTestCase(unittest.TestCase):
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
         qc = qaoa_dict["qc"]
         # Run the recommender
-        recommender(qc)
+        recommender_output = recommender(qc)
+        print(recommender_output)
 
         # Run QAOA on local simulator
         qaoa_dict = qaoa_optimize(qubo, layers=1)
