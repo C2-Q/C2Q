@@ -18,6 +18,7 @@ from src.problems.clique import Clique
 from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
+from src.problems.tsp import TSP
 from src.recommender.recommender_engine import recommender
 from src.reduction import *
 from src.sat_to_qubo import *
@@ -113,10 +114,12 @@ class MyTestCase(unittest.TestCase):
         clique = Clique(data.G, 4)
         qubo = clique.to_qubo()
         qubo.display_matrix()
+        
         # Obtain the QAOA circuit
         qubo = qubo.Q
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
         qc = qaoa_dict["qc"]
+
         # Run the recommender
         recommender_output = recommender(qc)
         print(recommender_output)
@@ -167,8 +170,32 @@ class MyTestCase(unittest.TestCase):
 
     def test_tsp_snippet(self):
         problem_type, data = self.parser.parse(self.tsp_snippet)
+        tsp = TSP(data.G)
         self.assertEqual(problem_type, 'TSP')
         data.visualize()
+        qubo = tsp.to_qubo()
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        tsp.draw_result(highest_possible_solution)
 
     def test_mis(self):
         problem_type, data = self.parser.parse(self.is_snippet)
@@ -179,11 +206,30 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
-        Q = ims.to_qubo()
-        Q.display_matrix()
-        x, value = Q.solve_brute_force()
-        value = ims.interpret(x)
-        ims.draw_result(value)
+        qubo = ims.to_qubo()
+        qubo.display_matrix()
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        ims.draw_result(highest_possible_solution)
 
     def test_mul(self):
         problem_type, data = self.parser.parse(self.mul_snippet)
@@ -215,10 +261,28 @@ class MyTestCase(unittest.TestCase):
         qubo.display_matrix()
         op, offset = convert_qubo_to_ising(qubo.Q)
         print(op, offset)
-        # qaoa
-        circuit, _, _, _, _ = qaoa_optimize(qubo.Q, layers=1)
-        print(circuit)
-        # recommender ...
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        clique.draw_result(highest_possible_solution)
 
     def test_clique(self):
         self.assertEqual(True, True)
