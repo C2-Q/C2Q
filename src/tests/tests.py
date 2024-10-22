@@ -10,14 +10,15 @@ from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator, Aer
 
 from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize, qaoa_no_optimization, sample_results
+from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
+from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
-from src.problems.tsp import TSP
-from src.recommender.recommender import recommender
+from src.recommender.recommender_engine import recommender
 from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
@@ -31,10 +32,10 @@ class MyTestCase(unittest.TestCase):
         """
         self.mul_snippet = "def a(p, q):\n    return p * q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
         self.maxCut_snippet = "def simple_cut_strategy(edges, n):\n    A, B = set(), set()\n    for node in range(n):\n        if len(A) < len(B):\n            A.add(node)\n        else:\n            B.add(node)\n    return sum(1 for u, v in edges if (u in A and v in B)), A, B\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\ncut_value, A, B = simple_cut_strategy(edges, 4)\nprint(cut_value, A, B)"
-        self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3),(3,4),(4,5),(5,0)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)"
+        self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
         self.matrix_define = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nnx.add_edges_from([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 2 , 3, matrix)"
         self.sub_snippet = "def a(p, q):\n    return p - q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
-        self.parser = Parser(model_path="others/saved_models")
+        self.parser = Parser(model_path="../../others/saved_models")
         self.tsp_snippet = "def a(cost_matrix):\n    n = len(cost_matrix)\n    visited = [0]\n    total_cost = 0\n    current = 0\n    while len(visited) < n:\n        next_city = min([city for city in range(n) if city not in visited], key=lambda city: cost_matrix[current][city])\n        total_cost += cost_matrix[current][next_city]\n        visited.append(next_city)\n        current = next_city\n    total_cost += cost_matrix[visited[-1]][0]\n    return total_cost, visited\n\n# Input data\ncost_matrix = [[0, 11, 30], [11, 0, 35], [30, 35, 0]]\ncost, route = a(cost_matrix)\nprint(cost, route)"
         self.code_visitor = CodeVisitor()
         self.clique_snippet = "def compute_clique(nodes, edges):\n    clique = set()\n    for node in nodes:\n        if all((node, neighbor) in edges or (neighbor, node) in edges for neighbor in clique):\n            clique.add(node)\n    return clique\n\n# Input data\nnodes = [0, 1, 2, 3]\nedges = [(0, 1), (0, 2), (1, 2), (2, 3)]\nresult = compute_clique(nodes, edges)\nprint(result)"
@@ -82,6 +83,26 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.mul_snippet)
         self.assertEqual(problem_type, 'MUL')  # add assertion here
 
+    def test_pdf_generation(self):
+        problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
+        print(problem_type, data)
+        self.assertEqual(problem_type, 'MaxCut')  # add assertion here
+        self.assertIsInstance(data.G, nx.Graph)
+        data.visualize()
+        self.assertEqual(nx.is_weighted(data.G), True)
+        mc = MaxCut(data.G)
+        mc.report()
+
+    def test_is_pdf_generation(self):
+        problem_type, data = self.parser.parse(self.is_snippet)
+        print(problem_type, data)
+        self.assertEqual(problem_type, 'MIS')  # add assertion here
+        self.assertIsInstance(data.G, nx.Graph)
+        data.visualize()
+        self.assertEqual(nx.is_weighted(data.G), True)
+        mis = MIS(data.G)
+        mis.report()
+
     def test_max_cut(self):
         problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
         print(problem_type, data)
@@ -92,12 +113,10 @@ class MyTestCase(unittest.TestCase):
         clique = Clique(data.G, 4)
         qubo = clique.to_qubo()
         qubo.display_matrix()
-
         # Obtain the QAOA circuit
         qubo = qubo.Q
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
         qc = qaoa_dict["qc"]
-
         # Run the recommender
         recommender_output = recommender(qc)
         print(recommender_output)
@@ -115,34 +134,41 @@ class MyTestCase(unittest.TestCase):
         print(f"Most probable solution: {highest_possible_solution}")
         clique.draw_result(highest_possible_solution)
 
-    def test_tsp_snippet(self):
-        problem_type, data = self.parser.parse(self.tsp_snippet)
-        tsp = TSP(data.G)
-        self.assertEqual(problem_type, 'TSP')
+    def test_max_cut_vqe(self):
+        problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
+        print(problem_type, data)
+        self.assertEqual(problem_type, 'MaxCut')  # add assertion here
+        self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
-        qubo = tsp.to_qubo()
-
+        self.assertEqual(nx.is_weighted(data.G), True)
+        clique = Clique(data.G, 4)
+        qubo = clique.to_qubo()
+        qubo.display_matrix()
         # Obtain the QAOA circuit
         qubo = qubo.Q
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        qc = qaoa_dict["qc"]
-
-        # Run the recommender
-        recommender_output = recommender(qc)
-        print(recommender_output)
+        # qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        # qc = qaoa_dict["qc"]
+        # # Run the recommender
+        # recommender(qc)
 
         # Run QAOA on local simulator
-        qaoa_dict = qaoa_optimize(qubo, layers=1)
+        vqe_dict = vqe_optimization(qubo, layers=1)
 
         # Obtain the parameters of the QAOA run
-        qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
-
+        qc = vqe_dict["qc"]
+        parameters = vqe_dict["parameters"]
+        theta = vqe_dict["theta"]
+        recommender(qc)
+        from src.algorithms.VQE.VQE import sample_results
         # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
         highest_possible_solution = sample_results(qc, parameters, theta)
         print(f"Most probable solution: {highest_possible_solution}")
-        tsp.draw_result(highest_possible_solution)
+        clique.draw_result(highest_possible_solution)
+
+    def test_tsp_snippet(self):
+        problem_type, data = self.parser.parse(self.tsp_snippet)
+        self.assertEqual(problem_type, 'TSP')
+        data.visualize()
 
     def test_mis(self):
         problem_type, data = self.parser.parse(self.is_snippet)
@@ -153,30 +179,11 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
-        qubo = ims.to_qubo()
-        qubo.display_matrix()
-
-        # Obtain the QAOA circuit
-        qubo = qubo.Q
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        qc = qaoa_dict["qc"]
-
-        # Run the recommender
-        recommender_output = recommender(qc)
-        print(recommender_output)
-
-        # Run QAOA on local simulator
-        qaoa_dict = qaoa_optimize(qubo, layers=1)
-
-        # Obtain the parameters of the QAOA run
-        qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
-
-        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
-        highest_possible_solution = sample_results(qc, parameters, theta)
-        print(f"Most probable solution: {highest_possible_solution}")
-        ims.draw_result(highest_possible_solution)
+        Q = ims.to_qubo()
+        Q.display_matrix()
+        x, value = Q.solve_brute_force()
+        value = ims.interpret(x)
+        ims.draw_result(value)
 
     def test_mul(self):
         problem_type, data = self.parser.parse(self.mul_snippet)
@@ -208,28 +215,10 @@ class MyTestCase(unittest.TestCase):
         qubo.display_matrix()
         op, offset = convert_qubo_to_ising(qubo.Q)
         print(op, offset)
-
-        # Obtain the QAOA circuit
-        qubo = qubo.Q
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        qc = qaoa_dict["qc"]
-
-        # Run the recommender
-        recommender_output = recommender(qc)
-        print(recommender_output)
-
-        # Run QAOA on local simulator
-        qaoa_dict = qaoa_optimize(qubo, layers=1)
-
-        # Obtain the parameters of the QAOA run
-        qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
-
-        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
-        highest_possible_solution = sample_results(qc, parameters, theta)
-        print(f"Most probable solution: {highest_possible_solution}")
-        clique.draw_result(highest_possible_solution)
+        # qaoa
+        circuit, _, _, _, _ = qaoa_optimize(qubo.Q, layers=1)
+        print(circuit)
+        # recommender ...
 
     def test_clique(self):
         self.assertEqual(True, True)
@@ -301,7 +290,7 @@ class MyTestCase(unittest.TestCase):
         circuit2.draw(output="mpl", plot_barriers=False)
         plt.show()
         # circuit2.draw(output="latex")
-        
+
     def test_chancellor(self):
         # Define CNF formula using clauses
         clauses = [
@@ -439,19 +428,13 @@ class MyTestCase(unittest.TestCase):
         G = nx.Graph()
         G.add_edges_from([(0, 1), (0, 2), (1, 2), (1, 3)])
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.G, 2)
+        independent_set_cnf = independent_set_to_sat(data.G)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
-        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3], iterations=1)
-        from qiskit.circuit.library import GroverOperator
-        op = GroverOperator(oracle,
-                            reflection_qubits=[0, 1, 2, 3])
-        qr = QuantumRegister(op.num_qubits)
-        cr = ClassicalRegister(4)
-        circuit = QuantumCircuit(qr, cr)
-        circuit.h([0, 1, 2, 3])
-
-        circuit = circuit.compose(op)
-        circuit.measure([0, 1, 2, 3], cr)
+        state_prep = QuantumCircuit(oracle.num_qubits)
+        state_prep.h([0, 1, 2, 3])
+        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3],
+                                working_qubits=[0, 1, 2, 3], state_pre=state_prep
+                                , iterations=1)
         print(solve_all_cnf_solutions(independent_set_cnf))
         #print(op.decompose())
         print(grover_circuit)
