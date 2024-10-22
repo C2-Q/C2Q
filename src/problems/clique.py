@@ -1,11 +1,17 @@
+import os
+
 import numpy as np
 import networkx as nx
 from typing import Optional, Union, List, Dict
 
+from fpdf import FPDF
+
+from src.algorithms.QAOA.QAOA import qaoa_no_optimization, qaoa_optimize, sample_results
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
+from src.recommender.recommender_engine import recommender
 from src.reduction import clique_to_sat
 
 
@@ -129,3 +135,75 @@ class Clique(NP):
             edge_color='black'
         )
         plt.show()
+
+    def report(self) -> None:
+        """
+        Generates a PDF report summarizing the problem, its solution, and a visualization of the result.
+        Args:
+            result: The calculated result of the problem (binary vector).
+        """
+        # Create an instance of FPDF
+        pdf = FPDF()
+
+        # Add a page to the PDF
+        pdf.add_page()
+
+        # Set title
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(200, 10, "Clique Problem Report", ln=True, align='C')
+
+        # Add some details about the problem
+        pdf.set_font("Arial", size=12)
+        pdf.ln(10)  # Add some vertical space
+        pdf.cell(200, 10, f"Clique Size (K): {self.size}", ln=True, align='L')
+        pdf.cell(200, 10, f"Number of Nodes: {len(self.nodes)}", ln=True, align='L')
+        pdf.cell(200, 10, "Nodes in the Clique:", ln=True, align='L')
+
+        # Interpret and list the solution using self.graph
+        qubo = self.to_qubo().Q
+        # qubo.display_matrix()
+        # Obtain the QAOA circuit
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+        # Run the recommender
+        recommender(qc)
+        # Run QAOA on local simulator
+
+        # qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        pdf.set_font("Arial", size=12)
+        for node in self.nodes:
+            pdf.cell(200, 10, f"- Node {node}", ln=True, align='L')
+
+        # Use self.graph for visualization and save the graph with results highlighted
+        plt.figure(figsize=(8, 6))
+        pos = nx.spring_layout(self.graph)  # Generate positions for the nodes in self.graph
+        self.draw_result(highest_possible_solution, pos=pos)
+
+        # Save the visualization as a PNG
+        image_path = "clique_result.png"
+        plt.savefig(image_path)
+        plt.close()
+
+        # Insert the image into the PDF
+        pdf.ln(10)
+        pdf.cell(200, 10, "Graph Visualization:", ln=True, align='L')
+        pdf.image(image_path, x=10, y=pdf.get_y(), w=190)
+
+        # Save the PDF to a file
+        pdf_output_path = "clique_report.pdf"
+        pdf.output(pdf_output_path)
+
+        # Optionally, clean up the saved PNG image
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        print(f"PDF report saved as {pdf_output_path}")

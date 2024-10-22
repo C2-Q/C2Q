@@ -92,6 +92,7 @@ class MyTestCase(unittest.TestCase):
         qubo_instance.display()
         qubo_instance.display_matrix()
         result = qubo_instance.solve_brute_force()
+        print(result[0])
         list = vc.interpret(result[0])
         vc.draw_result(result[0])
 
