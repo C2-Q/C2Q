@@ -16,7 +16,8 @@ from src.parser.parser import Parser, CodeVisitor
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
 from src.problems.maximal_independent_set import MIS
-from src.recommender.recommender_engine import recommender
+from src.problems.tsp import TSP
+from src.recommender.recommender import recommender
 from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
@@ -33,7 +34,7 @@ class MyTestCase(unittest.TestCase):
         self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3),(3,4),(4,5),(5,0)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)"
         self.matrix_define = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nnx.add_edges_from([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 2 , 3, matrix)"
         self.sub_snippet = "def a(p, q):\n    return p - q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
-        self.parser = Parser(model_path="../../others/saved_models")
+        self.parser = Parser(model_path="others/saved_models")
         self.tsp_snippet = "def a(cost_matrix):\n    n = len(cost_matrix)\n    visited = [0]\n    total_cost = 0\n    current = 0\n    while len(visited) < n:\n        next_city = min([city for city in range(n) if city not in visited], key=lambda city: cost_matrix[current][city])\n        total_cost += cost_matrix[current][next_city]\n        visited.append(next_city)\n        current = next_city\n    total_cost += cost_matrix[visited[-1]][0]\n    return total_cost, visited\n\n# Input data\ncost_matrix = [[0, 11, 30], [11, 0, 35], [30, 35, 0]]\ncost, route = a(cost_matrix)\nprint(cost, route)"
         self.code_visitor = CodeVisitor()
         self.clique_snippet = "def compute_clique(nodes, edges):\n    clique = set()\n    for node in nodes:\n        if all((node, neighbor) in edges or (neighbor, node) in edges for neighbor in clique):\n            clique.add(node)\n    return clique\n\n# Input data\nnodes = [0, 1, 2, 3]\nedges = [(0, 1), (0, 2), (1, 2), (2, 3)]\nresult = compute_clique(nodes, edges)\nprint(result)"
@@ -91,10 +92,12 @@ class MyTestCase(unittest.TestCase):
         clique = Clique(data.G, 4)
         qubo = clique.to_qubo()
         qubo.display_matrix()
+
         # Obtain the QAOA circuit
         qubo = qubo.Q
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
         qc = qaoa_dict["qc"]
+
         # Run the recommender
         recommender_output = recommender(qc)
         print(recommender_output)
@@ -111,10 +114,35 @@ class MyTestCase(unittest.TestCase):
         highest_possible_solution = sample_results(qc, parameters, theta)
         print(f"Most probable solution: {highest_possible_solution}")
         clique.draw_result(highest_possible_solution)
+
     def test_tsp_snippet(self):
         problem_type, data = self.parser.parse(self.tsp_snippet)
+        tsp = TSP(data.G)
         self.assertEqual(problem_type, 'TSP')
         data.visualize()
+        qubo = tsp.to_qubo()
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        tsp.draw_result(highest_possible_solution)
 
     def test_mis(self):
         problem_type, data = self.parser.parse(self.is_snippet)
@@ -125,11 +153,30 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
-        Q = ims.to_qubo()
-        Q.display_matrix()
-        x, value = Q.solve_brute_force()
-        value = ims.interpret(x)
-        ims.draw_result(value)
+        qubo = ims.to_qubo()
+        qubo.display_matrix()
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        ims.draw_result(highest_possible_solution)
 
     def test_mul(self):
         problem_type, data = self.parser.parse(self.mul_snippet)
@@ -161,10 +208,28 @@ class MyTestCase(unittest.TestCase):
         qubo.display_matrix()
         op, offset = convert_qubo_to_ising(qubo.Q)
         print(op, offset)
-        # qaoa
-        circuit, _, _, _, _ = qaoa_optimize(qubo.Q, layers=1)
-        print(circuit)
-        # recommender ...
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        clique.draw_result(highest_possible_solution)
 
     def test_clique(self):
         self.assertEqual(True, True)
@@ -223,6 +288,7 @@ class MyTestCase(unittest.TestCase):
         print("Original CNF solutions:", original_solutions)
         print("Converted CNF solutions:", converted_solutions)
         cha.printQ()
+
     def test_cnf_circuit(self):
         clauses = [
             [1, 2, 3],
@@ -235,6 +301,7 @@ class MyTestCase(unittest.TestCase):
         circuit2.draw(output="mpl", plot_barriers=False)
         plt.show()
         # circuit2.draw(output="latex")
+        
     def test_chancellor(self):
         # Define CNF formula using clauses
         clauses = [

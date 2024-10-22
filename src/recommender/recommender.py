@@ -123,10 +123,11 @@ def select_provider(provider):
         device_list = [
             "IonQ Aria",
             "Quantinuum H1",
-            "Quantinuum H2"
+            "Quantinuum H2",
+            "Rigetti Ankaa-9Q-3"
         ]
 
-        price_list_shots = [[0.000220, 0.000975], [12.5], [13.5]]
+        price_list_shots = [[0.000220, 0.000975], [12.5], [13.5], [1.3]]
 
     if provider == "IBM Quantum":
         device_list = [
@@ -230,6 +231,21 @@ def select_device(device):
     #    two_qubit_gate_timing = 70*10**(-9)
     #    t1_relaxation_time = 13*10**(-6)
     #    t2_relaxation_time = 13*10**(-6)
+
+    if device == "Rigetti Ankaa-9Q-3":
+        # Rigetti Ankaa-9Q-3 9-qubit fake backend
+        coupling_map_path = os.path.join(dirname, 'coupling_maps/rigetti_ankaa_9q_3_coupling_map.npy')
+        coupling_map = CouplingMap(np.load(coupling_map_path))
+        device_qubits = 9
+        backend = GenericBackendV2(device_qubits, coupling_map=coupling_map)
+        quantum_volume = 0
+        single_qubit_gate_error = 0.001
+        two_qubit_gate_error = 0.008
+        measurement_error = 0.0185 #(?)
+        single_qubit_gate_timing = 40 * 10 ** (-9) #(?)
+        two_qubit_gate_timing = 70 * 10 ** (-9) #(?)
+        t1_relaxation_time = 21 * 10 ** (-6)
+        t2_relaxation_time = 24 * 10 ** (-6)
 
     if device == "IQM Garnet":
         # IQM Garnet 20-qubit fake backend
@@ -404,8 +420,8 @@ def recommender(qc):
 
                 # Azure Quantum pricing is different on every provider
                 if provider == "Azure Quantum":
-                    #if device == "Rigetti Ankaa-2":
-                    #    price_total = price_list_shots[index_d][0]*time_to_execute
+                    if device == "Rigetti Ankaa-9Q-3":
+                        price_total = price_list_shots[index_d][0]*time_to_execute
 
                     # IonQ Aria pricing is based on the amount of single-qubit and two-qubit gates
                     if device == "IonQ Aria":
