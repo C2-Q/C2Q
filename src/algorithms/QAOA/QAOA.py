@@ -104,7 +104,7 @@ def optimize_parameters(qc, ising, parameters, theta, estimator):
 
     # Here we can change the optimization method etc.
     min_minimized_optimization = minimize(cost_estimator, theta, method="Powell",
-                                          args=(qc, ising, parameters, estimator, exp_value_list))
+                                          args=(qc, ising, estimator, exp_value_list))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
