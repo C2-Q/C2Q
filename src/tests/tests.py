@@ -155,7 +155,7 @@ class MyTestCase(unittest.TestCase):
         # recommender(qc)
 
         # Run QAOA on local simulator
-        vqe_dict = vqe_optimization(qubo, layers=1)
+        vqe_dict = vqe_optimization(qubo, layers=4)
 
         # Obtain the parameters of the QAOA run
         qc = vqe_dict["qc"]
@@ -272,7 +272,7 @@ class MyTestCase(unittest.TestCase):
         print(recommender_output)
 
         # Run QAOA on local simulator
-        qaoa_dict = qaoa_optimize(qubo, layers=1)
+        qaoa_dict = qaoa_optimize(qubo, layers=3)
 
         # Obtain the parameters of the QAOA run
         qc = qaoa_dict["qc"]
@@ -284,8 +284,6 @@ class MyTestCase(unittest.TestCase):
         print(f"Most probable solution: {highest_possible_solution}")
         clique.draw_result(highest_possible_solution)
 
-    def test_clique(self):
-        self.assertEqual(True, True)
 
     def test_graph_init(self):
         # Example 1: Using a distance matrix
