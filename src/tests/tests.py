@@ -115,10 +115,6 @@ class MyTestCase(unittest.TestCase):
         qubo = clique.to_qubo()
         qubo.display_matrix()
 
-
-
-
-
         # Obtain the QAOA circuit
         qubo = qubo.Q
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
