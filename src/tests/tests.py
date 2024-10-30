@@ -114,6 +114,7 @@ class MyTestCase(unittest.TestCase):
         clique = Clique(data.G, 4)
         qubo = clique.to_qubo()
         qubo.display_matrix()
+        
 
         # Obtain the QAOA circuit
         qubo = qubo.Q
