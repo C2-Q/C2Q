@@ -3,11 +3,11 @@ from qiskit_aer import AerSimulator
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import PauliEvolutionGate
 from qiskit.quantum_info import SparsePauliOp
+from qiskit.primitives import Estimator
 
 from scipy.optimize import minimize
 
 import numpy as np
-
 
 def convert_qubo_to_ising(qubo):
     # Number of qubits
@@ -43,7 +43,6 @@ def convert_qubo_to_ising(qubo):
 
     return operators, offset
 
-
 def initialize_qaoa(n):
     qc = QuantumCircuit(n)
     qc.h(range(n))
@@ -51,19 +50,16 @@ def initialize_qaoa(n):
 
     return qc
 
-
 # Add a cost layer based on the Ising Hamiltonian
 def add_cost_layer(qc, ising, gamma, n):
     cost_layer = PauliEvolutionGate(ising, gamma)
     qc.append(cost_layer, range(n))
     qc.barrier()
 
-
 # Add a QAOA mixer layer
 def add_mixer_layer(qc, beta, n):
     qc.rx(2 * beta, range(n))
     qc.barrier()
-
 
 def add_qaoa_layer(qc, ising, parameters, layers, n):
     i = 0
@@ -77,7 +73,6 @@ def add_qaoa_layer(qc, ising, parameters, layers, n):
         # Move to next QAOA layer
         i += 2
 
-
 def initialize_parameters(layers):
     theta = []
 
@@ -90,58 +85,32 @@ def initialize_parameters(layers):
 
     return theta
 
+def cost_estimator(theta, qc, ising, estimator, exp_value_list):
+    # Calculate the expectation value
 
-# Calculate the expectation value using the QUBO matrix. We are trying to minimize this expectation value.
-def calculate_expectation_value(theta, qc, qubo, parameters, exp_value_list, backend, shots=1000):
-    # Assign the gammas and the betas to the circuit
-    qc_assigned_parameters = qc.assign_parameters({parameters: theta})
-    # Transpile the circuit for the backend and measure the qubits
-    qc_assigned_parameters.measure_all()
-    qc_transpiled = transpile(qc_assigned_parameters, backend)
+    isa_hamiltonian = ising.apply_layout(qc.layout)
+    job = estimator.run(qc, isa_hamiltonian, theta, shots=1000)
 
-    # Run the circuit on the backend
-    result = backend.run(qc_transpiled, shots=shots).result()
+    result = job.result()
+    cost = result.values[0]
 
-    # Save the counts to a variable
-    counts = result.get_counts()
+    exp_value_list.append(cost)
 
-    exp_value = 0
+    return cost
 
-    for bitstring in counts.keys():
-        # Calculate the occurrence of a bitstring with respect to the number of shots
-        occurrence_bitstring = counts[bitstring] / shots
-
-        # Calculate the QUBO result of a bitstring
-        qubo_value = 0
-        for i in range(len(qubo)):
-            for j in range(len(qubo)):
-                if i == j:
-                    qubo_value += qubo[i][j] * int(bitstring[i])
-                else:
-                    qubo_value += qubo[i][j] * int(bitstring[i]) * int(bitstring[j])
-
-        # Expectation values of all bitstrings are summed
-        exp_value += occurrence_bitstring * qubo_value
-
-    exp_value_list.append(exp_value)
-
-    return exp_value
-
-
-def optimize_parameters(qc, qubo, parameters, theta, backend):
+def optimize_parameters(qc, ising, parameters, theta, estimator):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
     # Here we can change the optimization method etc.
-    min_minimized_optimization = minimize(calculate_expectation_value, theta, method="Powell",
-                                          args=(qc, qubo, parameters, exp_value_list, backend))
+    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell",
+                                          args=(qc, ising, estimator, exp_value_list))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
     min_exp_value_list = exp_value_list
 
     return min_minimized_optimization.x, minimum_objective_value, min_exp_value_list
-
 
 def qaoa_no_optimization(qubo, layers):
     """
@@ -185,8 +154,7 @@ def qaoa_no_optimization(qubo, layers):
     # Return QAOA circuit, parameter list and initial values for the parameters
     return qaoa_dict
 
-
-def qaoa_optimize(qubo, layers, backend=AerSimulator()):
+def qaoa_optimize(qubo, layers):
     """
     Implements QAOA with given QUBO.
 
@@ -219,27 +187,30 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     # Apply the QAOA layers
     add_qaoa_layer(qc, ising, parameters, layers, n)
 
+    estimator = Estimator()
+
     # Optimize the parameters
-    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
+    #theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
+    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, ising, parameters, theta, estimator)
 
     qaoa_dict = {
         "qc": qc,
         "parameters": parameters,
         "theta": theta,
         "minimum_objective_value": minimum_objective_value,
-        "exp_value_list": exp_value_list
+        "exp_value_list": exp_value_list,
+        "offset": offset
     }
 
     # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
     return qaoa_dict
-
 
 def sample_results(qc, parameters, theta, backend=AerSimulator()):
     qc_assigned_parameters = qc.assign_parameters({parameters: theta})
     qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
     qc_transpiled.measure_all()
 
-    counts = backend.run(qc_transpiled, shots=10000).result().get_counts()
+    counts = backend.run(qc_transpiled, shots=1000).result().get_counts()
 
     highest_possible_solution = 0
     max_count = 0
@@ -249,10 +220,7 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
             highest_possible_solution = key
 
     # Convert string to array
-    X = np.fromstring(highest_possible_solution, np.int8) - 48
-
-    # Flip the bitstring to fix the order
-    X = X[::-1]
+    X = np.fromiter(highest_possible_solution, dtype=int)
 
     #print(f'Most probable solution: {highest_possible_solution}')
     return X
