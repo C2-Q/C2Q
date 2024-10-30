@@ -18,6 +18,7 @@ from src.problems.clique import Clique
 from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
+from src.problems.tsp import TSP
 from src.recommender.recommender_engine import recommender
 from src.reduction import *
 from src.sat_to_qubo import *
@@ -32,7 +33,7 @@ class MyTestCase(unittest.TestCase):
         """
         self.mul_snippet = "def a(p, q):\n    return p * q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
         self.maxCut_snippet = "def simple_cut_strategy(edges, n):\n    A, B = set(), set()\n    for node in range(n):\n        if len(A) < len(B):\n            A.add(node)\n        else:\n            B.add(node)\n    return sum(1 for u, v in edges if (u in A and v in B)), A, B\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\ncut_value, A, B = simple_cut_strategy(edges, 4)\nprint(cut_value, A, B)"
-        self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 4), (0, 2), (4, 2), (4, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
+        self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
         self.matrix_define = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\nindependent_set = independent_nodes(4, edges)\nprint(independent_set)\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nnx.add_edges_from([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 2 , 3, matrix)"
         self.sub_snippet = "def a(p, q):\n    return p - q\n\n# Input data\np, q = -8, 8\nresult = a(-10, q)\nprint(result)"
         self.parser = Parser(model_path="../../others/saved_models")
@@ -96,9 +97,9 @@ class MyTestCase(unittest.TestCase):
     def test_is_pdf_generation(self):
         problem_type, data = self.parser.parse(self.is_snippet)
         print(problem_type, data)
-        #self.assertEqual(problem_type, 'MIS')  # add assertion here
+        self.assertEqual(problem_type, 'MIS')  # add assertion here
         self.assertIsInstance(data.G, nx.Graph)
-        # data.visualize()
+        data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
         mis = MIS(data.G)
         mis.report()
@@ -113,10 +114,12 @@ class MyTestCase(unittest.TestCase):
         clique = Clique(data.G, 4)
         qubo = clique.to_qubo()
         qubo.display_matrix()
+
         # Obtain the QAOA circuit
         qubo = qubo.Q
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
         qc = qaoa_dict["qc"]
+
         # Run the recommender
         recommender_output = recommender(qc)
         print(recommender_output)
@@ -167,14 +170,32 @@ class MyTestCase(unittest.TestCase):
 
     def test_tsp_snippet(self):
         problem_type, data = self.parser.parse(self.tsp_snippet)
+        tsp = TSP(data.G)
         self.assertEqual(problem_type, 'TSP')
         data.visualize()
+        qubo = tsp.to_qubo()
 
-    def test_mis_reduction(self):
-        problem_type, data = self.parser.parse(self.is_snippet)
-        data.visualize()
-        formula = maximal_independent_set_to_sat(data.G)
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
 
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        tsp.draw_result(highest_possible_solution)
 
     def test_mis(self):
         problem_type, data = self.parser.parse(self.is_snippet)
@@ -185,11 +206,30 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
-        Q = ims.to_qubo()
-        Q.display_matrix()
-        x, value = Q.solve_brute_force()
-        print(x)
-        ims.draw_result(result=x)
+        qubo = ims.to_qubo()
+        qubo.display_matrix()
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        ims.draw_result(highest_possible_solution)
 
     def test_mul(self):
         problem_type, data = self.parser.parse(self.mul_snippet)
@@ -221,10 +261,28 @@ class MyTestCase(unittest.TestCase):
         qubo.display_matrix()
         op, offset = convert_qubo_to_ising(qubo.Q)
         print(op, offset)
-        # qaoa
-        circuit, _, _, _, _ = qaoa_optimize(qubo.Q, layers=1)
-        print(circuit)
-        # recommender ...
+
+        # Obtain the QAOA circuit
+        qubo = qubo.Q
+        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qc = qaoa_dict["qc"]
+
+        # Run the recommender
+        recommender_output = recommender(qc)
+        print(recommender_output)
+
+        # Run QAOA on local simulator
+        qaoa_dict = qaoa_optimize(qubo, layers=1)
+
+        # Obtain the parameters of the QAOA run
+        qc = qaoa_dict["qc"]
+        parameters = qaoa_dict["parameters"]
+        theta = qaoa_dict["theta"]
+
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        clique.draw_result(highest_possible_solution)
 
     def test_clique(self):
         self.assertEqual(True, True)
@@ -268,7 +326,7 @@ class MyTestCase(unittest.TestCase):
         cnf = [[-1, -2, -3], [1, 2, 3], [1, -2, -3], [1, 3, -2], [-1, -2, 3], [2, 1, 4],
                [-1, -3, -4], [2, 3, 4], [1, 3, 4], [1, -3, 4], [1, 3, 5], [3, 4, 5], [-2, -3, -5], [1, 2, -3],
                [2, 4, 5], [2, 3, 5], [-1, -4, -5], [3, 4]]
-        #cnf = [[1, 2, 3], [2, -3], [-2], [1, 2, 3, 4], [3, 4, 5], [2, 3, 4], [2, 3, 5], [3, 4, 6], [3, 4, -5, -6]]
+        # cnf = [[1, 2, 3], [2, -3], [-2], [1, 2, 3, 4], [3, 4, 5], [2, 3, 4], [2, 3, 5], [3, 4, 6], [3, 4, -5, -6]]
         converted_cnf = sat_to_3sat(cnf)
         print("Converted 3-SAT CNF:", converted_cnf.clauses)
 
@@ -398,7 +456,7 @@ class MyTestCase(unittest.TestCase):
         qc = cnf_to_quantum_oracle_optimized(formula)
 
         combined_circuit = QuantumCircuit(qc.num_qubits)
-        #combined_circuit.h(range(formula.nv))
+        # combined_circuit.h(range(formula.nv))
         combined_circuit.x([1, 3])
         combined_circuit = combined_circuit.compose(qc)
 
@@ -434,15 +492,15 @@ class MyTestCase(unittest.TestCase):
         G = nx.Graph()
         G.add_edges_from([(0, 1), (0, 2), (1, 2), (1, 3)])
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = maximal_independent_set_to_sat(data.G)
+        independent_set_cnf = independent_set_to_sat(data.G)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
         state_prep = QuantumCircuit(oracle.num_qubits)
         state_prep.h([0, 1, 2, 3])
         grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3],
                                 working_qubits=[0, 1, 2, 3], state_pre=state_prep
-                                , iterations=2)
+                                , iterations=1)
         print(solve_all_cnf_solutions(independent_set_cnf))
-        #print(op.decompose())
+        # print(op.decompose())
         print(grover_circuit)
         backend = AerSimulator()
         transpiled_circuit = transpile(grover_circuit, backend=backend)
