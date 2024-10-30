@@ -155,7 +155,7 @@ class MyTestCase(unittest.TestCase):
         # recommender(qc)
 
         # Run QAOA on local simulator
-        vqe_dict = vqe_optimization(qubo, layers=4)
+        vqe_dict = qaoa_optimize(qubo, layers=4)
 
         # Obtain the parameters of the QAOA run
         qc = vqe_dict["qc"]
