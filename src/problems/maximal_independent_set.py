@@ -17,7 +17,7 @@ from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
-from src.reduction import independent_set_to_sat
+from src.reduction import independent_set_to_sat, maximal_independent_set_to_sat
 
 
 class MIS(NP):
@@ -51,7 +51,7 @@ class MIS(NP):
 
     def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
         """
-        Converts the clique problem into a QUBO problem represented by a QUBO class instance
+        Converts the mis problem into a QUBO problem represented by a QUBO class instance
         based on the Hamiltonian H = H_A + H_B
         Was done intuitively...
          H_A = A*sum_((u,v)\in E)(x_u*x_v)
@@ -107,11 +107,9 @@ class MIS(NP):
             pos: The positions of nodes (optional).
         """
         x = np.array(result)
-        print(x)
         # Create a mapping from node labels to their corresponding x values
         node_colors = {}
         for idx, val in enumerate(x):
-            print(idx,val)
             node_label = self.indices_node[idx]
             if val == 1:
                 node_colors[node_label] = 'red'  # Nodes in the clique are red
@@ -135,9 +133,10 @@ class MIS(NP):
         )
         # plt.show()
 
-    def grover_sat(self, iterations=2):
+    def grover_sat(self, iterations=1):
         independent_set_cnf = independent_set_to_sat(self.graph)
-        oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
+        maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
+        oracle = cnf_to_quantum_oracle_optimized(maximal_independent_set_cnf)
         state_prep = QuantumCircuit(oracle.num_qubits)
         state_prep.h(list(range(self.graph.number_of_nodes())))
         grover_circuit = grover(oracle=oracle,
@@ -193,7 +192,7 @@ class MIS(NP):
 
         # Perform QUBO optimization and sampling using QAOA
         qubo = self.to_qubo().Q
-        qaoa_dict = qaoa_optimize(qubo, layers=1)
+        qaoa_dict = qaoa_optimize(qubo, layers=3)
         qc = qaoa_dict["qc"]
         parameters = qaoa_dict["parameters"]
         theta = qaoa_dict["theta"]
@@ -296,7 +295,7 @@ class MIS(NP):
         pdf.cell(200, 10, "Grover algorithm, generated quantum circuit", ln=True, align='C')
         pdf.ln(10)
 
-        # Plot and save the quantum circuit for qaoa !!
+        # Plot and save the quantum circuit for grover !!
         grover_circuit.draw(style="mpl")
         plt.savefig(grover_circuit_image_path)
         plt.close()

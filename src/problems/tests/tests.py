@@ -4,6 +4,7 @@ import networkx
 import numpy as np
 from qiskit_aer.primitives import Sampler
 
+from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.problems.basic_arithmetic.multiplication import Mul
 from src.problems.clique import Clique
@@ -87,14 +88,26 @@ class MyTestCase(unittest.TestCase):
     def test_vc(self):
         graph = Graph.random_graph(num_nodes=6)
         vc = MVC(graph)
-        # graph.visualize()
         qubo_instance = vc.to_qubo()
         qubo_instance.display()
         qubo_instance.display_matrix()
         result = qubo_instance.solve_brute_force()
+        qubo = qubo_instance.Q
+        # Run QAOA on local simulator
+        vqe_dict = vqe_optimization(qubo, layers=2)
+
+        # Obtain the parameters of the QAOA run
+        qc = vqe_dict["qc"]
+        parameters = vqe_dict["parameters"]
+        theta = vqe_dict["theta"]
+        from src.algorithms.VQE.VQE import sample_results
+        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        highest_possible_solution = sample_results(qc, parameters, theta)
+        print(f"Most probable solution: {highest_possible_solution}")
+        vc.draw_result(highest_possible_solution)
         print(result[0])
         list = vc.interpret(result[0])
-        vc.draw_result(result[0])
+        print(list)
 
     def test_k_coloring(self):
         print("Most probable solution: [1 0 1 1 0]")

@@ -27,6 +27,38 @@ def independent_set_to_sat(graph: nx.Graph) -> CNF:
         cnf.append([-var(u), -var(v)])
 
     return cnf
+def maximal_independent_set_to_sat(graph: nx.Graph) -> CNF:
+    """
+    Converts the Maximal Independent Set problem to a SAT problem.
+
+    Parameters:
+        graph (nx.Graph): The input graph.
+
+    Returns:
+        CNF: The SAT formula in CNF representing the Maximal Independent Set problem.
+    """
+    cnf = CNF()
+    n = len(graph.nodes)
+
+    # Variables: x_v where v is the vertex in the graph
+    var = lambda v: v + 1  # Create unique variables (1-based indexing)
+
+    # Clause 1: No two adjacent vertices can both be in the independent set
+    # For each edge (u, v) in the graph, add the clause ¬x_u ∨ ¬x_v
+    for u, v in graph.edges:
+        cnf.append([-var(u), -var(v)])
+
+    # Clause 2: For maximality, every vertex not in the independent set
+    # must have at least one neighbor in the independent set
+    for v in graph.nodes:
+        neighbor_clause = []
+        for neighbor in graph.neighbors(v):
+            neighbor_clause.append(var(neighbor))
+        # Add clause that at least one neighbor must be in the independent set if v is not
+        if neighbor_clause:
+            cnf.append(neighbor_clause + [var(v)])
+
+    return cnf
 def independent_set_to_k_sat(graph: nx.Graph, k: int) -> CNF:
     """
     Converts the Independent Set problem to a SAT problem.
