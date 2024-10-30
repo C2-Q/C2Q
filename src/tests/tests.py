@@ -115,6 +115,7 @@ class MyTestCase(unittest.TestCase):
         qubo = clique.to_qubo()
         qubo.display_matrix()
         
+
         # Obtain the QAOA circuit
         qubo = qubo.Q
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
@@ -326,7 +327,7 @@ class MyTestCase(unittest.TestCase):
         cnf = [[-1, -2, -3], [1, 2, 3], [1, -2, -3], [1, 3, -2], [-1, -2, 3], [2, 1, 4],
                [-1, -3, -4], [2, 3, 4], [1, 3, 4], [1, -3, 4], [1, 3, 5], [3, 4, 5], [-2, -3, -5], [1, 2, -3],
                [2, 4, 5], [2, 3, 5], [-1, -4, -5], [3, 4]]
-        #cnf = [[1, 2, 3], [2, -3], [-2], [1, 2, 3, 4], [3, 4, 5], [2, 3, 4], [2, 3, 5], [3, 4, 6], [3, 4, -5, -6]]
+        # cnf = [[1, 2, 3], [2, -3], [-2], [1, 2, 3, 4], [3, 4, 5], [2, 3, 4], [2, 3, 5], [3, 4, 6], [3, 4, -5, -6]]
         converted_cnf = sat_to_3sat(cnf)
         print("Converted 3-SAT CNF:", converted_cnf.clauses)
 
@@ -456,7 +457,7 @@ class MyTestCase(unittest.TestCase):
         qc = cnf_to_quantum_oracle_optimized(formula)
 
         combined_circuit = QuantumCircuit(qc.num_qubits)
-        #combined_circuit.h(range(formula.nv))
+        # combined_circuit.h(range(formula.nv))
         combined_circuit.x([1, 3])
         combined_circuit = combined_circuit.compose(qc)
 
@@ -500,7 +501,7 @@ class MyTestCase(unittest.TestCase):
                                 working_qubits=[0, 1, 2, 3], state_pre=state_prep
                                 , iterations=1)
         print(solve_all_cnf_solutions(independent_set_cnf))
-        #print(op.decompose())
+        # print(op.decompose())
         print(grover_circuit)
         backend = AerSimulator()
         transpiled_circuit = transpile(grover_circuit, backend=backend)
