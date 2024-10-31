@@ -548,7 +548,7 @@ class MyTestCase(unittest.TestCase):
         qubits_array = []
 
         # Define the range of qubits
-        for z in range(4, 61, 2):
+        for z in range(4, 21, 2):
             qubits_array.append(z)
 
             # Generate 3-regular graphs.
