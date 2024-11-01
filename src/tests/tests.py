@@ -19,7 +19,7 @@ from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
 from src.problems.tsp import TSP
-from src.recommender.recommender_engine import recommender
+from src.recommender.recommender_engine import recommender, plot_results
 from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
@@ -122,7 +122,7 @@ class MyTestCase(unittest.TestCase):
         qc = qaoa_dict["qc"]
 
         # Run the recommender
-        recommender_output = recommender(qc)
+        recommender_output, recommender_devices = recommender(qc)
         print(recommender_output)
 
         # Run QAOA on local simulator
@@ -182,7 +182,7 @@ class MyTestCase(unittest.TestCase):
         qc = qaoa_dict["qc"]
 
         # Run the recommender
-        recommender_output = recommender(qc)
+        recommender_output, recommender_devices = recommender(qc)
         print(recommender_output)
 
         # Run QAOA on local simulator
@@ -216,7 +216,7 @@ class MyTestCase(unittest.TestCase):
         qc = qaoa_dict["qc"]
 
         # Run the recommender
-        recommender_output = recommender(qc)
+        recommender_output, recommender_devices = recommender(qc)
         print(recommender_output)
 
         # Run QAOA on local simulator
@@ -269,7 +269,7 @@ class MyTestCase(unittest.TestCase):
         qc = qaoa_dict["qc"]
 
         # Run the recommender
-        recommender_output = recommender(qc)
+        recommender_output, recommender_devices = recommender(qc)
         print(recommender_output)
 
         # Run QAOA on local simulator
@@ -541,6 +541,32 @@ class MyTestCase(unittest.TestCase):
         plot_histogram(counts)
         plt.show()
 
+    def test_plot_recommender(self):
+        # Plot recommender results with a range of qubits
+
+        recommender_data_array = []
+        qubits_array = []
+
+        # Define the range of qubits
+        for z in range(4, 21, 2):
+            qubits_array.append(z)
+
+            # Generate 3-regular graphs.
+            G = nx.random_regular_graph(3, z)
+
+            # Turn 3-regular graphs into MaxCut QUBO formulation (can be any other problem too)
+            maxcut = MaxCut(G)
+            qubo = maxcut.to_qubo()
+            qubo = qubo.Q
+
+            qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+            qc = qaoa_dict["qc"]
+            
+            # Run the recommender and append recommender_data_array
+            recommender_output, recommender_devices = recommender(qc)
+            recommender_data_array.append(recommender_devices)
+
+        plot_results(recommender_data_array, qubits_array)
 
 if __name__ == '__main__':
     unittest.main()
