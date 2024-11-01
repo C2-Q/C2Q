@@ -145,18 +145,20 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(data.G, nx.Graph)
         data.visualize()
         self.assertEqual(nx.is_weighted(data.G), True)
-        clique = Clique(data.G, 4)
+        clique = Clique(data.G, 3)
         qubo = clique.to_qubo()
         qubo.display_matrix()
+        print(qubo.solve_brute_force())
         # Obtain the QAOA circuit
         qubo = qubo.Q
+
         # qaoa_dict = qaoa_no_optimization(qubo, layers=1)
         # qc = qaoa_dict["qc"]
         # # Run the recommender
         # recommender(qc)
 
         # Run QAOA on local simulator
-        vqe_dict = qaoa_optimize(qubo, layers=4)
+        vqe_dict = qaoa_optimize(qubo, layers=5)
 
         # Obtain the parameters of the QAOA run
         qc = vqe_dict["qc"]

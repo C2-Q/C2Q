@@ -181,6 +181,7 @@ def sat_to_3sat(cnf):
     aux_var_counter = max(abs(lit) for clause in cnf for lit in clause) + 1  # Start for auxiliary variables
 
     for clause in cnf:
+        # todo deal with len(clause < 3)
         while len(clause) > 3:
             first_literal = clause[0]
             second_literal = clause[1]
