@@ -192,6 +192,8 @@ class Clique(NP):
         pdf.cell(200, 10, "Graph Visualization:", ln=True, align='L')
         pdf.image(image_path, x=10, y=pdf.get_y(), w=190)
 
+        # figures = evaluate_circuit(qc)
+
         # Save the PDF to a file
         pdf_output_path = "clique_report.pdf"
         pdf.output(pdf_output_path)

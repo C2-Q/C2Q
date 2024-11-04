@@ -1,4 +1,5 @@
 import ast
+import random
 import unittest
 
 import networkx as nx
@@ -23,6 +24,44 @@ from src.recommender.recommender_engine import recommender, plot_results
 from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
+
+
+def validate_assignment(formula, assignment):
+    """Check if the given assignment satisfies the CNF formula."""
+    # Adjust to access assignment values as a tuple or list
+    # assignment[i - 1] gives the assignment for variable i
+    for clause in formula.clauses:
+        clause_satisfied = False
+        for literal in clause:
+            var = abs(literal)
+            value = assignment[var - 1]  # Get the assigned value from the tuple
+            if (literal > 0 and value == 1) or (literal < 0 and value == 0):
+                clause_satisfied = True
+                break
+        if not clause_satisfied:
+            return False
+    return True
+
+
+def generate_random_cnf(num_vars, num_clauses, max_literals_per_clause):
+    """Generate a random CNF formula with the specified parameters."""
+    clauses = []
+
+    for _ in range(num_clauses):
+        clause = set()
+
+        while len(clause) < max_literals_per_clause:
+            literal = random.randint(1, num_vars)  # Choose a random variable
+            if random.choice([True, False]):
+                literal = -literal  # Randomly negate the literal
+
+            # Check for contradictory or duplicate literals in the clause
+            if literal not in clause and -literal not in clause:
+                clause.add(literal)
+
+        clauses.append(list(clause))
+
+    return CNF(from_clauses=clauses)
 
 
 class MyTestCase(unittest.TestCase):
@@ -114,7 +153,6 @@ class MyTestCase(unittest.TestCase):
         clique = Clique(data.G, 4)
         qubo = clique.to_qubo()
         qubo.display_matrix()
-        
 
         # Obtain the QAOA circuit
         qubo = qubo.Q
@@ -214,7 +252,7 @@ class MyTestCase(unittest.TestCase):
 
         # Obtain the QAOA circuit
         qubo = qubo.Q
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qaoa_dict = qaoa_no_optimization(qubo, layers=4)
         qc = qaoa_dict["qc"]
 
         # Run the recommender
@@ -287,7 +325,6 @@ class MyTestCase(unittest.TestCase):
         print(f"Most probable solution: {highest_possible_solution}")
         clique.draw_result(highest_possible_solution)
 
-
     def test_graph_init(self):
         # Example 1: Using a distance matrix
         distance_matrix = [
@@ -356,15 +393,53 @@ class MyTestCase(unittest.TestCase):
         plt.show()
         # circuit2.draw(output="latex")
 
+    def test_chancellor_randomized(self):
+        num_correct = 0
+        num_tests = 50
+        num_vars = 7
+        num_clauses = 10
+        max_literals_per_clause = 3
+        for test_num in range(num_tests):
+            print(f"\nRunning test case {test_num + 1}")
+
+            # Generate a random CNF formula
+            formula = generate_random_cnf(num_vars, num_clauses, max_literals_per_clause)
+            print("Generated CNF clauses:", formula.clauses)
+            print(solve_all_cnf_solutions(formula))
+            # Initialize the Chancellor instance
+            formula = sat_to_3sat(formula)
+            chancellor_instance = Chancellor(formula)
+
+            # Fill the QUBO matrix based on the formula
+            chancellor_instance.fillQ()
+
+            # Print the resulting QUBO matrix
+            print("QUBO Matrix:")
+            for key, value in chancellor_instance.Q.items():
+                print(f"Q[{key}] = {value}")
+
+            # Solve the QUBO problem
+            best_assignment, _ = chancellor_instance.solveQ()
+
+            # Validate best_assignment
+            is_correct = validate_assignment(formula, best_assignment)
+            # print("Best assignment:", best_assignment)
+            if is_correct: num_correct += 1
+            print("Is the assignment correct?", "Yes" if is_correct else "No")
+        print(num_correct)
+
     def test_chancellor(self):
         # Define CNF formula using clauses
         clauses = [
             [1, 2, 3, 4],
             [1, -2, 3],
             [1, 2],
-            [-2],
-            [-3],
-            [-2, 3, 4]
+            [4, 5],
+            [2],
+            [-2, 3],
+            [-2, 3, 4],
+            [3,4,6],
+            [6,-3, -4]
         ]
         # Create a CNF object from the clauses
         formula = CNF(from_clauses=clauses)
@@ -384,7 +459,7 @@ class MyTestCase(unittest.TestCase):
         chancellor_instance.visualizeQ()
 
         # Solve the QUBO problem
-        chancellor_instance.solveQ()
+        best_assignment, _ = chancellor_instance.solveQ()
 
     def test_is_chancellor(self):
         G = nx.Graph()
@@ -472,7 +547,7 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.is_snippet)
         print(problem_type, data)
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.G, 2)
+        independent_set_cnf = independent_set_to_k_sat(data.G, 2)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
         combined_circuit = QuantumCircuit(oracle.num_qubits)
         # combined_circuit.h(range(formula.nv))
@@ -499,7 +574,7 @@ class MyTestCase(unittest.TestCase):
         state_prep.h([0, 1, 2, 3])
         grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3],
                                 working_qubits=[0, 1, 2, 3], state_pre=state_prep
-                                , iterations=1)
+                                , iterations=4)
         print(solve_all_cnf_solutions(independent_set_cnf))
         # print(op.decompose())
         print(grover_circuit)
@@ -535,7 +610,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_factor(self):
         factor = Factor(35)
-        qc = factor.grover(iterations=1)
+        qc = factor.grover(iterations=2)
         print(qc)
         backend = AerSimulator()
         transpiled_circuit = transpile(qc, backend=backend)
@@ -563,12 +638,13 @@ class MyTestCase(unittest.TestCase):
 
             qaoa_dict = qaoa_no_optimization(qubo, layers=1)
             qc = qaoa_dict["qc"]
-            
+
             # Run the recommender and append recommender_data_array
             recommender_output, recommender_devices = recommender(qc)
             recommender_data_array.append(recommender_devices)
 
         plot_results(recommender_data_array, qubits_array)
+
 
 if __name__ == '__main__':
     unittest.main()

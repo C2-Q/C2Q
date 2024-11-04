@@ -157,21 +157,34 @@ class Chancellor(SATBase):
                     self.add(clause[2], self.num_variables + clause_index + 1, 1)
             elif len(clause) == 2:
                 if list(np.sign(clause)) == [1, 1]:
-                    self.add(clause[0], clause[0], -2)
-                    self.add(clause[1], clause[1], -2)
+                    self.add(clause[0], clause[0], -1)
+                    self.add(clause[1], clause[1], -1)
                     self.add(clause[0], clause[1], 1)
 
                 if list(np.sign(clause)) == [1, -1]:
-                    self.add(clause[0], clause[0], -1)
-                    self.add(clause[1], clause[1], 0)
-                    self.add(clause[0], clause[1], 0)
+                    self.add(clause[0], clause[0], 0)
+                    self.add(clause[1], clause[1], 1)
+                    self.add(clause[0], clause[1], -1)
                 else:
-                    self.add(clause[0], clause[0], -1)
-                    self.add(clause[1], clause[1], -1)
-                    self.add(clause[0], clause[1], 2)
-                self.add(self.num_variables + clause_index + 1, self.num_variables + clause_index + 1, -1)
-                self.add(clause[0], self.num_variables + clause_index + 1, 1)
-                self.add(clause[1], self.num_variables + clause_index + 1, 1)
+                    self.add(clause[0], clause[0], 0)
+                    self.add(clause[1], clause[1], 0)
+                    self.add(clause[0], clause[1], 1)
+                # if list(np.sign(clause)) == [1, 1]:
+                #     self.add(clause[0], clause[0], -2)
+                #     self.add(clause[1], clause[1], -2)
+                #     self.add(clause[0], clause[1], 1)
+                #
+                # if list(np.sign(clause)) == [1, -1]:
+                #     self.add(clause[0], clause[0], -1)
+                #     self.add(clause[1], clause[1], 0)
+                #     self.add(clause[0], clause[1], 0)
+                # else:
+                #     self.add(clause[0], clause[0], -1)
+                #     self.add(clause[1], clause[1], -1)
+                #     self.add(clause[0], clause[1], 2)
+                # self.add(self.num_variables + clause_index + 1, self.num_variables + clause_index + 1, -1)
+                # self.add(clause[0], self.num_variables + clause_index + 1, 1)
+                # self.add(clause[1], self.num_variables + clause_index + 1, 1)
             elif len(clause) == 1:
                 # Handling clauses with 1 literal (x1)
                 if list(np.sign(clause)) == [1]:
