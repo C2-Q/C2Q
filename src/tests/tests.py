@@ -390,7 +390,7 @@ class MyTestCase(unittest.TestCase):
         G = nx.Graph()
         G.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 4)])
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(G, 3)
+        independent_set_cnf = maximal_independent_set_to_sat(G)
         # Print the CNF clauses
         print("CNF Clauses for Independent Set Problem:")
         for clause in independent_set_cnf.clauses:

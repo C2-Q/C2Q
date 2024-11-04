@@ -164,17 +164,11 @@ class Clique(NP):
         # qubo.display_matrix()
         # Obtain the QAOA circuit
         qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        qc = qaoa_dict["qc"]
-        # Run the recommender
-        recommender(qc)
-        # Run QAOA on local simulator
-
-        # qaoa_dict = qaoa_optimize(qubo, layers=1)
-
         # Obtain the parameters of the QAOA run
         qc = qaoa_dict["qc"]
         parameters = qaoa_dict["parameters"]
         theta = qaoa_dict["theta"]
+        recommender_output, recommender_devices  = recommender(qc)
 
         # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
         highest_possible_solution = sample_results(qc, parameters, theta)
