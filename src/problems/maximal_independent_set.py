@@ -17,6 +17,7 @@ from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
+from src.recommender.recommender_engine import recommender
 from src.reduction import independent_set_to_sat, maximal_independent_set_to_sat
 
 
@@ -157,10 +158,10 @@ class MIS(NP):
         vqe_solution_image_path = "vqe_solution_visualization.png"
         grover_circuit_image_path = "grover_circuit.png"
         grover_solution_image_path = "grover_solution_visualization.png"
-        # Create an instance of FPDF with Times New Roman font
+
+
         pdf = FPDF()
         pdf.set_font("Times", size=12)
-
         # New page
         pdf.add_page()
 
@@ -241,7 +242,7 @@ class MIS(NP):
         #pdf.output(pdf_output_path)
 
         # start here for vqe algorithm
-        # Perform QUBO optimization and sampling using QAOA
+        # Perform QUBO optimization and sampling using VQE
         qubo = self.to_qubo().Q
         vqe_dict = vqe_optimization(qubo, layers=1)
         qc = vqe_dict["qc"]
@@ -259,7 +260,6 @@ class MIS(NP):
         pdf.ln(10)
 
         # Plot and save the quantum circuit for qaoa !!
-
         qc.decompose().draw(style="mpl")
         plt.savefig(vqe_circuit_image_path)
         plt.close()
@@ -318,6 +318,15 @@ class MIS(NP):
         pdf.ln(10)
         pdf.cell(200, 10, "Visualization of Grover Solution:", ln=True, align='L')
         pdf.image(grover_solution_image_path, x=10, y=pdf.get_y(), w=190)
+
+        pdf.add_page()
+        pdf.set_font("Times", 'B', 16)
+        recommender_output, recommender_devices = recommender(qc)
+        pdf.cell(200, 10, "Devices recommendation based on VQE circuit", ln=True, align='L')
+
+        # Use multi_cell to handle long text
+        pdf.set_font("Times", '', 12)  # Optionally set a smaller font for the output text
+        pdf.multi_cell(0, 10, recommender_output, align='L')
 
         pdf_output_path = "independent_set_report.pdf"
         pdf.output(pdf_output_path)
