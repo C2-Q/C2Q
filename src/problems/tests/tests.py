@@ -129,6 +129,7 @@ class MyTestCase(unittest.TestCase):
         mul = Mul(7, 5)
         self.assertEqual(True, True)
         qc = mul.quantum_circuit()
+        print(qc.decompose())
         sampler = Sampler()
         result = sampler.run(qc).result()
         result_counts = result.quasi_dists[0]

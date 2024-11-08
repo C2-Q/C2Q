@@ -566,15 +566,19 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.is_snippet)
         print(problem_type, data)
         G = nx.Graph()
-        G.add_edges_from([(0, 1), (0, 2), (1, 2), (1, 3)])
+        G.add_edges_from([(0, 1), (0, 2), (1, 2)])
+        graph = Graph([(0, 1), (0, 2), (1, 2)])
+        graph.visualize()
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.G)
+        independent_set_cnf = independent_set_to_k_sat(data.G, 1)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
         state_prep = QuantumCircuit(oracle.num_qubits)
-        state_prep.h([0, 1, 2, 3])
-        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3],
-                                working_qubits=[0, 1, 2, 3], state_pre=state_prep
-                                , iterations=4)
+        state_prep.h([0, 1, 2])
+        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2],
+                                working_qubits=[0, 1, 2], state_pre=state_prep
+                                , iterations=1)
+        oracle.draw('mpl')
+        plt.show()
         print(solve_all_cnf_solutions(independent_set_cnf))
         # print(op.decompose())
         print(grover_circuit)

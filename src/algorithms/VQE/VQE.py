@@ -5,7 +5,6 @@ from qiskit import transpile
 from qiskit_aer import AerSimulator
 
 from scipy.optimize import minimize
-
 import numpy as np
 
 from qiskit.quantum_info import SparsePauliOp
