@@ -486,9 +486,8 @@ def recommender(qc):
                                           routing_method='sabre')
                 circuit_dict = export_circuit_data(qc, qc_transpiled)
 
-                # Error: E_tot = N_1*E_1 + N_2*E_2
-                #total_average_error = circuit_dict["gates"]["single_qubit"] * device_dict["errors"]["single_qubit"] + circuit_dict["gates"]["two_qubit"] * device_dict["errors"]["two_qubit"] + circuit_dict["gates"]["measurement"] * device_dict["errors"]["measurement"]
-                total_average_error = (1 - (1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) + (1 - (1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) + (1 - (1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"]["measurement"])
+                # Error: E_tot = 1 - ((1 - E_1)^N_1 * (1 - E_2)^N_2 * (1 - E_M)^N_M)
+                total_average_error = 1 - (((1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) * ((1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) * ((1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"]["measurement"]))
 
                 # Time to execute single shot: T = depth * N_2 (assume that every layer has a two-qubit gate so the time to execute a layer is limited by the two-qubit gate time)
                 #time_to_execute_single_shot = circuit_dict["depth"]*device_dict["gate_timings"]["two_qubit"]
