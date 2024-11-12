@@ -665,7 +665,7 @@ class MyTestCase(unittest.TestCase):
             qubits_array.append(z)
 
             # Generate 3-regular graphs.
-            G = nx.random_regular_graph(3, z)
+            G = nx.random_regular_graph(3, z, seed=100)
 
             # Turn 3-regular graphs into MaxCut QUBO formulation (can be any other problem too)
             maxcut = MaxCut(G)
