@@ -12,13 +12,6 @@ import matplotlib.pyplot as plt
 import math
 import os
 
-from qiskit.quantum_info import state_fidelity
-from qiskit_experiments.library import StateTomography
-
-import warnings
-
-warnings.filterwarnings("ignore", message="^.*have no effect in local testing.*$")
-
 # Obtain the working directory for importing the coupling maps
 dirname = os.path.dirname(__file__)
 
