@@ -1,4 +1,5 @@
 import os
+import time
 
 import networkx
 import numpy as np
@@ -151,6 +152,7 @@ class MIS(NP):
         """
         Generates a PDF report summarizing the problem, its solution, and a visualization of the result.
         """
+        start_time = time.time()
         image_path = "graph_visualization.png"
         qaoa_circuit_image_path = "quantum_circuit_qaoa.png"
         qaoa_solution_image_path = "qaoa_solution_visualization.png"

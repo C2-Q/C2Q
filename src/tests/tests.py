@@ -15,6 +15,7 @@ from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor
+from src.problems.Three_SAT import ThreeSat
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
@@ -142,6 +143,14 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(nx.is_weighted(data.G), True)
         mis = MIS(data.G)
         mis.report()
+
+        formula = maximal_independent_set_to_sat(data.G)
+        formula = sat_to_3sat(formula)
+        sat = ThreeSat(formula)
+        qubo = sat.to_qubo()
+        qubo.display_matrix()
+        sat.report()
+
 
     def test_max_cut(self):
         problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
@@ -385,14 +394,37 @@ class MyTestCase(unittest.TestCase):
             [1, 2, 3],
             [1, -2, 3],
             [1, -3],
+            [-1, 4]
         ]
         formula = CNF(from_clauses=clauses)
-        circuit = cnf_to_quantum_circuit_optimized(formula)
-        circuit2 = cnf_to_quantum_oracle_optimized(formula)
-        circuit2.draw(output="mpl", plot_barriers=False)
-        plt.show()
-        # circuit2.draw(output="latex")
+        print(solve_all_cnf_solutions(formula))
+        sat = ThreeSat(formula)
+        qubo = sat.to_qubo()
+        qubo.display_matrix()
+        sat.report()
 
+        # qaoa_dict = qaoa_optimize(qubo.Q, layers=2)
+        # qaoa_qc = qaoa_dict["qc"]
+        # qaoa_parameters = qaoa_dict["parameters"]
+        # qaoa_theta = qaoa_dict["theta"]
+        # from src.algorithms.QAOA.QAOA import sample_results
+        # qaoa_solution = sample_results(qaoa_qc, qaoa_parameters, qaoa_theta)
+        # print(qaoa_solution)
+        # print("brute force")
+        # print(qubo.solve_brute_force())
+        #
+        # # VQE Solution
+        # vqe_dict = vqe_optimization(qubo.Q, layers=3)
+        # vqe_qc = vqe_dict["qc"]
+        # vqe_parameters = vqe_dict["parameters"]
+        # vqe_theta = vqe_dict["theta"]
+        # from src.algorithms.VQE.VQE import sample_results
+        # vqe_solution = sample_results(vqe_qc, vqe_parameters, vqe_theta)
+        # print(vqe_solution)
+        # grover_circuit = sat.grover_sat(iterations=3)
+        # from src.algorithms.grover import sample_results
+        # grover_solution = sample_results(grover_circuit)
+        # print(grover_solution)
     def test_chancellor_randomized(self):
         num_correct = 0
         num_tests = 50

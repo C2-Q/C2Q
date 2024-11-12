@@ -163,7 +163,7 @@ class Clique(NP):
         qubo = self.to_qubo().Q
         # qubo.display_matrix()
         # Obtain the QAOA circuit
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        qaoa_dict = qaoa_optimize(qubo, layers=3)
         # Obtain the parameters of the QAOA run
         qc = qaoa_dict["qc"]
         parameters = qaoa_dict["parameters"]

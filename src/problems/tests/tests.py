@@ -2,6 +2,7 @@ import unittest
 
 import networkx
 import numpy as np
+from matplotlib import pyplot as plt
 from qiskit_aer.primitives import Sampler
 
 from src.algorithms.VQE.VQE import vqe_optimization
@@ -126,15 +127,17 @@ class MyTestCase(unittest.TestCase):
         kc.draw_result(result[0])
 
     def test_mul(self):
-        mul = Mul(7, 5)
+        mul = Mul(1, 1)
         self.assertEqual(True, True)
         qc = mul.quantum_circuit()
-        print(qc.decompose())
-        sampler = Sampler()
-        result = sampler.run(qc).result()
-        result_counts = result.quasi_dists[0]
-        result_value = max(result_counts, key=result_counts.get)
-        print(result_value)
+        latex_code = qc.decompose().draw(style="mpl")
+        print(latex_code)
+        plt.show()
+        # sampler = Sampler()
+        # result = sampler.run(qc).result()
+        # result_counts = result.quasi_dists[0]
+        # result_value = max(result_counts, key=result_counts.get)
+        # print(result_value)
 
 if __name__ == '__main__':
     unittest.main()

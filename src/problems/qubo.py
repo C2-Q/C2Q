@@ -103,6 +103,7 @@ class QUBO:
 
     def display_matrix(self):
         print(self.Q)
+        return self.Q
 
     def __str__(self):
         return f"QUBO Problem with {self.n} variables."

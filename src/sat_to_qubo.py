@@ -86,7 +86,7 @@ class SATBase:
         plt.title("QUBO Matrix Visualization")
         plt.xlabel("Variable Index")
         plt.ylabel("Variable Index")
-        plt.show()
+        # plt.show()
 
 
 class Chancellor(SATBase):
