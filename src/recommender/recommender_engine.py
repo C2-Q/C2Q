@@ -2,7 +2,7 @@ from qiskit import transpile
 from qiskit.transpiler import CouplingMap
 
 from qiskit.providers.fake_provider import GenericBackendV2
-from qiskit_aer.noise import NoiseModel, depolarizing_error
+from qiskit_aer.noise import NoiseModel, depolarizing_error, pauli_error
 from qiskit_aer import AerSimulator
 
 import numpy as np
@@ -11,6 +11,13 @@ from statistics import mean
 import matplotlib.pyplot as plt
 import math
 import os
+
+from qiskit.quantum_info import state_fidelity
+from qiskit_experiments.library import StateTomography
+
+import warnings
+
+warnings.filterwarnings("ignore", message="^.*have no effect in local testing.*$")
 
 # Obtain the working directory for importing the coupling maps
 dirname = os.path.dirname(__file__)
@@ -195,7 +202,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 127
         backend = GenericBackendV2(device_qubits, basis_gates=['ecr', 'id', 'rz', 'sx', 'x'], coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 7
         single_qubit_gate_timing = 4.978 * 10 ** (-8)
         two_qubit_gate_timing = 5.618 * 10 ** (-7)
@@ -221,7 +228,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 127
         backend = GenericBackendV2(device_qubits, basis_gates=['ecr', 'id', 'rz', 'sx', 'x'], coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 7
         single_qubit_gate_timing = 5.688 * 10 ** (-8)
         two_qubit_gate_timing = 5.333 * 10 ** (-7)
@@ -247,7 +254,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 127
         backend = GenericBackendV2(device_qubits, basis_gates=['ecr', 'id', 'rz', 'sx', 'x'], coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 7
         single_qubit_gate_timing = 6 * 10 ** (-8)
         two_qubit_gate_timing = 6.6 * 10 ** (-7)
@@ -259,21 +266,22 @@ def select_device(device):
         two_qubit_gate_error = 0.008
         measurement_error = 0.0185 #(?)
         error_1 = depolarizing_error(single_qubit_gate_error, 1)
+        #error_gate1 = pauli_error([("X", single_qubit_gate_error), ("I", 1 - single_qubit_gate_error)])
         error_2 = depolarizing_error(two_qubit_gate_error, 2)
         error_m = depolarizing_error(measurement_error, 1)
         
         # Add errors to noise model
         noise_model = NoiseModel()
         noise_model.add_all_qubit_quantum_error(error_m, "measure")
-        noise_model.add_all_qubit_quantum_error(error_1, ["u1", "u2", "u3", "rz", "sx", "x"])
-        noise_model.add_all_qubit_quantum_error(error_2, ["cx", "ecr", "cz"])
+        noise_model.add_all_qubit_quantum_error(error_1, ["u1", "u2", "u3", "rz", "sx", "x", "rx", "z", "h", "s"])
+        noise_model.add_all_qubit_quantum_error(error_2, ["cx", "ecr", "cz", "rzz", "swap"])
 
         # Rigetti Ankaa-9Q-3 9-qubit fake backend
         coupling_map_path = os.path.join(dirname, 'coupling_maps/rigetti_ankaa_9q_3_coupling_map.npy')
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 9
         backend = GenericBackendV2(device_qubits, coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 0
         single_qubit_gate_timing = 40 * 10 ** (-9) #(?)
         two_qubit_gate_timing = 70 * 10 ** (-9) #(?)
@@ -299,7 +307,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 20
         backend = GenericBackendV2(device_qubits, basis_gates=['id', 'r', 'cz'], coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 5
         single_qubit_gate_timing = 20 * 10 ** (-9)
         two_qubit_gate_timing = 40 * 10 ** (-9)
@@ -338,7 +346,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 25
         backend = GenericBackendV2(device_qubits, coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 25
         single_qubit_gate_timing = 135 * 10 ** (-6)
         two_qubit_gate_timing = 600 * 10 ** (-6)
@@ -364,7 +372,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 25
         backend = GenericBackendV2(device_qubits, coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 25
         single_qubit_gate_timing = 135 * 10 ** (-6)
         two_qubit_gate_timing = 600 * 10 ** (-6)
@@ -390,7 +398,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 20
         backend = GenericBackendV2(device_qubits, coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 20
         # Gate timings not found, estimated time calculated differently
         single_qubit_gate_timing = 0
@@ -417,7 +425,7 @@ def select_device(device):
         coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 56
         backend = GenericBackendV2(device_qubits, coupling_map=coupling_map)
-        sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
+        #sim_backend = AerSimulator(noise_model=noise_model).from_backend(backend)
         quantum_volume = 21
         # Gate timings not found, estimated time calculated differently
         single_qubit_gate_timing = 0
@@ -442,11 +450,11 @@ def select_device(device):
         "relaxation_times": {
             "t1": t1_relaxation_time,
             "t2": t2_relaxation_time
-        }
+        },
+        "noise_model": noise_model
     }
 
     return device_dict
-
 
 def recommender(qc):
     """
@@ -486,27 +494,28 @@ def recommender(qc):
                                           routing_method='sabre')
                 circuit_dict = export_circuit_data(qc, qc_transpiled)
 
-                # Error: E_tot = 1 - ((1 - E_1)^N_1 * (1 - E_2)^N_2 * (1 - E_M)^N_M)
-                total_average_error = 1 - (((1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) * ((1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) * ((1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"]["measurement"]))
-
-                # Time to execute single shot: T = depth * N_2 (assume that every layer has a two-qubit gate so the time to execute a layer is limited by the two-qubit gate time)
-                #time_to_execute_single_shot = circuit_dict["depth"]*device_dict["gate_timings"]["two_qubit"]
-
                 if device == "Quantinuum H1" or device == "Quantinuum H2":
                     # Time estimated on the Quantinuum devices: HQC = 5 + ((N_1 + 10*N_2 + 5*N_M)/5000)*shots, on average Quantinuum devices process 850 HQC's per hour.
                     hqc = 5 + ((circuit_dict["gates"]["single_qubit"] + 10 * circuit_dict["gates"]["two_qubit"] + 5 *
                                 circuit_dict["gates"]["measurement"]) * (num_shots / 5000))
                     time_to_execute = (hqc / ((850 / 60) / 60)) * num_iterations
+                    time_to_execute_single_shot = time_to_execute / (num_shots * num_iterations)
                 else:
                     # Time to execute single shot: T = single_qubit_gate_layers * single_qubit_gate_time + two_qubit_gate_layers * two_qubit_gate_time
                     time_to_execute_single_shot = circuit_dict["depth"]["single_qubit"] * device_dict["gate_timings"]["single_qubit"] + circuit_dict["depth"]["two_qubit"] * device_dict["gate_timings"]["two_qubit"]
                     time_to_execute = time_to_execute_single_shot * num_shots * num_iterations
 
-                # T1 coherence: device_t1/T
-                #coherence_t1 = math.e ** (-time_to_execute_single_shot / device_dict["relaxation_times"]["t1"])
+                # T1 decay
+                t1_decay = math.e ** (-time_to_execute_single_shot / device_dict["relaxation_times"]["t1"])
 
-                # T2 coherence: device_t2/T
-                #coherence_t2 = math.e ** (-time_to_execute_single_shot / device_dict["relaxation_times"]["t2"])
+                # T2 decay
+                t2_decay = math.e ** (-time_to_execute_single_shot / device_dict["relaxation_times"]["t2"])
+
+                # Error: E_tot = N_1*E_1 + N_2*E_2
+                #total_average_error = circuit_dict["gates"]["single_qubit"] * device_dict["errors"]["single_qubit"] + circuit_dict["gates"]["two_qubit"] * device_dict["errors"]["two_qubit"] + circuit_dict["gates"]["measurement"] * device_dict["errors"]["measurement"]
+                #total_average_error = (1 - (1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) + (1 - (1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) + (1 - (1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"]["measurement"])
+                total_average_error = 1 - (((1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) * ((1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) * ((1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"]["measurement"]))
+                #* (1 - t1_decay)**circuit_dict["num_qubits"] * (1 - t2_decay)**circuit_dict["num_qubits"])
 
                 # Azure Quantum pricing is different on every provider
                 if provider == "Azure Quantum":
@@ -718,7 +727,7 @@ def plot_results(recommender_data_array, qubits_array):
 
     plt.xticks(x)
 
-    plt.yscale("log")
+    #plt.yscale("log")
     
     plt.savefig("recommender_output_errors.png")
 
