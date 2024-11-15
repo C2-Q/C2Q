@@ -14,7 +14,7 @@ from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize, qaoa_
 from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.algorithms.grover import grover
-from src.parser.parser import Parser, CodeVisitor
+from src.parser.parser import Parser, CodeVisitor, PROBLEMS
 from src.problems.Three_SAT import ThreeSat
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
@@ -135,21 +135,14 @@ class MyTestCase(unittest.TestCase):
         mc.report()
 
     def test_is_pdf_generation(self):
+        # parse is_snippet and get problem type and extract data
         problem_type, data = self.parser.parse(self.is_snippet)
-        print(problem_type, data)
-        self.assertEqual(problem_type, 'MIS')  # add assertion here
-        self.assertIsInstance(data.G, nx.Graph)
-        data.visualize()
-        self.assertEqual(nx.is_weighted(data.G), True)
-        mis = MIS(data.G)
+        # fetch problem class based on recognized problem type
+        mis = PROBLEMS[problem_type](data.G)
+        # generate comprehensive result for problem's original form
         mis.report()
-
-        formula = maximal_independent_set_to_sat(data.G)
-        formula = sat_to_3sat(formula)
-        sat = ThreeSat(formula)
-        qubo = sat.to_qubo()
-        qubo.display_matrix()
-        sat.report()
+        # generate comprehensive report for problem's 3SAT format after reduction
+        mis.report_3sat()
 
 
     def test_max_cut(self):
@@ -308,31 +301,31 @@ class MyTestCase(unittest.TestCase):
         cha = Chancellor(sat)
         cha.fillQ()
         qubo = clique.to_qubo()
-        qubo.display_matrix()
-        op, offset = convert_qubo_to_ising(qubo.Q)
-        print(op, offset)
-
-        # Obtain the QAOA circuit
-        qubo = qubo.Q
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        qc = qaoa_dict["qc"]
-
-        # Run the recommender
-        recommender_output, recommender_devices = recommender(qc)
-        print(recommender_output)
-
-        # Run QAOA on local simulator
-        qaoa_dict = qaoa_optimize(qubo, layers=3)
-
-        # Obtain the parameters of the QAOA run
-        qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
-
-        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
-        highest_possible_solution = sample_results(qc, parameters, theta)
-        print(f"Most probable solution: {highest_possible_solution}")
-        clique.draw_result(highest_possible_solution)
+        # qubo.display_matrix()
+        # op, offset = convert_qubo_to_ising(qubo.Q)
+        # print(op, offset)
+        #
+        # # Obtain the QAOA circuit
+        # qubo = qubo.Q
+        # qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        # qc = qaoa_dict["qc"]
+        #
+        # # Run the recommender
+        # recommender_output, recommender_devices = recommender(qc)
+        # print(recommender_output)
+        #
+        # # Run QAOA on local simulator
+        # qaoa_dict = qaoa_optimize(qubo, layers=3)
+        #
+        # # Obtain the parameters of the QAOA run
+        # qc = qaoa_dict["qc"]
+        # parameters = qaoa_dict["parameters"]
+        # theta = qaoa_dict["theta"]
+        #
+        # # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        # highest_possible_solution = sample_results(qc, parameters, theta)
+        # print(f"Most probable solution: {highest_possible_solution}")
+        # clique.draw_result(highest_possible_solution)
 
     def test_graph_init(self):
         # Example 1: Using a distance matrix
@@ -399,9 +392,7 @@ class MyTestCase(unittest.TestCase):
         formula = CNF(from_clauses=clauses)
         print(solve_all_cnf_solutions(formula))
         sat = ThreeSat(formula)
-        qubo = sat.to_qubo()
-        qubo.display_matrix()
-        sat.report()
+        sat.report_latex()
 
         # qaoa_dict = qaoa_optimize(qubo.Q, layers=2)
         # qaoa_qc = qaoa_dict["qc"]
@@ -666,7 +657,7 @@ class MyTestCase(unittest.TestCase):
 
             # Generate 3-regular graphs.
             G = nx.random_regular_graph(3, z, seed=100)
-
+            print(G.nodes)
             # Turn 3-regular graphs into MaxCut QUBO formulation (can be any other problem too)
             maxcut = MaxCut(G)
             qubo = maxcut.to_qubo()

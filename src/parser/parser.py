@@ -2,6 +2,16 @@ import ast
 import torch
 from transformers import RobertaTokenizer, AutoModelForSequenceClassification
 from src.graph import Graph
+from src.problems.basic_arithmetic.addition import Add
+from src.problems.basic_arithmetic.multiplication import Mul
+from src.problems.basic_arithmetic.subtraction import Sub
+from src.problems.clique import Clique
+from src.problems.factorization import Factor
+from src.problems.kcolor import KColor
+from src.problems.max_cut import MaxCut
+from src.problems.maximal_independent_set import MIS
+from src.problems.minimum_vertex_cover import MVC
+from src.problems.tsp import TSP
 
 # labels = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "Factor","ADD", "MUL", "SUB", "Unknown"]
 # Define problem type tags
@@ -20,7 +30,18 @@ PROBLEM_TAGS = {
 }
 GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"]
 ARITHMETIC_TAGS = ["ADD", "MUL", "SUB"]
-
+PROBLEMS = {
+    "MaxCut": MaxCut,
+    "MIS": MIS,
+    "TSP": TSP,
+    "Clique": Clique,
+    "KColor": KColor,
+    "Factor": Factor,
+    "ADD": Add,
+    "MUL": Mul,
+    "SUB": Sub,
+    "VC": MVC
+}
 # Reverse mapping, e.g., PROBLEM_POOLS[2] = "TSP"
 PROBLEM_POOLS = [k for k, v in PROBLEM_TAGS.items()]
 

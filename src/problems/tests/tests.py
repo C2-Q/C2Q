@@ -130,9 +130,8 @@ class MyTestCase(unittest.TestCase):
         mul = Mul(1, 1)
         self.assertEqual(True, True)
         qc = mul.quantum_circuit()
-        latex_code = qc.decompose().draw(style="mpl")
+        latex_code = qc.decompose().draw(output="latex_source")
         print(latex_code)
-        plt.show()
         # sampler = Sampler()
         # result = sampler.run(qc).result()
         # result_counts = result.quasi_dists[0]
