@@ -33,7 +33,7 @@ def cost_func_vqe(theta, circuit, hamiltonian, estimator = Estimator()):
     Returns:
         float: Energy estimate
     """
-    cost = estimator.run(circuit, hamiltonian, theta).result().values[0]
+    cost = estimator.run(circuit, hamiltonian, theta, shots=1000).result().values[0]
 
     return cost
 
@@ -54,7 +54,7 @@ def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
 
-    # Calculate the offset also, this is not important for the QAOA optimization
+    # Calculate the offset also
     offset = 0
 
     operator_list = []
@@ -68,17 +68,17 @@ def convert_qubo_to_ising(qubo):
             if j >= i:
                 if i == j:
                     pauli_operator[i] = "Z"
-                    ising_value = -(1 / 2) * np.sum(qubo[i])
+                    ising_value = -(1/2)*qubo[i][i] - (1/4)*np.sum(qubo[i][(i+1):]) - (1/4)*np.sum(qubo[:,i][:i])
+                    offset += (1 / 2) * qubo[i][i]
                 else:
                     pauli_operator[i] = "Z"
                     pauli_operator[j] = "Z"
-                    ising_value = (1 / 2) * qubo[i][j]
+                    ising_value = (1 / 4) * qubo[i][j]
+                    offset += (1 / 4) * qubo[i][j]
 
                 if not ising_value == 0:
                     ising_pauli_op = (''.join(pauli_operator), ising_value)
                     operator_list.append(ising_pauli_op)
-
-                offset += (1 / 2) * qubo[i][j]
 
     operators = SparsePauliOp.from_list(operator_list)
 
@@ -105,7 +105,8 @@ def vqe_optimization(qubo, layers):
         "qc": vqe_circuit,
         "parameters": parameters,
         "theta": theta,
-        "minimum_objective_value": minimum_objective_value
+        "minimum_objective_value": minimum_objective_value,
+        "offset": offset
     }
 
     return vqe_dict
@@ -115,7 +116,7 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
     qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
     qc_transpiled.measure_all()
 
-    counts = backend.run(qc_transpiled, shots=10000).result().get_counts()
+    counts = backend.run(qc_transpiled, shots=1000).result().get_counts()
 
     highest_possible_solution = 0
     max_count = 0
