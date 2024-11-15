@@ -13,7 +13,7 @@ def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
 
-    # Calculate the offset also, this is not important for the QAOA optimization
+    # Calculate the offset also
     offset = 0
 
     operator_list = []
@@ -27,17 +27,17 @@ def convert_qubo_to_ising(qubo):
             if j >= i:
                 if i == j:
                     pauli_operator[i] = "Z"
-                    ising_value = -(1 / 2) * np.sum(qubo[i])
+                    ising_value = -(1/2)*qubo[i][i] - (1/4)*np.sum(qubo[i][(i+1):]) - (1/4)*np.sum(qubo[:,i][:i])
+                    offset += (1 / 2) * qubo[i][i]
                 else:
                     pauli_operator[i] = "Z"
                     pauli_operator[j] = "Z"
-                    ising_value = (1 / 2) * qubo[i][j]
+                    ising_value = (1 / 4) * qubo[i][j]
+                    offset += (1 / 4) * qubo[i][j]
 
                 if not ising_value == 0:
                     ising_pauli_op = (''.join(pauli_operator), ising_value)
                     operator_list.append(ising_pauli_op)
-
-                offset += (1 / 2) * qubo[i][j]
 
     operators = SparsePauliOp.from_list(operator_list)
 
@@ -59,7 +59,7 @@ def add_cost_layer(qc, ising, gamma, n):
 # Add a QAOA mixer layer
 def add_mixer_layer(qc, beta, n):
     qc.rx(2 * beta, range(n))
-    qc.barrier()
+    #qc.barrier()
 
 def add_qaoa_layer(qc, ising, parameters, layers, n):
     i = 0
@@ -103,7 +103,7 @@ def optimize_parameters(qc, ising, parameters, theta, estimator):
     exp_value_list = []
 
     # Here we can change the optimization method etc.
-    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell",
+    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell", options={'maxiter':500, 'maxfev':500},
                                           args=(qc, ising, estimator, exp_value_list))
 
     # Save the objective value the optimization finally gives us
@@ -224,5 +224,3 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
 
     #print(f'Most probable solution: {highest_possible_solution}')
     return X
-
-
