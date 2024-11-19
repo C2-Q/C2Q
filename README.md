@@ -1,5 +1,6 @@
 # C2Q-Project
-old project URL: https://github.com/Bossy-Ye/C2Q
+Old project URL (you can find some demos there...): https://github.com/Bossy-Ye/C2Q
+
 
 C2Q is aiming to bridge the gap between classical and quantum computing.
 
