@@ -449,7 +449,7 @@ def select_device(device):
 
     return device_dict
 
-def recommender(qc):
+def recommender(qc, save_figures=True):
     """
     Main function of the quantum recommender. Outputs three options for quantum devices: lowest error, lowest time and lowest price.
 
@@ -591,6 +591,41 @@ def recommender(qc):
                 first_device = False
 
         #print("--------------------------------------------\n")
+
+    device_names = []
+    device_errors = []
+    device_times = []
+    device_prices = []
+
+    if save_figures:
+        for device in recommender_devices:
+            device_names.append(device["name"])
+            device_errors.append(device["error"])
+            device_times.append(device["time"])
+            device_prices.append(device["price"])
+
+        # Plot errors
+        fig = plt.figure(figsize = (18, 5))
+        plt.bar(device_names, device_errors, width = 0.4)
+        plt.ylabel("Error (%)")
+        plt.title("Estimated total error with each quantum computer")
+        plt.savefig("recommender_errors_devices.png")
+
+        # Plot times
+        fig = plt.figure(figsize = (18, 5))
+        plt.bar(device_names, device_times, width = 0.4)
+        plt.ylabel("Time (s)")
+        plt.title("Estimated total time with each quantum computer (50 iterations, 1000 shots per iteration)")
+        plt.yscale("log")
+        plt.savefig("recommender_times_devices.png")
+
+        # Plot prices
+        fig = plt.figure(figsize = (18, 5))
+        plt.bar(device_names, device_prices, width = 0.4)
+        plt.ylabel("Price ($)")
+        plt.title("Estimated price with each quantum computer (50 iterations, 1000 shots per iteration)")
+        plt.yscale("log")
+        plt.savefig("recommender_prices_devices.png")
 
     recommender_output = f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}. \n - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}. \n - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}."
 

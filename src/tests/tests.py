@@ -668,7 +668,7 @@ class MyTestCase(unittest.TestCase):
             qc = qaoa_dict["qc"]
 
             # Run the recommender and append recommender_data_array
-            recommender_output, recommender_devices = recommender(qc)
+            recommender_output, recommender_devices = recommender(qc, save_figures=False)
             recommender_data_array.append(recommender_devices)
 
         plot_results(recommender_data_array, qubits_array)
