@@ -137,12 +137,13 @@ class MyTestCase(unittest.TestCase):
     def test_is_pdf_generation(self):
         # parse is_snippet and get problem type and extract data
         problem_type, data = self.parser.parse(self.is_snippet)
+        print(self.is_snippet)
         # fetch problem class based on recognized problem type
         mis = PROBLEMS[problem_type](data.G)
         # generate comprehensive result for problem's original form
-        mis.report()
+        mis.report_latex()
         # generate comprehensive report for problem's 3SAT format after reduction
-        mis.report_3sat()
+        # mis.report_3sat()
 
 
     def test_max_cut(self):

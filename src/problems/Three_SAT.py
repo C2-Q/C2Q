@@ -320,20 +320,23 @@ class ThreeSat(NP):
                                "\n\\end{bmatrix}$"
                 doc.append(NoEscape(matrix_latex))
             # Adding the oracle image in LaTeX format
-            with doc.create(Subsection("Oracle Visualization")):
-                doc.append("The corresponding oracle for the 3-SAT problem is shown below:\n")
-
-                # Generate and save the oracle circuit as an image
-                oracle_circuit_image_path = "quantum_circuit_oracle.png"
-                oracle = cnf_to_quantum_oracle_optimized(self.three_sat)
-                oracle.draw(style="mpl")
-                plt.savefig(oracle_circuit_image_path)
-                plt.close()
-
-                # Add the image to the LaTeX document
-                with doc.create(Figure(position='h!')) as oracle_fig:
-                    oracle_fig.add_image(oracle_circuit_image_path, width="300px")  # Adjust width as desired
-                    oracle_fig.add_caption("Corresponding Oracle Visualization for the 3-SAT Problem")
+            # with doc.create(Subsection("Oracle Visualization")):
+            #     doc.append("The corresponding oracle for the 3-SAT problem is shown below:\n")
+            #
+            #     # Generate and save the oracle circuit as an image
+            #     oracle_circuit_image_path = "quantum_circuit_oracle.png"
+            #     oracle = cnf_to_quantum_oracle_optimized(self.three_sat)
+            #     print(oracle.draw(output="latex_source"))
+            #     oracle.draw(style="mpl")
+            #     plt.savefig(oracle_circuit_image_path)
+            #     plt.close()
+            #
+            #     # Add the image to the LaTeX document
+            #     with doc.create(Figure(position='h!')) as oracle_fig:
+            #         oracle_fig.add_image(oracle_circuit_image_path, width="300px")  # Adjust width as desired
+            #         oracle_fig.add_caption("Corresponding Oracle Visualization for the 3-SAT Problem")
+            oracle = cnf_to_quantum_oracle_optimized(self.three_sat)
+            print(oracle.draw(output="latex_source"))
             # Adding QAOA Configurations
             with doc.create(Subsection('QAOA Configurations')):
                 doc.append("QAOA is configured with the following parameters:\n")
