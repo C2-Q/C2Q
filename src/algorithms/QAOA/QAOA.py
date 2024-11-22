@@ -3,7 +3,7 @@ from qiskit_aer import AerSimulator
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import PauliEvolutionGate
 from qiskit.quantum_info import SparsePauliOp
-from qiskit.primitives import Estimator
+from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
 
 from scipy.optimize import minimize
 
@@ -85,26 +85,26 @@ def initialize_parameters(layers):
 
     return theta
 
-def cost_estimator(theta, qc, ising, estimator, exp_value_list):
+def cost_estimator(theta, qc_transpiled, ising, estimator, exp_value_list):
     # Calculate the expectation value
 
-    isa_hamiltonian = ising.apply_layout(qc.layout)
-    job = estimator.run(qc, isa_hamiltonian, theta, shots=1000)
+    isa_hamiltonian = ising.apply_layout(qc_transpiled.layout)
+    job = estimator.run([(qc_transpiled, isa_hamiltonian, theta)])
 
-    result = job.result()
-    cost = result.values[0]
+    result = job.result()[0]
+    cost = result.data.evs
 
     exp_value_list.append(cost)
 
     return cost
 
-def optimize_parameters(qc, ising, parameters, theta, estimator):
+def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
     # Here we can change the optimization method etc.
     min_minimized_optimization = minimize(cost_estimator, theta, method="Powell", options={'maxiter':500, 'maxfev':500},
-                                          args=(qc, ising, estimator, exp_value_list))
+                                          args=(qc_transpiled, ising, estimator, exp_value_list))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
@@ -154,7 +154,7 @@ def qaoa_no_optimization(qubo, layers):
     # Return QAOA circuit, parameter list and initial values for the parameters
     return qaoa_dict
 
-def qaoa_optimize(qubo, layers):
+def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     """
     Implements QAOA with given QUBO.
 
@@ -187,11 +187,15 @@ def qaoa_optimize(qubo, layers):
     # Apply the QAOA layers
     add_qaoa_layer(qc, ising, parameters, layers, n)
 
-    estimator = Estimator()
+    qc.measure_all()
+    qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
+
+    estimator = Estimator(backend)
+    estimator.options.default_shots = 1000
 
     # Optimize the parameters
     #theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
-    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, ising, parameters, theta, estimator)
+    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc_transpiled, ising, parameters, theta, estimator)
 
     qaoa_dict = {
         "qc": qc,
@@ -205,12 +209,20 @@ def qaoa_optimize(qubo, layers):
     # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
     return qaoa_dict
 
-def sample_results(qc, parameters, theta, backend=AerSimulator()):
-    qc_assigned_parameters = qc.assign_parameters({parameters: theta})
-    qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
-    qc_transpiled.measure_all()
+def sample_results(qc_transpiled, parameters, theta, backend=AerSimulator()):
+    sampler = Sampler(mode=backend)
+    sampler.options.default_shots = 1000
 
-    counts = backend.run(qc_transpiled, shots=1000).result().get_counts()
+    if backend.name == 'aer_simulator':
+        qc_transpiled_parameters = qc_transpiled.decompose(reps=1).assign_parameters({parameters: theta})
+    else:
+        qc_transpiled_parameters = qc_transpiled.assign_parameters({parameters: theta})
+
+    job = sampler.run([qc_transpiled_parameters])
+
+    result = job.result()[0]
+
+    counts = result.data.meas.get_counts()
 
     highest_possible_solution = 0
     max_count = 0
