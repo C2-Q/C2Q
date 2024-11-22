@@ -9,7 +9,7 @@ C2Q is aiming to bridge the gap between classical and quantum computing.
 - Grover
 - VQE
 ## Parser
-training of model of our parser here: https://github.com/Bossy-Ye/C2Q-Parser
+training of model of our parser here: [https://github.com/Bossy-Ye/C2Q-Parser](https://github.com/C2-Q/C2Q/blob/main/src/parser/train.ipynb)
 
 # How to contribute
 
