@@ -117,9 +117,9 @@ def export_circuit_data(circuit, circuit_transpiled):
 
 # Available providers
 provider_list = [
-    "Azure Quantum",
     "IBM Quantum",
     "Amazon Braket",
+    "Azure Quantum",
     #"IQM Resonance"
 ]
 
@@ -150,6 +150,7 @@ def select_provider(provider, available_devices):
             if azure_device not in available_devices:
                 unavailable_devices.append(azure_device)
 
+        # https://learn.microsoft.com/en-us/azure/quantum/pricing
         price_list_shots = [[0.000220, 0.000975], [12.5], [13.5], [1.3]]
 
     if provider == "IBM Quantum":
@@ -165,7 +166,7 @@ def select_provider(provider, available_devices):
             if device.startswith("ibm_") and device not in device_list:
                 device_list.append(device)
 
-        price_list_shots = [96]*len(device_list)
+        price_list_shots = [96]*len(device_list) # Pay-as-you-go pricing https://www.ibm.com/quantum/pricing
 
     if provider == "Amazon Braket":
         device_list = [
@@ -173,7 +174,8 @@ def select_provider(provider, available_devices):
             "IQM Garnet",
             "Rigetti Ankaa-2"
         ]
-
+        
+        # https://aws.amazon.com/braket/pricing
         price_list_shots = [
             0.03,
             0.00145,
@@ -306,6 +308,8 @@ def select_device(device, ibm_service, available_devices):
         if available_devices and device not in available_devices:
             device = device + " (unavailable)"
         # Error rates for estimating the error
+        # Calibration data from the Braket Console:
+        # https://eu-north-1.console.aws.amazon.com/braket/home?region=eu-north-1#/devices/arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2
         single_qubit_gate_error = 0.001931
         two_qubit_gate_error = 0.11794
         measurement_error = 0.06565
@@ -327,12 +331,12 @@ def select_device(device, ibm_service, available_devices):
         # Error rates for estimating the error
         single_qubit_gate_error = 0.001
         two_qubit_gate_error = 0.008
-        measurement_error = 0.0185 #(?)
+        measurement_error = 0.06565 # Not found, using the Rigetti Ankaa-2 measurement error instead
         t1_relaxation_time = 21 * 10 ** (-6)
         t2_relaxation_time = 24 * 10 ** (-6)
         # Gate timings for estimating the time to execute a circuit
-        single_qubit_gate_timing = 40 * 10 ** (-9) #(?)
-        two_qubit_gate_timing = 70 * 10 ** (-9) #(?)
+        single_qubit_gate_timing = 40 * 10 ** (-9) # Not found, using the Rigetti Ankaa-2 timing instead
+        two_qubit_gate_timing = 70 * 10 ** (-9) # Not found, using the Rigetti Ankaa-2 timing instead
 
         # Rigetti Ankaa-9Q-3 9-qubit fake backend
         coupling_map_path = os.path.join(dirname, 'coupling_maps/rigetti_ankaa_9q_3_coupling_map.npy')
@@ -384,6 +388,8 @@ def select_device(device, ibm_service, available_devices):
             two_qubit_gate_error = mean(two_qubit_gate_error)
 
             # Gate timings for estimating the time to execute a circuit
+            # Gate timing calibration data not available, using:
+            # https://web.archive.org/web/20241126104255/https://aws.amazon.com/braket/quantum-computers/iqm/
             single_qubit_gate_timing = 20 * 10 ** (-9)
             two_qubit_gate_timing = 40 * 10 ** (-9)
 
@@ -485,35 +491,45 @@ def select_device(device, ibm_service, available_devices):
         device_qubits = 25
 
     if device == "IonQ Aria (Azure)":
+        # Using the calibration data from Amazon Braket for IonQ Aria, since the data is not available from Azure Quantum.
+
+        device_file_path = os.path.join(dirname, f'device_information/IonQ Aria (Amazon).pkl')
+        with open(device_file_path, 'rb') as f:
+            saved_dict = pickle.load(f)
+
         if available_devices and device not in available_devices:
             device = device + " (unavailable)"
-        # Error rates for estimating the error
-        single_qubit_gate_error = 0.0006
-        two_qubit_gate_error = 0.006
-        measurement_error = 0.0048
-        t1_relaxation_time = 100000000 * 10 ** (-6)
-        t2_relaxation_time = 1000000 * 10 ** (-6)
-        # Gate timings for estimating the time to execute a circuit
-        single_qubit_gate_timing = 135 * 10 ** (-6)
-        two_qubit_gate_timing = 600 * 10 ** (-6)
+
+        backend = ionq_provider.get_backend("simulator", gateset="native")
+
+        single_qubit_gate_error = saved_dict["errors"]["single_qubit"]
+        two_qubit_gate_error = saved_dict["errors"]["two_qubit"]
+        measurement_error = saved_dict["errors"]["measurement"]
+        single_qubit_gate_timing = saved_dict["gate_timings"]["single_qubit"]
+        two_qubit_gate_timing = saved_dict["gate_timings"]["two_qubit"]
+        t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
+        t2_relaxation_time = saved_dict["relaxation_times"]["t2"]
 
         # IonQ Aria 25-qubit fake backend. Coupling map is not needed because the device qubits are all-to-all connected.
         #coupling_map_path = os.path.join(dirname, 'coupling_maps/ionq_aria_coupling_map.npy')
         #coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 25
         #backend = GenericBackendV2(device_qubits)
-        backend = ionq_provider.get_backend("simulator", gateset="native")
 
     if device == "Quantinuum H1":
         if available_devices and device not in available_devices:
             device = device + " (unavailable)"
         # Error rates for estimating the error
+        # https://cdn.prod.website-files.com/669960f53cd73aedb80c8eea/6718b983d80f99dbf611b460_Quantinuum%20H1%20Product%20Data%20Sheet%20V7.00%2015Oct24.pdf
         single_qubit_gate_error = 0.00002
         two_qubit_gate_error = 0.001
         measurement_error = 0.003
+        # Relaxation times
+        # https://docs.quantinuum.com/h-series/support/faqs.html#machine-questions
         t1_relaxation_time = 60
         t2_relaxation_time = 4
-        # Gate timings for estimating the time to execute a circuit
+        # Gate timings for estimating the time to execute a circuit (interzone + gate time)
+        # https://arxiv.org/abs/2003.01293
         single_qubit_gate_timing = 288 * 10 ** (-6)
         two_qubit_gate_timing = 308 * 10 ** (-6)
 
@@ -528,12 +544,16 @@ def select_device(device, ibm_service, available_devices):
         if available_devices and device not in available_devices:
             device = device + " (unavailable)"
         # Error rates for estimating the error
+        # https://cdn.prod.website-files.com/669960f53cd73aedb80c8eea/6718b99685b5ef37ae2294dc_Quantinuum%20H2%20Product%20Data%20Sheet%20V2.00%2015Oct24%5B99%5D.pdf
         single_qubit_gate_error = 0.00003
         two_qubit_gate_error = 0.0015
         measurement_error = 0.0015
+        # Relaxation times
+        # https://docs.quantinuum.com/h-series/support/faqs.html#machine-questions
         t1_relaxation_time = 60
         t2_relaxation_time = 4
-        # Gate timings for estimating the time to execute a circuit
+        # Gate timings for estimating the time to execute a circuit (interzone + gate time)
+        # https://arxiv.org/abs/2003.01293
         single_qubit_gate_timing = 288 * 10 ** (-6)
         two_qubit_gate_timing = 308 * 10 ** (-6)
 
@@ -568,7 +588,7 @@ def select_device(device, ibm_service, available_devices):
 def fetch_available_devices(azure_workspace, braket_provider, ibm_service):
     # Fetch available devices
     # See tests/tests.py for an example how to use this function.
-    
+
     azure_dev_list_all = azure_workspace.get_targets()
 
     braket_dev_list = braket_provider.backends(statuses=["ONLINE"])
