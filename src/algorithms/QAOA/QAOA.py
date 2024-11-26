@@ -209,7 +209,9 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
     return qaoa_dict
 
-def sample_results(qc_transpiled, parameters, theta, backend=AerSimulator()):
+def sample_results(qc, parameters, theta, backend=AerSimulator()):
+    qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
+
     sampler = Sampler(mode=backend)
     sampler.options.default_shots = 1000
 

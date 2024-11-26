@@ -117,7 +117,9 @@ def vqe_optimization(qubo, layers, backend=AerSimulator()):
 
     return vqe_dict
 
-def sample_results(vqe_circuit_transpiled, parameters, theta, backend=AerSimulator()):
+def sample_results(vqe_circuit, parameters, theta, backend=AerSimulator()):
+    vqe_circuit_transpiled = transpile(vqe_circuit, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
+    
     sampler = Sampler(mode=backend)
     sampler.options.default_shots = 1000
 
