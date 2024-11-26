@@ -567,6 +567,8 @@ def select_device(device, ibm_service, available_devices):
 
 def fetch_available_devices(azure_workspace, braket_provider, ibm_service):
     # Fetch available devices
+    # See tests/tests.py for an example how to use this function.
+    
     azure_dev_list_all = azure_workspace.get_targets()
 
     braket_dev_list = braket_provider.backends(statuses=["ONLINE"])
