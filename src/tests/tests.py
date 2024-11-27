@@ -9,6 +9,9 @@ from qiskit.circuit.library import GroverOperator, MCMT, ZGate, MCXGate
 from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator, Aer
+from qiskit_braket_provider import BraketProvider
+from azure.quantum import Workspace
+from qiskit_ibm_runtime import QiskitRuntimeService
 
 from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize, qaoa_no_optimization, sample_results
 from src.algorithms.VQE.VQE import vqe_optimization
@@ -20,7 +23,7 @@ from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
 from src.problems.tsp import TSP
-from src.recommender.recommender_engine import recommender, plot_results
+from src.recommender.recommender_engine import recommender, plot_results, fetch_available_devices
 from src.reduction import *
 from src.sat_to_qubo import *
 from src.circuits_library import *
@@ -644,6 +647,35 @@ class MyTestCase(unittest.TestCase):
             recommender_data_array.append(recommender_devices)
 
         plot_results(recommender_data_array, qubits_array)
+    
+    #def test_calibration_data_fetching(self):
+        # Fetch the available devices and their calibration data.
+        # First, provide credentials for Azure Quantum, Amazon Braket and IBM Quantum.
+
+        #azure_workspace = Workspace(
+        #    resource_id = "<resource id here>", # Azure Quantum workspace resource id
+        #    location = "westeurope")
+
+        #braket_provider = BraketProvider() # See https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html on how to configure BraketProvider.
+
+        #token = "<ibm quantum api token here>" # IBM Quantum API token
+        #ibm_service = QiskitRuntimeService(
+        #    channel='ibm_quantum',
+        #    instance='ibm-q/open/main',
+        #    token=token
+        #)
+
+        #available_devices = fetch_available_devices(azure_workspace, braket_provider, ibm_service)
+
+        # Example MaxCut problem
+        #G = nx.random_regular_graph(3, 4)
+        #qubo = MaxCut(G).to_qubo().Q
+        #qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        #qc = qaoa_dict["qc"]
+
+        # Use the list of available devices to fetch calibration data
+        #recommender_output, recommender_devices = recommender(qc, ibm_service=ibm_service, available_devices=available_devices)
+
 
 
 if __name__ == '__main__':

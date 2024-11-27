@@ -147,7 +147,7 @@ class MIS(NP):
                                 iterations=iterations)
         return grover_circuit
 
-    def report(self) -> None:
+    def report(self, backend=AerSimulator()) -> None:
         """
         Generates a PDF report summarizing the problem, its solution, and a visualization of the result.
         """
@@ -158,7 +158,9 @@ class MIS(NP):
         vqe_solution_image_path = "vqe_solution_visualization.png"
         grover_circuit_image_path = "grover_circuit.png"
         grover_solution_image_path = "grover_solution_visualization.png"
-
+        errors_bar_image_path = "recommender_errors_devices.png"
+        times_bar_image_path = "recommender_times_devices.png"
+        prices_bar_image_path = "recommender_prices_devices.png"
 
         pdf = FPDF()
         pdf.set_font("Times", size=12)
@@ -167,7 +169,7 @@ class MIS(NP):
 
         # Set title with Times New Roman font
         pdf.set_font("Times", 'B', 16)
-        pdf.cell(200, 10, "MaxCut Problem Report", ln=True, align='C')
+        pdf.cell(200, 10, "Maximal Independent Set Problem Report", ln=True, align='C')
 
         # Add some details about the graph
         pdf.set_font("Times", size=12)
@@ -193,7 +195,7 @@ class MIS(NP):
 
         # Perform QUBO optimization and sampling using QAOA
         qubo = self.to_qubo().Q
-        qaoa_dict = qaoa_optimize(qubo, layers=3)
+        qaoa_dict = qaoa_optimize(qubo, layers=1, backend=backend)
         qc = qaoa_dict["qc"]
         parameters = qaoa_dict["parameters"]
         theta = qaoa_dict["theta"]
@@ -201,7 +203,7 @@ class MIS(NP):
 
         # Sample the QAOA circuit and get the most probable solution
         from src.algorithms.QAOA.QAOA import sample_results
-        highest_possible_solution = sample_results(qc, parameters, theta)
+        highest_possible_solution = sample_results(qc, parameters, theta, backend)
 
         # Add a new page for QAOA results
         # Draw and insert the quantum circuit (qc) into the PDF
@@ -212,9 +214,7 @@ class MIS(NP):
         pdf.ln(10)
 
         # Plot and save the quantum circuit for qaoa !!
-        qc.decompose().draw(style="mpl")
-        plt.savefig(qaoa_circuit_image_path)
-        plt.close()
+        qc.decompose().draw("mpl", filename=qaoa_circuit_image_path)
 
         # Insert the qaoa quantum circuit image into the PDF
         pdf.image(qaoa_circuit_image_path, x=10, y=pdf.get_y(), w=190)
@@ -244,7 +244,7 @@ class MIS(NP):
         # start here for vqe algorithm
         # Perform QUBO optimization and sampling using VQE
         qubo = self.to_qubo().Q
-        vqe_dict = vqe_optimization(qubo, layers=1)
+        vqe_dict = vqe_optimization(qubo, layers=1, backend=backend)
         qc = vqe_dict["qc"]
         parameters = vqe_dict["parameters"]
         theta = vqe_dict["theta"]
@@ -252,7 +252,7 @@ class MIS(NP):
 
         # Sample the vqe circuit and get the most probable solution
         from src.algorithms.VQE.VQE import sample_results
-        highest_possible_solution = sample_results(qc, parameters, theta)
+        highest_possible_solution = sample_results(qc, parameters, theta, backend)
 
         pdf.add_page()
         pdf.set_font("Times", 'B', 16)
@@ -260,9 +260,7 @@ class MIS(NP):
         pdf.ln(10)
 
         # Plot and save the quantum circuit for qaoa !!
-        qc.decompose().draw(style="mpl")
-        plt.savefig(vqe_circuit_image_path)
-        plt.close()
+        qc.decompose().draw("mpl", filename=vqe_circuit_image_path)
 
         # Insert the quantum circuit image into the PDF
         pdf.image(vqe_circuit_image_path, x=10, y=pdf.get_y(), w=190)
@@ -287,18 +285,16 @@ class MIS(NP):
 
         # oracle execution and visualization, pdf written
 
-        grover_circuit = self.grover_sat(iterations=1)
+        grover_circuit = self.grover_sat(iterations=3)
         from src.algorithms.grover import sample_results
-        most_probable_grover_result = sample_results(grover_circuit)
+        most_probable_grover_result = sample_results(grover_circuit, backend)
         pdf.add_page()
         pdf.set_font("Times", 'B', 16)
         pdf.cell(200, 10, "Grover algorithm, generated quantum circuit", ln=True, align='C')
         pdf.ln(10)
 
         # Plot and save the quantum circuit for grover !!
-        grover_circuit.draw(style="mpl")
-        plt.savefig(grover_circuit_image_path)
-        plt.close()
+        grover_circuit.draw("mpl", filename=grover_circuit_image_path)
         # Insert the quantum circuit image into the PDF
         pdf.image(grover_circuit_image_path, x=10, y=pdf.get_y(), w=190)
         pdf.add_page()
@@ -327,6 +323,18 @@ class MIS(NP):
         # Use multi_cell to handle long text
         pdf.set_font("Times", '', 12)  # Optionally set a smaller font for the output text
         pdf.multi_cell(0, 10, recommender_output, align='L')
+
+        pdf.ln(10)
+        pdf.cell(200, 10, "Estimated errors:", ln=True, align='L')
+        pdf.image(errors_bar_image_path, x=10, y=pdf.get_y(), w=190)
+
+        pdf.ln(60)
+        pdf.cell(200, 10, "Estimated execution times:", ln=True, align='L')
+        pdf.image(times_bar_image_path, x=10, y=pdf.get_y(), w=190)
+
+        pdf.ln(60)
+        pdf.cell(200, 10, "Estimated prices:", ln=True, align='L')
+        pdf.image(prices_bar_image_path, x=10, y=pdf.get_y(), w=190)
 
         pdf_output_path = "independent_set_report.pdf"
         pdf.output(pdf_output_path)

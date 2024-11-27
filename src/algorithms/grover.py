@@ -5,6 +5,9 @@ from qiskit import QuantumCircuit, transpile, QuantumRegister, ClassicalRegister
 from qiskit.circuit.library import GroverOperator, MCMT, ZGate, MCXGate
 from qiskit.visualization import plot_histogram
 from qiskit_aer import AerSimulator
+from qiskit_ibm_runtime import SamplerV2 as Sampler
+from qiskit.visualization import plot_distribution
+import pickle
 
 
 def grover(oracle: QuantumCircuit,
@@ -129,11 +132,14 @@ def grover_optimized_iterations(oracle: QuantumCircuit,
 
     return grover_circuit
 
-def sample_results(grover_circuit: QuantumCircuit):
-    backend = AerSimulator()
-    transpiled_circuit = transpile(grover_circuit, backend=backend)
-    counts = backend.run(transpiled_circuit, shots=500000).result().get_counts()
-    print(counts)
+def sample_results(grover_circuit: QuantumCircuit, backend=AerSimulator()):
+    sampler = Sampler(mode=backend)
+    sampler.options.default_shots = 1000
+    transpiled_circuit = transpile(grover_circuit, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
+    job = sampler.run([transpiled_circuit])
+    result = job.result()[0]
+    counts = result.data.c0.get_counts()
+
     most_probable_grover_result = max(counts, key=counts.get)
     most_probable_grover_result = np.fromstring(most_probable_grover_result, np.int8) - 48
     # Flip the bitstring to fix the order

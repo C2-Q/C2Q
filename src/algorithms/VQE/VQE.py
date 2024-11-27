@@ -1,8 +1,8 @@
 from qiskit.circuit.library import TwoLocal
 from qiskit.circuit import ParameterVector
-from qiskit.primitives import Estimator
 from qiskit import transpile
 from qiskit_aer import AerSimulator
+from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
 
 from scipy.optimize import minimize
 
@@ -21,28 +21,25 @@ def initialize_parameters(reps):
     
     return theta
 
-def cost_func_vqe(theta, circuit, hamiltonian, estimator = Estimator()):
-    """Return estimate of energy from estimator
+def cost_estimator(theta, vqe_circuit_transpiled, ising, estimator, exp_value_list):
+    # Calculate the expectation value
 
-    Parameters:
-        params (ndarray): Array of ansatz parameters
-        ansatz (QuantumCircuit): Parameterized ansatz circuit
-        hamiltonian (SparsePauliOp): Operator representation of Hamiltonian
-        estimator (Estimator): Estimator primitive instance
+    isa_hamiltonian = ising.apply_layout(vqe_circuit_transpiled.layout)
+    job = estimator.run([(vqe_circuit_transpiled, isa_hamiltonian, theta)])
 
-    Returns:
-        float: Energy estimate
-    """
-    cost = estimator.run(circuit, hamiltonian, theta, shots=1000).result().values[0]
+    result = job.result()[0]
+    cost = result.data.evs
+
+    exp_value_list.append(cost)
 
     return cost
 
-def optimize_parameters(qc, ising, theta):
+def optimize_parameters(vqe_circuit_transpiled, ising, theta, estimator):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
     # Here we can change the optimization method etc.
-    min_minimized_optimization = minimize(cost_func_vqe, theta, method="Powell", options={'maxiter':500, 'maxfev':500}, args=(qc, ising))
+    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell", options={'maxiter':500, 'maxfev':500}, args=(vqe_circuit_transpiled, ising, estimator, exp_value_list))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
@@ -94,13 +91,22 @@ def vqe_no_optimization(qubo, layers):
 
     return vqe_dict
 
-def vqe_optimization(qubo, layers):
+def vqe_optimization(qubo, layers, backend=AerSimulator()):
     ising, offset = convert_qubo_to_ising(qubo)
     vqe_circuit = TwoLocal(len(qubo[0]), 'ry', 'cz', insert_barriers=True, reps=layers)
+
     num_parameters = vqe_circuit.num_parameters
     parameters = ParameterVector('theta', num_parameters)
     theta = initialize_parameters(num_parameters)
-    theta, minimum_objective_value = optimize_parameters(vqe_circuit, ising, theta)
+
+    vqe_circuit.measure_all()
+    vqe_circuit_transpiled = transpile(vqe_circuit, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
+
+    estimator = Estimator(backend)
+    estimator.options.default_shots = 1000
+
+    theta, minimum_objective_value = optimize_parameters(vqe_circuit_transpiled, ising, theta, estimator)
+
     vqe_dict = {
         "qc": vqe_circuit,
         "parameters": parameters,
@@ -111,12 +117,22 @@ def vqe_optimization(qubo, layers):
 
     return vqe_dict
 
-def sample_results(qc, parameters, theta, backend=AerSimulator()):
-    qc_assigned_parameters = qc.assign_parameters(theta)
-    qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
-    qc_transpiled.measure_all()
+def sample_results(vqe_circuit, parameters, theta, backend=AerSimulator()):
+    vqe_circuit_transpiled = transpile(vqe_circuit, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
+    
+    sampler = Sampler(mode=backend)
+    sampler.options.default_shots = 1000
 
-    counts = backend.run(qc_transpiled, shots=1000).result().get_counts()
+    if backend.name == 'aer_simulator':
+        vqe_circuit_transpiled_assigned_parameters = vqe_circuit_transpiled.decompose(reps=1).assign_parameters(theta)
+    else:
+        vqe_circuit_transpiled_assigned_parameters = vqe_circuit_transpiled.assign_parameters(theta)
+
+    job = sampler.run([vqe_circuit_transpiled_assigned_parameters])
+
+    result = job.result()[0]
+
+    counts = result.data.meas.get_counts()
 
     highest_possible_solution = 0
     max_count = 0
@@ -126,7 +142,7 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
             highest_possible_solution = key
 
     # Convert string to array
-    X = np.fromstring(highest_possible_solution, np.int8) - 48
+    X = np.fromiter(highest_possible_solution, dtype=int)
 
     #print(f'Most probable solution: {highest_possible_solution}')
     return X
