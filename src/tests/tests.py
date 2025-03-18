@@ -1,4 +1,5 @@
 import ast
+import json
 import random
 import unittest
 
@@ -672,6 +673,25 @@ class MyTestCase(unittest.TestCase):
             recommender_data_array.append(recommender_devices)
 
         plot_results(recommender_data_array, qubits_array)
+
+    def test_def(self):
+        # Create a sample circuit
+        from qiskit import assemble
+        qc = QuantumCircuit(2)
+        qc.h(0)
+        qc.cx(0, 1)
+
+        # Choose a backend (here, a simulator)
+        backend = Aer.get_backend('qasm_simulator')
+
+        # Transpile and assemble the circuit into a Qobj
+        transpiled_qc = transpile(qc, backend)
+        qobj = assemble(transpiled_qc, backend)
+
+        # Convert the Qobj to a dictionary and then to JSON
+        qobj_dict = qobj.to_dict()  # Qobj has a to_dict() method
+        json_str = json.dumps(qobj_dict, indent=2)
+        print(json_str)
 
 
 if __name__ == '__main__':
