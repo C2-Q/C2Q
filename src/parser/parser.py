@@ -1,7 +1,22 @@
+"""
+author boshuai ye
+博帅叶
+"""
+
 import ast
 import torch
 from transformers import RobertaTokenizer, AutoModelForSequenceClassification
 from src.graph import Graph
+from src.problems.basic_arithmetic.addition import Add
+from src.problems.basic_arithmetic.multiplication import Mul
+from src.problems.basic_arithmetic.subtraction import Sub
+from src.problems.clique import Clique
+from src.problems.factorization import Factor
+from src.problems.kcolor import KColor
+from src.problems.max_cut import MaxCut
+from src.problems.maximal_independent_set import MIS
+from src.problems.minimum_vertex_cover import MVC
+from src.problems.tsp import TSP
 
 # labels = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "Factor","ADD", "MUL", "SUB", "Unknown"]
 # Define problem type tags
@@ -20,7 +35,18 @@ PROBLEM_TAGS = {
 }
 GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"]
 ARITHMETIC_TAGS = ["ADD", "MUL", "SUB"]
-
+PROBLEMS = {
+    "MaxCut": MaxCut,
+    "MIS": MIS,
+    "TSP": TSP,
+    "Clique": Clique,
+    "KColor": KColor,
+    "Factor": Factor,
+    "ADD": Add,
+    "MUL": Mul,
+    "SUB": Sub,
+    "VC": MVC
+}
 # Reverse mapping, e.g., PROBLEM_POOLS[2] = "TSP"
 PROBLEM_POOLS = [k for k, v in PROBLEM_TAGS.items()]
 
@@ -71,7 +97,7 @@ class Parser:
         visitor = CodeVisitor()
         visitor.visit(tree)
         vars, calls = visitor.get_extracted_data()
-        # Use extracted data for specific problem types (e.g., graph-related or arithmetic problems)
+        # Use extracted data for specific problem types
         if problem_class == "GRAPH":
             data = self._process_graph_data(vars, calls)
         elif problem_class == "ARITHMETIC":
@@ -118,10 +144,10 @@ class Parser:
         for func_name, args in function_calls.items():
             for arg in args:
                 try:
-                    graph = Graph(arg)  # Try to create a graph from function call arguments
-                    return graph  # If successful, return the graph
+                    graph = Graph(arg)
+                    return graph  # If 👌 return graph
                 except ValueError:
-                    continue  # Skip and try the next argument if an exception is raised
+                    continue
 
         # If no graph could be created, return a randomly generated graph
         return Graph.random_graph()
@@ -142,7 +168,7 @@ class Parser:
 
             # Iterate through arguments and resolve constants or variables
             for arg in args:
-                if isinstance(arg, int):  # If the argument is already an integer, it's valid
+                if isinstance(arg, int):  # If the argument is already an integer, it's valid 😯
                     resolved_args.append(arg)
                 elif isinstance(arg, str) and arg in variables:  # Check if it's a variable in the extracted variables
                     # Try to resolve the variable's value
@@ -150,7 +176,7 @@ class Parser:
                     if isinstance(var_value, int):  # Check if the variable value is an integer
                         resolved_args.append(var_value)
                     else:
-                        break  # If the variable is not an integer, skip this function call
+                        break  # If the variable is not an integer, skip this function call！！！
                 else:
                     break  # If it's neither an int nor a valid variable, skip this function call
 
@@ -158,7 +184,7 @@ class Parser:
             if len(resolved_args) == 2:
                 return resolved_args
 
-        # If no valid arithmetic function call is found, raise an error or return None or return a case
+        # If no valid arithmetic function call is found, raise an error or return None or return a case, a randomized case...
         return [16, 16]
         #raise ValueError("No valid arithmetic function calls with two integer arguments found.")
 
@@ -234,6 +260,7 @@ class CodeVisitor(ast.NodeVisitor):
         # If the value is a unary operation (like -8), handle it properly
         elif isinstance(value, ast.UnaryOp) and isinstance(value.op, ast.USub):
             # If it's a negative number (UnaryOp with USub), return the negative value
+            # -
             if isinstance(value.operand, ast.Constant):
                 return -value.operand.value
 

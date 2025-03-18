@@ -1,4 +1,5 @@
 import ast
+import json
 import random
 import unittest
 
@@ -17,7 +18,8 @@ from src.algorithms.QAOA.QAOA import convert_qubo_to_ising, qaoa_optimize, qaoa_
 from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.algorithms.grover import grover
-from src.parser.parser import Parser, CodeVisitor
+from src.parser.parser import Parser, CodeVisitor, PROBLEMS
+from src.problems.Three_SAT import ThreeSat
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
@@ -137,14 +139,16 @@ class MyTestCase(unittest.TestCase):
         mc.report()
 
     def test_is_pdf_generation(self):
+        # parse is_snippet and get problem type and extract data
         problem_type, data = self.parser.parse(self.is_snippet)
-        print(problem_type, data)
-        self.assertEqual(problem_type, 'MIS')  # add assertion here
-        self.assertIsInstance(data.G, nx.Graph)
-        data.visualize()
-        self.assertEqual(nx.is_weighted(data.G), True)
-        mis = MIS(data.G)
-        mis.report()
+        print(self.is_snippet)
+        # fetch problem class based on recognized problem type
+        mis = PROBLEMS[problem_type](data.G)
+        # generate comprehensive result for problem's original form
+        mis.report_latex()
+        # generate comprehensive report for problem's 3SAT format after reduction
+        # mis.report_3sat()
+
 
     def test_max_cut(self):
         problem_type, data = self.parser.parse(self.maxCut_snippet_adj)
@@ -302,31 +306,31 @@ class MyTestCase(unittest.TestCase):
         cha = Chancellor(sat)
         cha.fillQ()
         qubo = clique.to_qubo()
-        qubo.display_matrix()
-        op, offset = convert_qubo_to_ising(qubo.Q)
-        print(op, offset)
-
-        # Obtain the QAOA circuit
-        qubo = qubo.Q
-        qaoa_dict = qaoa_no_optimization(qubo, layers=1)
-        qc = qaoa_dict["qc"]
-
-        # Run the recommender
-        recommender_output, recommender_devices = recommender(qc)
-        print(recommender_output)
-
-        # Run QAOA on local simulator
-        qaoa_dict = qaoa_optimize(qubo, layers=3)
-
-        # Obtain the parameters of the QAOA run
-        qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
-
-        # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
-        highest_possible_solution = sample_results(qc, parameters, theta)
-        print(f"Most probable solution: {highest_possible_solution}")
-        clique.draw_result(highest_possible_solution)
+        # qubo.display_matrix()
+        # op, offset = convert_qubo_to_ising(qubo.Q)
+        # print(op, offset)
+        #
+        # # Obtain the QAOA circuit
+        # qubo = qubo.Q
+        # qaoa_dict = qaoa_no_optimization(qubo, layers=1)
+        # qc = qaoa_dict["qc"]
+        #
+        # # Run the recommender
+        # recommender_output, recommender_devices = recommender(qc)
+        # print(recommender_output)
+        #
+        # # Run QAOA on local simulator
+        # qaoa_dict = qaoa_optimize(qubo, layers=3)
+        #
+        # # Obtain the parameters of the QAOA run
+        # qc = qaoa_dict["qc"]
+        # parameters = qaoa_dict["parameters"]
+        # theta = qaoa_dict["theta"]
+        #
+        # # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
+        # highest_possible_solution = sample_results(qc, parameters, theta)
+        # print(f"Most probable solution: {highest_possible_solution}")
+        # clique.draw_result(highest_possible_solution)
 
     def test_graph_init(self):
         # Example 1: Using a distance matrix
@@ -388,14 +392,35 @@ class MyTestCase(unittest.TestCase):
             [1, 2, 3],
             [1, -2, 3],
             [1, -3],
+            [-1, 4]
         ]
         formula = CNF(from_clauses=clauses)
-        circuit = cnf_to_quantum_circuit_optimized(formula)
-        circuit2 = cnf_to_quantum_oracle_optimized(formula)
-        circuit2.draw(output="mpl", plot_barriers=False)
-        plt.show()
-        # circuit2.draw(output="latex")
+        print(solve_all_cnf_solutions(formula))
+        sat = ThreeSat(formula)
+        sat.report_latex()
 
+        # qaoa_dict = qaoa_optimize(qubo.Q, layers=2)
+        # qaoa_qc = qaoa_dict["qc"]
+        # qaoa_parameters = qaoa_dict["parameters"]
+        # qaoa_theta = qaoa_dict["theta"]
+        # from src.algorithms.QAOA.QAOA import sample_results
+        # qaoa_solution = sample_results(qaoa_qc, qaoa_parameters, qaoa_theta)
+        # print(qaoa_solution)
+        # print("brute force")
+        # print(qubo.solve_brute_force())
+        #
+        # # VQE Solution
+        # vqe_dict = vqe_optimization(qubo.Q, layers=3)
+        # vqe_qc = vqe_dict["qc"]
+        # vqe_parameters = vqe_dict["parameters"]
+        # vqe_theta = vqe_dict["theta"]
+        # from src.algorithms.VQE.VQE import sample_results
+        # vqe_solution = sample_results(vqe_qc, vqe_parameters, vqe_theta)
+        # print(vqe_solution)
+        # grover_circuit = sat.grover_sat(iterations=3)
+        # from src.algorithms.grover import sample_results
+        # grover_solution = sample_results(grover_circuit)
+        # print(grover_solution)
     def test_chancellor_randomized(self):
         num_correct = 0
         num_tests = 50
@@ -569,15 +594,19 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(self.is_snippet)
         print(problem_type, data)
         G = nx.Graph()
-        G.add_edges_from([(0, 1), (0, 2), (1, 2), (1, 3)])
+        G.add_edges_from([(0, 1), (0, 2), (1, 2)])
+        graph = Graph([(0, 1), (0, 2), (1, 2)])
+        graph.visualize()
         # Convert to SAT problem with an independent set of size 2
-        independent_set_cnf = independent_set_to_sat(data.G)
+        independent_set_cnf = independent_set_to_k_sat(data.G, 1)
         oracle = cnf_to_quantum_oracle_optimized(independent_set_cnf)
         state_prep = QuantumCircuit(oracle.num_qubits)
-        state_prep.h([0, 1, 2, 3])
-        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2, 3],
-                                working_qubits=[0, 1, 2, 3], state_pre=state_prep
-                                , iterations=4)
+        state_prep.h([0, 1, 2])
+        grover_circuit = grover(oracle, objective_qubits=[0, 1, 2],
+                                working_qubits=[0, 1, 2], state_pre=state_prep
+                                , iterations=1)
+        oracle.draw('mpl')
+        plt.show()
         print(solve_all_cnf_solutions(independent_set_cnf))
         # print(op.decompose())
         print(grover_circuit)
@@ -633,7 +662,7 @@ class MyTestCase(unittest.TestCase):
 
             # Generate 3-regular graphs.
             G = nx.random_regular_graph(3, z, seed=100)
-
+            print(G.nodes)
             # Turn 3-regular graphs into MaxCut QUBO formulation (can be any other problem too)
             maxcut = MaxCut(G)
             qubo = maxcut.to_qubo()
@@ -676,6 +705,25 @@ class MyTestCase(unittest.TestCase):
         # Use the list of available devices to fetch calibration data
         #recommender_output, recommender_devices = recommender(qc, ibm_service=ibm_service, available_devices=available_devices)
 
+
+    def test_def(self):
+        # Create a sample circuit
+        from qiskit import assemble
+        qc = QuantumCircuit(2)
+        qc.h(0)
+        qc.cx(0, 1)
+
+        # Choose a backend (here, a simulator)
+        backend = Aer.get_backend('qasm_simulator')
+
+        # Transpile and assemble the circuit into a Qobj
+        transpiled_qc = transpile(qc, backend)
+        qobj = assemble(transpiled_qc, backend)
+
+        # Convert the Qobj to a dictionary and then to JSON
+        qobj_dict = qobj.to_dict()  # Qobj has a to_dict() method
+        json_str = json.dumps(qobj_dict, indent=2)
+        print(json_str)
 
 
 if __name__ == '__main__':

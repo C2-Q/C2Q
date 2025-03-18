@@ -5,7 +5,6 @@ from qiskit_aer import AerSimulator
 from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
 
 from scipy.optimize import minimize
-
 import numpy as np
 
 from qiskit.quantum_info import SparsePauliOp
