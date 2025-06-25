@@ -4,10 +4,12 @@ from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import PauliEvolutionGate
 from qiskit.quantum_info import SparsePauliOp
 from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
+from qiskit.visualization import plot_distribution
 
 from scipy.optimize import minimize
 
 import numpy as np
+import pickle
 
 def convert_qubo_to_ising(qubo):
     # Number of qubits
@@ -85,26 +87,47 @@ def initialize_parameters(layers):
 
     return theta
 
-def cost_estimator(theta, qc_transpiled, ising, estimator, exp_value_list):
-    # Calculate the expectation value
+def calculate_expectation_value(theta, qc_transpiled, parameters, qubo, backend, exp_value_list, shots=1000):
+    # Assign the gammas and the betas to the circuit
+    qc_transpiled_assigned_parameters = qc_transpiled.assign_parameters({parameters:theta})
 
-    isa_hamiltonian = ising.apply_layout(qc_transpiled.layout)
-    job = estimator.run([(qc_transpiled, isa_hamiltonian, theta)])
+    # Run the circuit on the backend
+    result = backend.run(qc_transpiled_assigned_parameters, shots=shots).result()
 
-    result = job.result()[0]
-    cost = result.data.evs
+    # Save the counts to a variable
+    counts = result.get_counts()
 
-    exp_value_list.append(cost)
+    exp_value = 0
 
-    return cost
+    for bitstring in counts.keys():
+        # Calculate the occurrence of a bitstring with respect to the number of shots
+        occurrence_bitstring = counts[bitstring] / shots
 
-def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
+        # Calculate the QUBO result of a bitstring
+        qubo_value = 0
+        for i in range(len(qubo)):
+            for j in range(len(qubo)):
+                if i == j:
+                    qubo_value += qubo[i][j]*int(bitstring[i])
+                else:
+                    qubo_value += qubo[i][j]*int(bitstring[i])*int(bitstring[j])
+
+        # Expectation values of all bitstrings are summed
+        exp_value += occurrence_bitstring * qubo_value
+    
+    exp_value_list.append(exp_value)
+
+    #print(exp_value)
+    
+    return exp_value
+
+def optimize_parameters(qc_transpiled, qubo, parameters, theta, backend):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
     # Here we can change the optimization method etc.
-    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell", options={'maxiter':500, 'maxfev':500},
-                                          args=(qc_transpiled, ising, estimator, exp_value_list))
+    min_minimized_optimization = minimize(calculate_expectation_value, theta, method="Powell", options={'maxiter':100, 'maxfev':100},
+                                          args=(qc_transpiled, parameters, qubo, backend, exp_value_list))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
@@ -190,15 +213,15 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     qc.measure_all()
     qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
 
-    estimator = Estimator(backend)
-    estimator.options.default_shots = 1000
+    #estimator = Estimator(backend)
+    #estimator.options.default_shots = 1000
 
     # Optimize the parameters
     #theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
-    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc_transpiled, ising, parameters, theta, estimator)
+    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc_transpiled, qubo, parameters, theta, backend)
 
     qaoa_dict = {
-        "qc": qc,
+        "qc": qc_transpiled,
         "parameters": parameters,
         "theta": theta,
         "minimum_objective_value": minimum_objective_value,
@@ -206,25 +229,28 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
         "offset": offset
     }
 
+    qaoa_dict_saved = qaoa_dict.copy()
+    del qaoa_dict_saved["qc"]
+    del qaoa_dict_saved["parameters"]
+
+    with open('qaoa_dict_saved.pkl', 'wb') as f:
+        pickle.dump(qaoa_dict_saved, f)
+
     # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
     return qaoa_dict
 
-def sample_results(qc, parameters, theta, backend=AerSimulator()):
-    qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
-
-    sampler = Sampler(mode=backend)
-    sampler.options.default_shots = 1000
-
+def sample_results(qc_transpiled, parameters, theta, backend=AerSimulator()):
     if backend.name == 'aer_simulator':
         qc_transpiled_parameters = qc_transpiled.decompose(reps=1).assign_parameters({parameters: theta})
     else:
         qc_transpiled_parameters = qc_transpiled.assign_parameters({parameters: theta})
 
-    job = sampler.run([qc_transpiled_parameters])
+    counts = backend.run(qc_transpiled_parameters, shots=1000).result().get_counts()
 
-    result = job.result()[0]
+    with open('qaoa_counts.pkl', 'wb') as f:
+        pickle.dump(counts, f)
 
-    counts = result.data.meas.get_counts()
+    plot_distribution(counts, figsize=(15, 5), filename='qaoa_distribution.png')
 
     highest_possible_solution = 0
     max_count = 0
@@ -235,6 +261,6 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
 
     # Convert string to array
     X = np.fromiter(highest_possible_solution, dtype=int)
-    X = X[::-1]
+
     #print(f'Most probable solution: {highest_possible_solution}')
     return X
