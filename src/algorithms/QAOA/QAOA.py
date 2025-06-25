@@ -221,6 +221,6 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
 
     # Convert string to array
     X = np.fromiter(highest_possible_solution, dtype=int)
-
+    X = X[::-1]
     #print(f'Most probable solution: {highest_possible_solution}')
     return X

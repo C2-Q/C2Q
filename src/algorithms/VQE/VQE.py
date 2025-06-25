@@ -9,18 +9,20 @@ import numpy as np
 
 from qiskit.quantum_info import SparsePauliOp
 
+
 def initialize_parameters(reps):
     theta = []
 
     # Initialize a parameter for the "gamma" and "beta" variables
     initial_param = np.pi
-    
+
     initial_param_list = [initial_param] * reps
     theta.extend(initial_param_list)
-    
+
     return theta
 
-def cost_func_vqe(theta, circuit, hamiltonian, estimator = Estimator()):
+
+def cost_func_vqe(theta, circuit, hamiltonian, estimator=Estimator()):
     """Return estimate of energy from estimator
 
     Parameters:
@@ -36,18 +38,21 @@ def cost_func_vqe(theta, circuit, hamiltonian, estimator = Estimator()):
 
     return cost
 
+
 def optimize_parameters(qc, ising, theta):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
     # Here we can change the optimization method etc.
-    min_minimized_optimization = minimize(cost_func_vqe, theta, method="Powell", options={'maxiter':500, 'maxfev':500}, args=(qc, ising))
+    min_minimized_optimization = minimize(cost_func_vqe, theta, method="Powell",
+                                          options={'maxiter': 500, 'maxfev': 500}, args=(qc, ising))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
     min_exp_value_list = exp_value_list
 
     return min_minimized_optimization.x, minimum_objective_value
+
 
 def convert_qubo_to_ising(qubo):
     # Number of qubits
@@ -67,7 +72,8 @@ def convert_qubo_to_ising(qubo):
             if j >= i:
                 if i == j:
                     pauli_operator[i] = "Z"
-                    ising_value = -(1/2)*qubo[i][i] - (1/4)*np.sum(qubo[i][(i+1):]) - (1/4)*np.sum(qubo[:,i][:i])
+                    ising_value = -(1 / 2) * qubo[i][i] - (1 / 4) * np.sum(qubo[i][(i + 1):]) - (1 / 4) * np.sum(
+                        qubo[:, i][:i])
                     offset += (1 / 2) * qubo[i][i]
                 else:
                     pauli_operator[i] = "Z"
@@ -83,6 +89,7 @@ def convert_qubo_to_ising(qubo):
 
     return operators, offset
 
+
 def vqe_no_optimization(qubo, layers):
     vqe_circuit = TwoLocal(len(qubo[0]), 'ry', 'cz', insert_barriers=True, reps=layers)
     vqe_circuit.measure_all()
@@ -92,6 +99,7 @@ def vqe_no_optimization(qubo, layers):
     }
 
     return vqe_dict
+
 
 def vqe_optimization(qubo, layers):
     ising, offset = convert_qubo_to_ising(qubo)
@@ -110,6 +118,7 @@ def vqe_optimization(qubo, layers):
 
     return vqe_dict
 
+
 def sample_results(qc, parameters, theta, backend=AerSimulator()):
     qc_assigned_parameters = qc.assign_parameters(theta)
     qc_transpiled = transpile(qc_assigned_parameters, backend=backend)
@@ -126,6 +135,6 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
 
     # Convert string to array
     X = np.fromstring(highest_possible_solution, np.int8) - 48
-
+    X = X[::-1]
     #print(f'Most probable solution: {highest_possible_solution}')
     return X

@@ -129,6 +129,7 @@ def grover_optimized_iterations(oracle: QuantumCircuit,
 
     return grover_circuit
 
+
 def sample_results(grover_circuit: QuantumCircuit):
     backend = AerSimulator()
     transpiled_circuit = transpile(grover_circuit, backend=backend)
