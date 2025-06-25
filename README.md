@@ -31,7 +31,7 @@ Developing quantum software currently demands deep knowledge of quantum theory, 
 
 ## 📐 Architecture
 
-![Framework Overview](assets/classiq_flow.pdf)
+![Framework Overview](src/assets/classiq_flow.pdf)
 
 Refer to [`docs/architecture.md`](docs/architecture.md) for detailed component diagrams and workflow explanations.
 
