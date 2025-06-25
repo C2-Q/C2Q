@@ -393,7 +393,11 @@ class ThreeSat(NP):
 
         # Example QAOA Quantum Circuit Image
         from src.algorithms.VQE.VQE import sample_results
+        start_time = time.perf_counter()
         vqe_dict = vqe_optimization(qubo, layers=3)
+        end_time = time.perf_counter()
+        execution_time = end_time - start_time
+        print(f"Circuit execution time: {execution_time:.4f} seconds")
         vqe_solution = sample_results(vqe_dict["qc"], vqe_dict["parameters"], vqe_dict["theta"])
         # Adding VQE Solution depiction in LaTeX format
         with doc.create(Subsection("VQE Solution")):
@@ -408,6 +412,7 @@ class ThreeSat(NP):
 
         vqe_circuit_image_path = "quantum_circuit_vqe.png"
         vqe_dict["qc"].draw(style="latex")
+        print(vqe_dict["qc"].decompose().decompose().decompose().depth())
         # latex_code_vqe = vqe_dict["qc"].draw(output="latex_source")
         plt.savefig(vqe_circuit_image_path)
         with doc.create(Figure(position='h!')) as vqe_fig:

@@ -1,6 +1,5 @@
 """
 author boshuai ye
-博帅叶
 """
 
 import ast
@@ -34,7 +33,7 @@ PROBLEM_TAGS = {
     "Unknown": 10
 }
 GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"]
-ARITHMETIC_TAGS = ["ADD", "MUL", "SUB"]
+ARITHMETIC_TAGS = ["ADD", "MUL", "SUB", "Factor"]
 PROBLEMS = {
     "MaxCut": MaxCut,
     "MIS": MIS,

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.14)  15 NOV 2024 15:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.14)  9 JUN 2025 11:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -288,7 +288,7 @@ File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count285
 \l__pdf_internal_box=\box57
 )
-(./3sat_report_with_latex.pdf.aux)
+No file 3sat_report_with_latex.pdf.aux.
 \openout1 = `3sat_report_with_latex.pdf.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
@@ -307,7 +307,6 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
 3.
-
 (/usr/local/texlive/2024/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -604,12 +603,15 @@ L3 programming layer <2024-02-20>
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
+
+Package lastpage Warning: Rerun to get the references right on input line 168.
+
  ) 
 Here is how much of TeX's memory you used:
- 5146 strings out of 474116
- 72646 string characters out of 5743681
+ 5142 strings out of 474116
+ 72513 string characters out of 5743681
  1964187 words of memory out of 5000000
- 27424 multiletter control sequences out of 15000+600000
+ 27422 multiletter control sequences out of 15000+600000
  586064 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  72i,8n,79p,1485b,234s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -620,7 +622,7 @@ mf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2024/texmf-dist/fon
 ts/type1/public/lm/lmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/pu
 blic/lm/lmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy
 10.pfb>
-Output written on 3sat_report_with_latex.pdf.pdf (6 pages, 539386 bytes).
+Output written on 3sat_report_with_latex.pdf.pdf (6 pages, 546741 bytes).
 PDF statistics:
  77 PDF objects out of 1000 (max. 8388607)
  46 compressed objects within 1 object stream

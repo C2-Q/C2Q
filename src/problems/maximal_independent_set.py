@@ -52,7 +52,6 @@ class MIS(NP):
         n = len(self.nodes)
         self.sat = independent_set_to_sat(self.graph)
 
-
     def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
         """
         Converts the mis problem into a QUBO problem represented by a QUBO class instance
@@ -168,7 +167,6 @@ class MIS(NP):
         grover_circuit_image_path = "grover_circuit.png"
         grover_solution_image_path = "grover_solution_visualization.png"
 
-
         pdf = FPDF()
         pdf.set_font("Times", size=12)
         # New page
@@ -176,7 +174,7 @@ class MIS(NP):
 
         # Set title with Times New Roman font
         pdf.set_font("Times", 'B', 16)
-        pdf.cell(200, 10, "MaxCut Problem Report", ln=True, align='C')
+        pdf.cell(200, 10, "MIS Problem Report", ln=True, align='C')
 
         # Add some details about the graph
         pdf.set_font("Times", size=12)
@@ -356,16 +354,26 @@ class MIS(NP):
 
         print(f"PDF report saved as {pdf_output_path}")
 
-    def report_latex(self):
+    def report_latex(self, directory:str = None):
+        import time
+        import os
+        import matplotlib.pyplot as plt
+        import networkx as nx
+        from pylatex import Document, Section, Subsection, Figure, NoEscape, Package
+
+        if directory is None:
+            directory = os.getcwd()
         start_time = time.time()
         print("Starting Independent Set problem report generation with LaTeX formatting...")
 
-        # Initialize the LaTeX document
+        # Initialize LaTeX document
         doc = Document()
         doc.packages.append(Package("amsmath"))
         doc.packages.append(Package("qcircuit"))
+
+        # Compute layout once
         pos = nx.spring_layout(self.graph)
-        # Title section
+
         with doc.create(Section("Independent Set Problem Report", numbering=False)):
             doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
 
@@ -376,73 +384,66 @@ class MIS(NP):
                 edge_str = ', '.join([f"({u},{v})" for u, v in edges])
                 doc.append(f"Edges of Nodes: [{edge_str}]\n")
 
-                # Graph visualization
                 plt.figure(figsize=(8, 6))
-                pos = nx.spring_layout(self.graph)
                 nx.draw(self.graph, pos=pos, with_labels=True, node_color='lightblue', edge_color='gray')
-                graph_image_path = "graph_visualization.png"
+                graph_image_path = os.path.join(directory, "graph_visualization.png")
+                plt.title("Independent Set Graph")
                 plt.savefig(graph_image_path)
                 plt.close()
+
             with doc.create(Figure(position='h!')) as graph_fig:
                 graph_fig.add_image(graph_image_path, width="360px")
                 graph_fig.add_caption("Graph Visualization")
 
-            # Adding QUBO Matrix Visualization
+            # QUBO Matrix Visualization
             with doc.create(Subsection('QUBO Matrix Visualization')):
                 doc.append("Converted QUBO matrix visualization:\n")
-
-                # Display QUBO matrix with LaTeX
                 qubo_matrix = self.to_qubo().Q
                 matrix_latex = "$\\begin{bmatrix}\n" + \
-                                "\\\\".join(" & ".join(f"{val:.1f}" for val in row) for row in qubo_matrix) + \
-                                "\n\\end{bmatrix}$"
+                               "\\\\".join(" & ".join(f"{val:.1f}" for val in row) for row in qubo_matrix) + \
+                               "\n\\end{bmatrix}$"
                 doc.append(NoEscape(matrix_latex))
-            # Adding the oracle image in LaTeX format
+
+            # Oracle Visualization
             with doc.create(Subsection("Oracle Visualization")):
                 doc.append("The corresponding oracle for the Independent Set problem is shown below:\n")
-
-                # Generate and save the oracle circuit as an image
-                oracle_circuit_image_path = "quantum_circuit_oracle.png"
+                oracle_circuit_image_path = os.path.join(directory, "quantum_circuit_oracle.png")
                 maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
                 oracle = cnf_to_quantum_oracle_optimized(maximal_independent_set_cnf)
                 oracle.draw(style="mpl")
                 plt.savefig(oracle_circuit_image_path)
                 plt.close()
 
-                # Add the image to the LaTeX document
                 with doc.create(Figure(position='h!')) as oracle_fig:
-                    oracle_fig.add_image(oracle_circuit_image_path, width="300px")  # Adjust width as desired
+                    oracle_fig.add_image(oracle_circuit_image_path, width="300px")
                     oracle_fig.add_caption("Corresponding Oracle Visualization for the Independent Set Problem")
+
             # QAOA Section
             with doc.create(Subsection("QAOA Optimization Results", numbering=False)):
                 qubo = self.to_qubo().Q
                 qaoa_dict = qaoa_optimize(qubo, layers=3)
-                qc = qaoa_dict["qc"]
-                string,_ = recommender(qc)
-                print(string)
+                qaoa_qc = qaoa_dict["qc"]
                 parameters = qaoa_dict["parameters"]
                 theta = qaoa_dict["theta"]
                 from src.algorithms.QAOA.QAOA import sample_results
-                highest_possible_solution = sample_results(qc, parameters, theta)
+                qaoa_solution = sample_results(qaoa_qc, parameters, theta)
                 doc.append("Most Probable Solution for QAOA:\n")
                 doc.append(NoEscape(r"\begin{itemize}"))
-                for i, state in enumerate(highest_possible_solution):
+                for i, state in enumerate(qaoa_solution):
                     assignment = "true" if state else "false"
-                    doc.append(NoEscape(rf"\item Variable \( x_{i + 1} \) is set to {assignment}"))
+                    doc.append(NoEscape(rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"))
                 doc.append(NoEscape(r"\end{itemize}"))
 
-                # here we visualize the result for qaoa
-                self.draw_result(highest_possible_solution, pos=pos)
-                qaoa_result_image_path = "qaoa_result.png"
+                self.draw_result(qaoa_solution, pos=pos)
+                qaoa_result_image_path = os.path.join(directory, "qaoa_result.png")
                 plt.savefig(qaoa_result_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as qaoa_res_fig:
                     qaoa_res_fig.add_image(qaoa_result_image_path, width="180px")
                     qaoa_res_fig.add_caption("QAOA Result")
 
-                # QAOA Circuit visualization
-                qaoa_circuit_image_path = "quantum_circuit_qaoa.png"
-                qc.decompose().draw(style="mpl")
+                qaoa_circuit_image_path = os.path.join(directory, "quantum_circuit_qaoa.png")
+                qaoa_qc.decompose().draw(style="mpl")
                 plt.savefig(qaoa_circuit_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as qaoa_fig:
@@ -451,76 +452,112 @@ class MIS(NP):
 
             # VQE Section
             with doc.create(Subsection("VQE Optimization Results", numbering=False)):
+                start_time = time.perf_counter()
                 vqe_dict = vqe_optimization(qubo, layers=3)
-                qc = vqe_dict["qc"]
+                end_time = time.perf_counter()
+                execution_time = end_time - start_time
+                print(f"Circuit execution time: {execution_time:.4f} seconds")
+                vqe_qc = vqe_dict["qc"]
+                print(vqe_dict["qc"].decompose().decompose().decompose().depth())
                 parameters = vqe_dict["parameters"]
                 theta = vqe_dict["theta"]
                 from src.algorithms.VQE.VQE import sample_results
-                highest_possible_solution = sample_results(qc, parameters, theta)
+                vqe_solution = sample_results(vqe_qc, parameters, theta)
                 doc.append("Most Probable Solution for VQE:\n")
                 doc.append(NoEscape(r"\begin{itemize}"))
-                for i, state in enumerate(highest_possible_solution):
+                for i, state in enumerate(vqe_solution):
                     assignment = "true" if state else "false"
-                    doc.append(NoEscape(rf"\item Variable \( x_{i + 1} \) is set to {assignment}"))
+                    doc.append(NoEscape(rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"))
                 doc.append(NoEscape(r"\end{itemize}"))
 
-                # here we visualize the result for VQE
-                self.draw_result(highest_possible_solution, pos=pos)
-                vqe_result_image_path = "vqe_result.png"
+                self.draw_result(vqe_solution, pos=pos)
+                vqe_result_image_path = os.path.join(directory, "vqe_result.png")
                 plt.savefig(vqe_result_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as vqe_res_fig:
                     vqe_res_fig.add_image(vqe_result_image_path, width="180px")
                     vqe_res_fig.add_caption("VQE Result")
 
-                # VQE Circuit visualization
-                vqe_circuit_image_path = "quantum_circuit_vqe.png"
-                qc.decompose().draw(style="mpl")
+                vqe_circuit_image_path = os.path.join(directory,"quantum_circuit_vqe.png")
+                vqe_qc.decompose().draw(style="mpl")
                 plt.savefig(vqe_circuit_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as vqe_fig:
                     vqe_fig.add_image(vqe_circuit_image_path, width="180px")
                     vqe_fig.add_caption("VQE Quantum Circuit")
 
-            # Grover's Algorithm Section
+            # Grover Section
             with doc.create(Subsection("Grover's Algorithm Results", numbering=False)):
-                grover_circuit = self.grover_sat(iterations=1)
+                grover_qc = self.grover_sat(iterations=1)
                 from src.algorithms.grover import sample_results
-                most_probable_grover_result = sample_results(grover_circuit)
+                grover_solution = sample_results(grover_qc)
                 doc.append("Most Probable Solution for Grover's Algorithm:\n")
                 doc.append(NoEscape(r"\begin{itemize}"))
-                for i, state in enumerate(most_probable_grover_result):
+                for i, state in enumerate(grover_solution):
                     assignment = "true" if state else "false"
-                    doc.append(NoEscape(rf"\item Variable \( x_{i + 1} \) is set to {assignment}"))
+                    doc.append(NoEscape(rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"))
                 doc.append(NoEscape(r"\end{itemize}"))
-
-                # here we visualize the result for grover
-                self.draw_result(highest_possible_solution, pos=pos)
-                grover_result_image_path = "grover_result.png"
+                # print(grover_solution)
+                self.draw_result(grover_solution, pos=pos)
+                grover_result_image_path = os.path.join(directory, "grover_result.png")
                 plt.savefig(grover_result_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as grover_res_fig:
-                    grover_res_fig.add_image(vqe_result_image_path, width="180px")
-                    grover_res_fig.add_caption("Grover\' Algorithm Result")
+                    grover_res_fig.add_image(grover_result_image_path, width="180px")
+                    grover_res_fig.add_caption("Grover's Algorithm Result")
 
-                # Grover Circuit visualization
-                grover_circuit_image_path = "quantum_circuit_grover.png"
-                grover_circuit.draw(style="mpl")
+                grover_circuit_image_path = os.path.join(directory, "quantum_circuit_grover.png")
+                grover_qc.draw(style="mpl")
                 plt.savefig(grover_circuit_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as grover_fig:
                     grover_fig.add_image(grover_circuit_image_path, width="180px")
                     grover_fig.add_caption("Grover's Quantum Circuit")
 
-        # Generate PDF
-        output_path = "independent_set_report_with_latex.pdf"
+            # Optional: recommend device
+            string, _ = recommender(qaoa_qc, save_figures=True)
+            # Insert recommender plots into report
+            for plot_name, caption in zip([
+                "recommender_errors_devices.png",
+                "recommender_times_devices.png",
+                "recommender_prices_devices.png"
+            ], [
+                "Estimated total error with each quantum computer",
+                "Estimated total time with each quantum computer",
+                "Estimated price with each quantum computer"
+            ]):
+                fig_path = os.path.join(directory, plot_name)
+                if os.path.exists(fig_path):
+                    with doc.create(Figure(position='h!')) as fig:
+                        fig.add_image(fig_path, width="360px")
+                        fig.add_caption(caption)
+            # error_image_path = "error_image.png"
+            # price_image_path = "price_image.png"
+            # time_image_path = "time_image.png"
+            # plt.savefig(error_image_path)
+            # plt.savefig(price_image_path)
+            # plt.savefig(time_image_path)
+            # plt.close()
+            # print(string)
+
+            with doc.create(Subsection("Device Recommendation Summary", numbering=False)):
+                doc.append("Here is the device recommendation summary based on error, time, and price:\\\n")
+                doc.append(string)
+
+        output_path = os.path.join(directory, "independent_set_report_with_latex")
+        # output_path = "independent_set_report_with_latex.pdf"
         doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
 
-        # Cleanup images
-        # for img_path in [graph_image_path, qaoa_circuit_image_path, vqe_circuit_image_path, grover_circuit_image_path]:
-        #     if os.path.exists(img_path):
-        #         os.remove(img_path)
+        # Cleanup temporary images
+        for img_name in [
+            graph_image_path, qaoa_result_image_path, qaoa_circuit_image_path,
+            vqe_result_image_path, vqe_circuit_image_path,
+            grover_result_image_path, grover_circuit_image_path,
+            oracle_circuit_image_path
+        ]:
+            img_path = os.path.join(directory, img_name)
+            if os.path.exists(img_path):
+                os.remove(img_path)
 
         end_time = time.time()
         print(f"PDF report generated in {end_time - start_time:.2f} seconds.")
-
