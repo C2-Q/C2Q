@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.14)  9 JUN 2025 11:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.14)  25 JUN 2025 15:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -288,7 +288,7 @@ File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count285
 \l__pdf_internal_box=\box57
 )
-No file 3sat_report_with_latex.pdf.aux.
+(./3sat_report_with_latex.pdf.aux)
 \openout1 = `3sat_report_with_latex.pdf.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
@@ -307,6 +307,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
 3.
+
 (/usr/local/texlive/2024/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -542,13 +543,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 56--58
 
  []
 
-<quantum_circuit_qaoa.png, id=13, 1610.1756pt x 9631.4229pt>
+<quantum_circuit_qaoa.png, id=13, 1627.5204pt x 10235.6001pt>
 File: quantum_circuit_qaoa.png Graphic file (type png)
 <use quantum_circuit_qaoa.png>
 Package pdftex.def Info: quantum_circuit_qaoa.png  used on input line 81.
-(pdftex.def)             Requested size: 120.45044pt x 720.41504pt.
+(pdftex.def)             Requested size: 120.45044pt x 757.48505pt.
 
-LaTeX Warning: Float too large for page by 194.35947pt on input line 83.
+LaTeX Warning: Float too large for page by 231.42947pt on input line 83.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -582,11 +583,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 148--150
  []
 
 [3]
-<quantum_circuit_grover.png, id=24, 1032.0156pt x 748.7172pt>
+<quantum_circuit_grover.png, id=24, 1045.0242pt x 748.7172pt>
 File: quantum_circuit_grover.png Graphic file (type png)
 <use quantum_circuit_grover.png>
 Package pdftex.def Info: quantum_circuit_grover.png  used on input line 163.
-(pdftex.def)             Requested size: 120.45044pt x 87.38591pt.
+(pdftex.def)             Requested size: 120.45044pt x 86.28917pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -599,19 +600,12 @@ enddocument/afterlastpage: lastpage setting LastPage.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package lastpage Warning: Rerun to get the references right on input line 168.
-
  ) 
 Here is how much of TeX's memory you used:
- 5142 strings out of 474116
- 72513 string characters out of 5743681
+ 5145 strings out of 474116
+ 72618 string characters out of 5743681
  1964187 words of memory out of 5000000
- 27422 multiletter control sequences out of 15000+600000
+ 27423 multiletter control sequences out of 15000+600000
  586064 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  72i,8n,79p,1485b,234s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -622,7 +616,7 @@ mf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2024/texmf-dist/fon
 ts/type1/public/lm/lmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/pu
 blic/lm/lmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy
 10.pfb>
-Output written on 3sat_report_with_latex.pdf.pdf (6 pages, 546741 bytes).
+Output written on 3sat_report_with_latex.pdf.pdf (6 pages, 600223 bytes).
 PDF statistics:
  77 PDF objects out of 1000 (max. 8388607)
  46 compressed objects within 1 object stream
