@@ -44,6 +44,20 @@ class NPC(Base):
 
         return qc
 
+    def _construct_circuits(self):
+        return {"qaoa": self.qaoa(), "vqe": self.vqe(), "grover": self.grover_sat(1)}
+
+    def recommender_engine(self):
+        qcs = self._construct_circuits()
+        print(qcs)
+        for qc in qcs.values():
+            try:
+                recommender_output, devices = recommender(qc.decompose())
+                print(recommender_output)
+                print(devices)
+            except Exception as e:
+                print(e.__str__())
+
     def grover(self):
         raise NotImplementedError("should be implemented in subclass")
 
@@ -281,6 +295,7 @@ class NPC(Base):
         with doc.create(Figure(position='h!')) as oracle_fig:
             oracle_fig.add_image(self.oracle_circuit_image_path, width="300px")
             oracle_fig.add_caption("Corresponding Oracle Visualization for the Independent Set Problem")
+
     def interpret(self):
         raise NotImplementedError("Interpretation not implemented")
 

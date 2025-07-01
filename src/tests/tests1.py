@@ -61,7 +61,7 @@ class MyTestCase(unittest.TestCase):
                 problem_type, data = parser.parse(clean_code)
 
                 # 打印结果
-                # print("→", problem_type, data)
+                print("→", problem_type, data,)
 
                 # 统计 Unknown 类型
                 if problem_type == 'Unknown':
@@ -80,6 +80,12 @@ class MyTestCase(unittest.TestCase):
         mis = PROBLEMS[tag](data.G)
         mis.report_latex()
         # mis.report_3sat()
+
+    def test_is(self):
+        tag, data = self.parser.parse(self.is_snippet)
+        # print(tag, data)
+        mis = PROBLEMS[tag](data.G)
+        mis.recommender_engine()
 
 
 
