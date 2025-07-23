@@ -149,6 +149,7 @@ class Parser:
                     continue
 
         # If no graph could be created, return a randomly generated graph
+        print("no data extracted, generating a random graph")
         return Graph.random_graph()
 
     def _process_arithmetic_data(self, variables, function_calls):

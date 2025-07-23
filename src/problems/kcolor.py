@@ -29,6 +29,9 @@ class KColor(NP):
             self.graph = graph
         else:
             raise TypeError("The graph must be a NetworkX graph.")
+
+        if k is None:
+            k = 3
         self.k = k
         self.nodes = list(self.graph.nodes())
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}

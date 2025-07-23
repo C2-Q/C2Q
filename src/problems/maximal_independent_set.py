@@ -136,6 +136,9 @@ class MIS(NPC):
         )
         # plt.show()
 
+    def to_sat(self):
+        self.sat = maximal_independent_set_to_sat(self.graph)
+
     def grover_sat(self, iterations=1):
         independent_set_cnf = independent_set_to_sat(self.graph)
         maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)

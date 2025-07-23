@@ -67,6 +67,8 @@ class NPC(Base):
     def to_ising(self):
         raise NotImplementedError("should be implemented in subclass")
 
+    def to_sat(self):
+        raise NotImplementedError("should be implemented in subclass")
     def reduce_to_3sat(self):
         # if sat is not none
         self.three_sat = sat_to_3sat(self.sat)
@@ -86,7 +88,9 @@ class NPC(Base):
             directory = os.getcwd()
 
         start_time = time.time()
-        print("Starting Independent Set problem report generation with LaTeX formatting...")
+        problems_name = self.__class__.__name__
+
+        print(f'Starting {problems_name} report generation with LaTeX formatting...')
 
         # Initialize LaTeX document
         doc = Document()
@@ -95,8 +99,8 @@ class NPC(Base):
 
         # Compute layout once
         pos = nx.spring_layout(self.graph)
-        title = self.__str__()
-        with doc.create(Section("Independent Set Problem Report", numbering=False)):
+
+        with doc.create(Section(f'{problems_name} Problem Report', numbering=False)):
             doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
 
             # Graph details
@@ -113,19 +117,33 @@ class NPC(Base):
 
             # Oracle Visualization
             with doc.create(Subsection("Oracle Visualization")):
-                self._oracle_latex(doc, directory)
+                try:
+                    self._oracle_latex(doc, directory)
+                except Exception as e:
+                    doc.append("not implemented yet\n")
 
             # QAOA Section
             with doc.create(Subsection("QAOA Optimization Results", numbering=False)):
-                qaoa_qc = self._qaoa_latex(doc, pos, directory)
+                try:
+                    qaoa_qc = self._qaoa_latex(doc, pos, directory)
+                except Exception as e:
+                    doc.append("not implemented yet\n")
+
 
             # VQE Section
             with doc.create(Subsection("VQE Optimization Results", numbering=False)):
-                self._vqe_latex(doc, pos, directory)
+                try:
+                    self._vqe_latex(doc, pos, directory)
+                except Exception as e:
+                    doc.append("not implemented yet\n")
 
             # Grover Section
             with doc.create(Subsection("Grover's Algorithm Results", numbering=False)):
-                self._grover_latex(doc, pos, directory)
+                try:
+                    self._grover_latex(doc, pos, directory)
+                except Exception as e:
+                    doc.append("not implemented yet\n")
+
             # Optional: recommend device
             string, _ = recommender(qaoa_qc, save_figures=True)
             # Insert recommender plots into report
@@ -156,7 +174,7 @@ class NPC(Base):
                 doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
                 doc.append(string)
 
-        output_path = os.path.join(directory, "independent_set_report_with_latex")
+        output_path = os.path.join(directory, f'{problems_name}_report')
         # output_path = "independent_set_report_with_latex.pdf"
         doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
 
@@ -168,9 +186,12 @@ class NPC(Base):
             self.oracle_circuit_image_path
         ]:
             print(img_name)
+            if img_name is None:
+                continue
             img_path = os.path.join(directory, img_name)
             if os.path.exists(img_path):
                 os.remove(img_path)
+
 
         end_time = time.time()
         print(f"PDF report generated in {end_time - start_time:.2f} seconds.")
@@ -284,17 +305,19 @@ class NPC(Base):
             graph_fig.add_caption("Graph Visualization")
 
     def _oracle_latex(self, doc, directory):
-        doc.append("The corresponding oracle for the Independent Set problem is shown below:\n")
+        problem_name = self.__class__.__name__
+        doc.append(f'The corresponding oracle for the {problem_name} is shown below:\n')
         self.oracle_circuit_image_path = os.path.join(directory, "quantum_circuit_oracle.png")
-        maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
-        oracle = cnf_to_quantum_oracle_optimized(maximal_independent_set_cnf)
+        self.to_sat()
+        # maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
+        oracle = cnf_to_quantum_oracle_optimized(self.sat)
         oracle.draw(style="mpl")
         plt.savefig(self.oracle_circuit_image_path)
         plt.close()
 
         with doc.create(Figure(position='h!')) as oracle_fig:
             oracle_fig.add_image(self.oracle_circuit_image_path, width="300px")
-            oracle_fig.add_caption("Corresponding Oracle Visualization for the Independent Set Problem")
+            oracle_fig.add_caption(f'Corresponding Oracle Visualization for the {problem_name} Problem')
 
     def interpret(self):
         raise NotImplementedError("Interpretation not implemented")

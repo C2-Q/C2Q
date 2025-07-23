@@ -1,0 +1,21 @@
+code_snippet,labels
+"best = 0\nfor s in range(1<<n):\n    cut = sum(W[i][j] for i,j in E\n              if ((s>>i)&1) ^ ((s>>j)&1))\n    best = max(best, cut)",0
+"edges = nx.edge_boundary(G, *nx.partition(G))\nscore = sum(G[u][v]['w'] for u, v in edges)\nprint(score)",0
+"S = max((S for S in powerset(V)\n          if not any(e in E for e in combinations(S, 2))),\n         key=len)",1
+"ind = set()\nfor v in sorted(V, key=G.degree):\n    if all((v,u) not in E for u in ind):\n        ind.add(v)",1
+"tour = min(permutations(range(n)),\n           key=lambda p: sum(D[p[i]][p[i-1]] for i in range(n)))",2
+"dp = {(1<<i, i): D[0][i] for i in range(1,n)}\nfor mask in range(1<<n):\n    for j in range(1,n):\n        if mask & (1<<j):\n            dp[mask,j] = min(\n              dp[mask^(1<<j),k] + D[k][j]\n              for k in range(1,n) if mask&(1<<k) and k!=j)",2
+"cover = min((S for S in powerset(V)\n             if all(u in S or v in S for u,v in E)),\n            key=len)",3
+"cnf = CNF();\nfor u,v in E: cnf.append([-x[u], -x[v]])\ncover = solve_minisat(cnf)",3
+"colors = {}\nfor v in sorted(G, key=G.degree, reverse=True):\n    used = {colors[u] for u in G[v] if u in colors}\n    colors[v] = next(c for c in range(n) if c not in used)",4
+"model = cp_model.CpModel()\ncol = {(v,c): model.NewBoolVar(f\"x{v}{c}\")\n        for v in V for c in range(k)}\nfor v in V: model.Add(sum(col[v,c] for c in range(k))==1)\nfor u,v in E:\n    for c in range(k): model.Add(col[u,c]+col[v,c] <= 1)",4
+"@lru_cache(None)\ndef opt(i,w):\n    if i==len(v): return 0\n    return max(opt(i+1,w),\n               v[i]+opt(i+1,w-wt[i]) if wt[i]<=w else 0)",5
+"val = [0]*(W+1)\nfor i in range(n):\n    for w in range(W, wt[i]-1, -1):\n        val[w] = max(val[w], val[w-wt[i]]+v[i])",5
+"score = sum(F[i][j]*D[p[i]][p[j]]\n            for i in range(n) for j in range(n))",6
+"best = float('inf')\nfor p in permutations(range(n)):\n    best = min(best, (F*D[p][:,p]).sum())",6
+"dp = {0}\nfor a in A: dp |= {s+a for s in dp}\nans = min(abs(total-2*s) for s in dp)",7
+"from itertools import product\nbest = min(abs(sum(A[i]*sign for i,sign in enumerate(bits)))\n           for bits in product([-1,1], repeat=len(A)))",7
+"x = np.linalg.solve(A, b)",8
+"sol = linsolve(Matrix(A), *symbols('x0:%d'%n))",8
+"res = pow(a, b, m)",9
+"class M(int):\n    def __pow__(self, e, mod=None):\n        return pow(int(self), e, mod)\nprint(M(a)**b % m)",9

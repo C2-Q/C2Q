@@ -18,6 +18,9 @@ from src.graph import Graph
 from src.algorithms.grover import grover
 from src.parser.parser import Parser, CodeVisitor, PROBLEMS
 from src.problems.Three_SAT import ThreeSat
+from src.problems.basic_arithmetic.addition import Add
+from src.problems.basic_arithmetic.multiplication import Mul
+from src.problems.basic_arithmetic.subtraction import Sub
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
 from src.problems.max_cut import MaxCut
@@ -33,10 +36,13 @@ import ast
 class MyTestCase(unittest.TestCase):
     def setUp(self):
         self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
+        self.maxCut_snippet = "def simple_cut_strategy(edges, n):\n    A, B = set(), set()\n    for node in range(n):\n        if len(A) < len(B):\n            A.add(node)\n        else:\n            B.add(node)\n    return sum(1 for u, v in edges if (u in A and v in B)), A, B\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\ncut_value, A, B = simple_cut_strategy(edges, 4)\nprint(cut_value, A, B)"
         self.parser = Parser(model_path="../parser/saved_models")
+        self.clique_snippet = "def compute_clique(nodes, edges):\n    clique = set()\n    for node in nodes:\n        if all((node, neighbor) in edges or (neighbor, node) in edges for neighbor in clique):\n            clique.add(node)\n    return clique\n\n# Input data\nnodes = [0, 1, 2, 3]\nedges = [(0, 1), (0, 2), (1, 2), (2, 3)]\nresult = compute_clique(nodes, edges)\nprint(result)"
         parser = Parser(model_path="../parser/saved_models")
 
-        file_path = '../parser/data.csv'
+        # file_path = '../parser/data.csv'
+        file_path = '../parser/extra_data.csv'
         first_column = []
 
         # 读取 CSV 文件第一列
@@ -86,6 +92,36 @@ class MyTestCase(unittest.TestCase):
         # print(tag, data)
         mis = PROBLEMS[tag](data.G)
         mis.recommender_engine()
+
+    def test_maxcut(self):
+        tag, data = self.parser.parse(self.maxCut_snippet)
+        print(tag, data)
+        problem = PROBLEMS[tag](data.G)
+        problem.report_latex()
+
+    def test_clique(self):
+        tag, data = self.parser.parse(self.clique_snippet)
+        print(tag, data)
+        problem = PROBLEMS[tag](data.G)
+        problem.report_latex()
+
+    def test_factorization(self):
+        problem = Factor(35)
+        problem.report_latex()
+
+    def test_add(self):
+        problem = Add(7, 7)
+        problem.report_latex()
+
+    def test_multiply(self):
+        problem = Mul(-7, 7)
+        problem.report_latex()
+
+    def test_subtract(self):
+        problem = Sub(4, 6)
+        problem.report_latex()
+
+
 
 
 

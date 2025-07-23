@@ -12,11 +12,11 @@ from src.algorithms.VQE.VQE import vqe_optimization
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
-
+from src.problems.np_complete import NPC
 from src.recommender.recommender_engine import recommender
 
 
-class MaxCut(NP):
+class MaxCut(NPC):
     """
     An application class for the maximum cut problem based on a NetworkX graph.
     """
