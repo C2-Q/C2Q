@@ -2,12 +2,14 @@ import numpy as np
 import networkx as nx
 from typing import Optional, Union, List, Dict
 
+from src.graph import Graph
 from src.problems.np_problems import NP
+from src.problems.np_complete import NPC
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
 
-class TSP(NP):
+class TSP(NPC):
     """
     An application class for the Traveling Salesman Problem (TSP) based on a NetworkX graph.
     """
@@ -22,6 +24,8 @@ class TSP(NP):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
+        elif isinstance(graph, Graph):
+            self.graph = graph.G
         else:
             raise TypeError("The distance matrix must be a NetworkX graph or an adjacency list/array.")
 
@@ -174,4 +178,4 @@ class TSP(NP):
         edge_labels = nx.get_edge_attributes(self.graph, 'weight')
         nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=edge_labels)
 
-        plt.show()
+        # plt.show()

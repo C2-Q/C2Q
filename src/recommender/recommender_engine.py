@@ -631,13 +631,13 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
     Returns:
         recommender_output (string): String containing recommended quantum devices.
     """
-
+    # tuned parameters
+    lambda1 = 0.1
+    lambda2 = 0.3
+    lambda3 = 0.6
     # Number of shots per execution and number of iterations of QAOA optimization
     num_shots = 1000
     num_iterations = 50
-
-    #print(
-    #    "!!! Testing phase! The results below might be very inaccurate, do not use these to pick a quantum device !!!\n")
 
     # Three metrics: minimum error, minimum time and minimum price
     min_error_device = []
@@ -801,7 +801,9 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
 
     recommender_output = f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}. \n - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}. \n - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}."
 
+
     return recommender_output, recommender_devices
+
 
 def plot_results(recommender_data_array, qubits_array):
     """

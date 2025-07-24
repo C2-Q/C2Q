@@ -1,3 +1,5 @@
+from collections import Counter
+
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit.circuit.library import VBERippleCarryAdder, RGQFTMultiplier
 
@@ -50,10 +52,13 @@ class Mul(Arithmetic):
         return qc
 
     def interpret(self, result):
-        n_bits = max(self.left.bit_length(), self.right.bit_length())
+        result = Counter(result).most_common(1)
+        result = result[0][0]
+        result = int(result.replace(' ', ''), 2)
+        n_bits = max(self.left.bit_length(), self.right.bit_length()) * 2
         if self.left * self.right < 0:
             result = complement_binary_list_to_decimal(decimal_to_complement_binary_list(result, n_bits + 1))
         else:
-            result = complement_binary_list_to_decimal(decimal_to_complement_binary_list(result, n_bits))
+            result = complement_binary_list_to_decimal(decimal_to_complement_binary_list(result, n_bits + 1))
         return result
 

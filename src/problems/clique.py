@@ -7,20 +7,21 @@ from typing import Optional, Union, List, Dict
 from fpdf import FPDF
 
 from src.algorithms.QAOA.QAOA import qaoa_no_optimization, qaoa_optimize, sample_results
+from src.graph import Graph
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 
 from src.recommender.recommender_engine import recommender
 from src.reduction import clique_to_sat
+from src.problems.np_complete import NPC
 
-
-class Clique(NP):
+class Clique(NPC):
     """
     An application class for the clique problem based on a NetworkX graph.
     """
 
-    def __init__(self, graph: nx.Graph, size: int) -> None:
+    def __init__(self, graph: nx.Graph, size: int = None) -> None:
         """
         Args:
             graph: A graph representing the problem. It can be specified directly as a
@@ -31,12 +32,17 @@ class Clique(NP):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
+        elif isinstance(graph, Graph):
+            self.graph = graph.G
         else:
             raise TypeError("The graph must be a NetworkX graph")
 
-        self.size = size  # The desired clique size (K)
         # Store nodes and mappings
         self.nodes = list(self.graph.nodes())
+        if size is None:
+            size = len(self.nodes) - 1
+            print(len(self.nodes))
+        self.size = size  # The desired clique size (K)
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
 
@@ -134,7 +140,7 @@ class Clique(NP):
             font_color='white',
             edge_color='black'
         )
-        plt.show()
+        # plt.show()
 
     def report(self) -> None:
         """
@@ -168,7 +174,7 @@ class Clique(NP):
         qc = qaoa_dict["qc"]
         parameters = qaoa_dict["parameters"]
         theta = qaoa_dict["theta"]
-        recommender_output, recommender_devices  = recommender(qc)
+        recommender_output, recommender_devices = recommender(qc)
 
         # Sample the QAOA circuit with optimized parameters and obtain the most probable solution based on the QAOA run
         highest_possible_solution = sample_results(qc, parameters, theta)

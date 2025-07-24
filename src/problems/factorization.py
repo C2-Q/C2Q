@@ -1,4 +1,9 @@
+import os
+from collections import Counter
+
 from matplotlib import pyplot as plt
+from pylatex import Figure
+from qiskit_aer import AerSimulator
 
 from src.algorithms.grover import grover
 from src.circuits_library import quantum_factor_mul_oracle
@@ -7,7 +12,7 @@ from src.problems.problem import Problem
 
 from qiskit.circuit.library import PhaseOracle, GroverOperator
 #from qiskit_algorithms import AmplificationProblem, Grover
-from qiskit import qasm2, QuantumCircuit
+from qiskit import qasm2, QuantumCircuit, transpile
 from qiskit.primitives import Sampler
 
 
@@ -28,6 +33,88 @@ class Factor(Problem):
                                 )
         return grover_circuit
 
+    def execute(self):
+        qc = self.grover(iterations=2)
+
+        backend = AerSimulator()
+        transpiled = transpile(qc, backend)
+        shots = 10000
+
+        counts = backend.run(transpiled, shots=shots).result().get_counts()
+        print(counts)
+        return counts
+
+    def interpret(self, result):
+        # Get the top 2 most frequent bitstrings
+        top_two = Counter(result).most_common(2)
+
+        # Convert bitstrings to integers
+        top_two_decimals = [int(bits.replace(' ', ''), 2) for bits, _ in top_two]
+
+        return top_two_decimals
+
+    def report_latex(self, directory=None):
+        import time
+        import os
+        import matplotlib.pyplot as plt
+        import networkx as nx
+        from pylatex import Document, Section, Subsection, Figure, NoEscape, Package
+
+        if directory is None:
+            directory = os.getcwd()
+
+        start_time = time.time()
+        problems_name = self.__class__.__name__
+
+        print(f'Starting {problems_name} report generation with LaTeX formatting...')
+
+        # Initialize LaTeX document
+        doc = Document()
+        doc.packages.append(Package("amsmath"))
+        doc.packages.append(Package("qcircuit"))
+
+        with doc.create(Section(f'{problems_name} Problem Report', numbering=False)):
+            doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
+            doc.append(f'factorization problem: {self.number}')
+            with doc.create(Subsection("Grover's Circuit Visualization")):
+                try:
+                    self._grover_latex(doc, directory)
+                except Exception as e:
+                    doc.append("not implemented yet\n")
+        output_path = os.path.join(directory, f'{problems_name}_report')
+
+        doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
+        for img_name in [
+            self.grover_circuit_image_path,
+        ]:
+            print(img_name)
+            if img_name is None:
+                continue
+            img_path = os.path.join(directory, img_name)
+            if os.path.exists(img_path):
+                os.remove(img_path)
+
+        end_time = time.time()
+        print(f"PDF report generated in {end_time - start_time:.2f} seconds.")
+
+    def _grover_latex(self, doc, directory):
+        problem_name = self.__class__.__name__
+        doc.append(f'The corresponding grover circuit for the {problem_name} is shown below:\n')
+        self.grover_circuit_image_path = os.path.join(directory, "quantum_circuit_oracle.png")
+        # maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
+        grover_qc = self.grover()
+        grover_qc.draw(style="mpl")
+        plt.savefig(self.grover_circuit_image_path)
+        plt.close()
+        with doc.create(Figure(position='h!')) as oracle_fig:
+            oracle_fig.add_image(self.grover_circuit_image_path, width="300px")
+            oracle_fig.add_caption(f'Corresponding Grover Visualization for the {problem_name} Problem')
+
+        from src.algorithms.grover import sample_results
+        res = self.execute()
+        res = self.interpret(res)
+        doc.append("Most Probable Solution for Grover's Algorithm:\n")
+        doc.append(f'{self.number} = {res[0]}*{res[1]}')
 
 # # Import Qiskit
 # from qiskit import QuantumCircuit

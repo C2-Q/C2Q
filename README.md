@@ -1,7 +1,7 @@
 # C2⟩Q⟩: Classical-to-Quantum Programming Framework
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Status: Research Prototype](https://img.shields.io/badge/status-research--prototype-orange)]()
 
 ---

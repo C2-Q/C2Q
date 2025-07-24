@@ -3,12 +3,16 @@ import unittest
 import networkx
 import numpy as np
 from matplotlib import pyplot as plt
+from qiskit import transpile
+from qiskit.visualization import plot_histogram
+from qiskit_aer import AerSimulator
 from qiskit_aer.primitives import Sampler
 
 from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
 from src.problems.basic_arithmetic.multiplication import Mul
 from src.problems.clique import Clique
+from src.problems.factorization import Factor
 from src.problems.kcolor import KColor
 from src.problems.max_cut import MaxCut
 from src.problems.maximal_independent_set import MIS
@@ -137,6 +141,21 @@ class MyTestCase(unittest.TestCase):
         # result_counts = result.quasi_dists[0]
         # result_value = max(result_counts, key=result_counts.get)
         # print(result_value)
+
+    def test_factorization(self):
+        factor = Factor(24)
+        qc = factor.grover(iterations=2)
+        print(qc)
+        backend = AerSimulator()
+        transpiled_circuit = transpile(qc, backend=backend)
+        counts = backend.run(transpiled_circuit, shots=50000).result().get_counts()
+        plot_histogram(counts)
+        plt.show()
+
+    def test_factor_grover(self):
+        factor = Factor(18)
+        print(factor.execute())
+
 
 if __name__ == '__main__':
     unittest.main()

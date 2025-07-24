@@ -28,6 +28,7 @@ class Problem:
         theta = qaoa_dict["theta"]
 
         return qc
+
     def vqe(self):
         qubo = self.to_qubo().Q
         # Run QAOA on local simulator
@@ -40,6 +41,12 @@ class Problem:
 
         return qc
 
+    def interpret(self, result):
+        raise NotImplementedError("should be implemented in subclass")
+
+    def draw_result(self):
+        raise NotImplementedError("should be implemented in subclass")
+
     def grover(self):
         raise NotImplementedError("should be implemented in subclass")
 
@@ -47,4 +54,7 @@ class Problem:
         raise NotImplementedError("should be implemented in subclass")
 
     def report(self):
+        raise NotImplementedError("should be implemented in subclass")
+
+    def report_latex(self):
         raise NotImplementedError("should be implemented in subclass")

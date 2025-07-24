@@ -650,6 +650,8 @@ class MyTestCase(unittest.TestCase):
         plot_histogram(counts)
         plt.show()
 
+
+
     def test_plot_recommender(self):
         # Plot recommender results with a range of qubits
 

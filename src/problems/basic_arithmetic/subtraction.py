@@ -1,3 +1,5 @@
+from collections import Counter
+
 from qiskit import QuantumCircuit
 from qiskit.circuit.library import VBERippleCarryAdder
 
@@ -59,6 +61,9 @@ class Sub(Arithmetic):
         return qc
 
     def interpret(self, result):
+        result = Counter(result).most_common(1)
+        result = result[0][0]
+        result = int(result.replace(' ', ''), 2)
         n_bits = max(self.left.bit_length(), self.right.bit_length())
         if self.left * self.right < 0:
             result = complement_binary_list_to_decimal(decimal_to_complement_binary_list(result, n_bits + 1))
