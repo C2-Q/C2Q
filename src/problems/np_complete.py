@@ -109,11 +109,28 @@ class NPC(Base):
             # QUBO Matrix Visualization
             with doc.create(Subsection('QUBO Matrix Visualization')):
                 doc.append("Converted QUBO matrix visualization:\n")
+
                 qubo_matrix = self.to_qubo().Q
-                matrix_latex = "$\\begin{bmatrix}\n" + \
-                               "\\\\".join(" & ".join(f"{val:.1f}" for val in row) for row in qubo_matrix) + \
-                               "\n\\end{bmatrix}$"
-                doc.append(NoEscape(matrix_latex))
+                assert all(
+                    len(row) == len(qubo_matrix[0]) for row in qubo_matrix), "Inconsistent row length in QUBO matrix"
+
+                num_cols = len(qubo_matrix[0])
+                col_format = "c" * num_cols  # e.g., 'cccccc' for 6 columns
+
+                rows = [" & ".join(f"{val:.1f}" for val in row) + r" \\" for row in qubo_matrix]
+
+                matrix_code = r"\[" + "\n"
+                matrix_code += rf"\begin{{array}}{{{col_format}}}" + "\n"
+                matrix_code += "\n".join(rows) + "\n"
+                matrix_code += r"\end{array}" + "\n"
+                matrix_code += r"\]"
+
+                doc.append(NoEscape(matrix_code))
+
+                # matrix_latex = "$\\begin{bmatrix}\n" + \
+                #                "\\\\".join(" & ".join(f"{val:.1f}" for val in row) for row in qubo_matrix) + \
+                #                "\n\\end{bmatrix}$"
+                # doc.append(NoEscape(matrix_latex))
 
             # Oracle Visualization
             with doc.create(Subsection("Oracle Visualization")):

@@ -3,12 +3,14 @@ import numpy as np
 import networkx as nx
 from typing import Optional, Union, List, Dict
 
+from src.graph import Graph
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
+from src.problems.np_complete import NPC
 
 
-class MVC(NP):
+class MVC(NPC):
     """
     An application class for the vertex cover problem based on a NetworkX graph.
     reference: https://arxiv.org/pdf/1302.5843
@@ -24,6 +26,8 @@ class MVC(NP):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
+        elif isinstance(graph, Graph):
+            self.graph = graph.G
         else:
             raise TypeError("The graph must be a NetworkX graph.")
 
@@ -117,6 +121,4 @@ class MVC(NP):
             font_color='white',
             edge_color='black'
         )
-        plt.show()
-
-
+        # plt.show()

@@ -33,12 +33,16 @@ from src.circuits_library import *
 import csv
 import ast
 
+
 class MyTestCase(unittest.TestCase):
     def setUp(self):
         self.is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input data\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
         self.maxCut_snippet = "def simple_cut_strategy(edges, n):\n    A, B = set(), set()\n    for node in range(n):\n        if len(A) < len(B):\n            A.add(node)\n        else:\n            B.add(node)\n    return sum(1 for u, v in edges if (u in A and v in B)), A, B\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3)]\ncut_value, A, B = simple_cut_strategy(edges, 4)\nprint(cut_value, A, B)"
         self.parser = Parser(model_path="../parser/saved_models")
         self.clique_snippet = "def compute_clique(nodes, edges):\n    clique = set()\n    for node in nodes:\n        if all((node, neighbor) in edges or (neighbor, node) in edges for neighbor in clique):\n            clique.add(node)\n    return clique\n\n# Input data\nnodes = [0, 1, 2, 3]\nedges = [(0, 1), (0, 2), (1, 2), (2, 3)]\nresult = compute_clique(nodes, edges)\nprint(result)"
+        self.tsp_snippet = "def a(cost_matrix):\n    n = len(cost_matrix)\n    visited = [0]\n    total_cost = 0\n    current = 0\n    while len(visited) < n:\n        next_city = min([city for city in range(n) if city not in visited], key=lambda city: cost_matrix[current][city])\n        total_cost += cost_matrix[current][next_city]\n        visited.append(next_city)\n        current = next_city\n    total_cost += cost_matrix[visited[-1]][0]\n    return total_cost, visited\n\n# Input data\ncost_matrix = [[0, 11, 30], [11, 0, 35], [30, 35, 0]]\ncost, route = a(cost_matrix)\nprint(cost, route)"
+        self.kcolor_snippet = "import networkx as nx\n\ndef kcoloring_networkx_dfs(G, k):\n    def dfs(node, colors):\n        if node == len(G.nodes):\n            return colors\n        for color in range(k):\n            if all(colors[neighbor] != color for neighbor in G.neighbors(node)):\n                colors[node] = color\n                result = dfs(node + 1, colors)\n                if result:\n                    return result\n                colors[node] = -1\n        return None\n    return dfs(0, [-1] * len(G.nodes))\n\nG = nx.Graph()\nG.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0)])\ncolors = kcoloring_networkx_dfs(G, 3)\nprint(colors)"
+        self.vc_snippet = "def vertex_cover_greedy(n, edges):\n    cover = set()\n    remaining_edges = set(edges)\n    while remaining_edges:\n        u, v = remaining_edges.pop()\n        cover.add(u)\n        cover.add(v)\n        remaining_edges = {e for e in remaining_edges if u not in e and v not in e}\n    return cover\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3), (3, 4)]\ncover = vertex_cover_greedy(5, edges)\nprint(cover)"
         parser = Parser(model_path="../parser/saved_models")
 
         # file_path = '../parser/data.csv'
@@ -67,7 +71,7 @@ class MyTestCase(unittest.TestCase):
                 problem_type, data = parser.parse(clean_code)
 
                 # 打印结果
-                print("→", problem_type, data,)
+                print("→", problem_type, data, )
 
                 # 统计 Unknown 类型
                 if problem_type == 'Unknown':
@@ -80,29 +84,30 @@ class MyTestCase(unittest.TestCase):
                 print("error info:", e)
 
         # print("Number of Unknown problems:", num)
+
     def test_something(self):
         tag, data = self.parser.parse(self.is_snippet)
         #print(tag, data)
-        mis = PROBLEMS[tag](data.G)
+        mis = PROBLEMS[tag](data)
         mis.report_latex()
         # mis.report_3sat()
 
     def test_is(self):
         tag, data = self.parser.parse(self.is_snippet)
         # print(tag, data)
-        mis = PROBLEMS[tag](data.G)
+        mis = PROBLEMS[tag](data)
         mis.recommender_engine()
 
     def test_maxcut(self):
         tag, data = self.parser.parse(self.maxCut_snippet)
         print(tag, data)
-        problem = PROBLEMS[tag](data.G)
+        problem = PROBLEMS[tag](data)
         problem.report_latex()
 
     def test_clique(self):
         tag, data = self.parser.parse(self.clique_snippet)
         print(tag, data)
-        problem = PROBLEMS[tag](data.G)
+        problem = PROBLEMS[tag](data)
         problem.report_latex()
 
     def test_factorization(self):
@@ -121,7 +126,23 @@ class MyTestCase(unittest.TestCase):
         problem = Sub(4, 6)
         problem.report_latex()
 
+    def test_tsp(self):
+        tag, data = self.parser.parse(self.tsp_snippet)
+        print(tag, data)
+        problem = PROBLEMS[tag](data)
+        problem.report_latex()
 
+    def test_kcolor(self):
+        tag, data = self.parser.parse(self.kcolor_snippet)
+        print(tag, data.G)
+        problem = PROBLEMS[tag](data)
+        problem.report_latex()
+
+    def test_vc(self):
+        tag, data = self.parser.parse(self.vc_snippet)
+        print(tag, data.G)
+        problem = PROBLEMS[tag](data)
+        problem.report_latex()
 
 
 

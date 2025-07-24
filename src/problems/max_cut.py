@@ -9,6 +9,7 @@ from qiskit.visualization import plot_circuit_layout
 
 from src.algorithms.QAOA.QAOA import qaoa_no_optimization, sample_results, qaoa_optimize
 from src.algorithms.VQE.VQE import vqe_optimization
+from src.graph import Graph
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
@@ -31,6 +32,8 @@ class MaxCut(NPC):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
+        elif isinstance(graph, Graph):
+            self.graph = graph.G
         else:
             raise TypeError("The graph must be a NetworkX graph")
 

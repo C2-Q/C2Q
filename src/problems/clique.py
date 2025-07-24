@@ -7,6 +7,7 @@ from typing import Optional, Union, List, Dict
 from fpdf import FPDF
 
 from src.algorithms.QAOA.QAOA import qaoa_no_optimization, qaoa_optimize, sample_results
+from src.graph import Graph
 from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
@@ -31,6 +32,8 @@ class Clique(NPC):
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
+        elif isinstance(graph, Graph):
+            self.graph = graph.G
         else:
             raise TypeError("The graph must be a NetworkX graph")
 
@@ -137,7 +140,7 @@ class Clique(NPC):
             font_color='white',
             edge_color='black'
         )
-        plt.show()
+        # plt.show()
 
     def report(self) -> None:
         """
