@@ -1,7 +1,7 @@
 # C2⟩Q⟩: Classical-to-Quantum Programming Framework
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Status: Research Prototype](https://img.shields.io/badge/status-research--prototype-orange)]()
 
 ---
@@ -31,7 +31,7 @@ Developing quantum software currently demands deep knowledge of quantum theory, 
 
 ## 📐 Architecture
 
-![Framework Overview](src/assets/classiq_flow.pdf)
+![Framework Overview](./src/assets/classiq_flow.pdf)
 
 Refer to [`docs/architecture.md`](docs/architecture.md) for detailed component diagrams and workflow explanations.
 
@@ -41,7 +41,7 @@ Refer to [`docs/architecture.md`](docs/architecture.md) for detailed component d
 
 ### 🔧 Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - Git
 
 ### 💻 Quickstart
