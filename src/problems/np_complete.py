@@ -142,54 +142,29 @@ class NPC(Base):
             # QAOA Section
             with doc.create(Subsection("QAOA Optimization Results", numbering=False)):
                 try:
-                    qaoa_qc = self._qaoa_latex(doc, pos, directory)
-                except Exception as e:
+                    qaoa_dict = self._qaoa_latex(doc, pos, directory)
+                    qaoa_qc = qaoa_dict["qc"]
+                except Exception:
+                    qaoa_qc = None
                     doc.append("not implemented yet\n")
-
 
             # VQE Section
             with doc.create(Subsection("VQE Optimization Results", numbering=False)):
                 try:
                     self._vqe_latex(doc, pos, directory)
-                except Exception as e:
+                except Exception:
                     doc.append("not implemented yet\n")
 
             # Grover Section
             with doc.create(Subsection("Grover's Algorithm Results", numbering=False)):
                 try:
                     self._grover_latex(doc, pos, directory)
-                except Exception as e:
+                except Exception:
                     doc.append("not implemented yet\n")
 
             # Optional: recommend device
-            string, _ = recommender(qaoa_qc, save_figures=True)
-            # Insert recommender plots into report
-            for plot_name, caption in zip([
-                "recommender_errors_devices.png",
-                "recommender_times_devices.png",
-                "recommender_prices_devices.png"
-            ], [
-                "Estimated total error with each quantum computer",
-                "Estimated total time with each quantum computer",
-                "Estimated price with each quantum computer"
-            ]):
-                fig_path = os.path.join(directory, plot_name)
-                if os.path.exists(fig_path):
-                    with doc.create(Figure(position='h!')) as fig:
-                        fig.add_image(fig_path, width="360px")
-                        fig.add_caption(caption)
-            # error_image_path = "error_image.png"
-            # price_image_path = "price_image.png"
-            # time_image_path = "time_image.png"
-            # plt.savefig(error_image_path)
-            # plt.savefig(price_image_path)
-            # plt.savefig(time_image_path)
-            # plt.close()
-            # print(string)
-
-            with doc.create(Subsection("Device Recommendation Summary", numbering=False)):
-                doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
-                doc.append(string)
+            if qaoa_qc is not None:
+                self._device_recommendation_latex(doc, qaoa_qc, directory)
 
         output_path = os.path.join(directory, f'{problems_name}_report')
         # output_path = "independent_set_report_with_latex.pdf"
@@ -217,10 +192,13 @@ class NPC(Base):
         qubo = self.to_qubo().Q
         qaoa_dict = qaoa_optimize(qubo, layers=3)
         qaoa_qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
+        parameters = qaoa_dict.get("parameters")
+        theta = qaoa_dict.get("theta")
         from src.algorithms.QAOA.QAOA import sample_results
-        qaoa_solution = sample_results(qaoa_qc, parameters, theta)
+        if parameters is not None and theta is not None:
+            qaoa_solution = sample_results(qaoa_qc, parameters, theta)
+        else:
+            qaoa_solution = [0] * qaoa_qc.num_qubits
         doc.append("Most Probable Solution for QAOA:\n")
         doc.append(NoEscape(r"\begin{itemize}"))
         for i, state in enumerate(qaoa_solution):
@@ -243,16 +221,24 @@ class NPC(Base):
         with doc.create(Figure(position='h!')) as qaoa_fig:
             qaoa_fig.add_image(self.qaoa_circuit_image_path, width="180px")
             qaoa_fig.add_caption("QAOA Quantum Circuit")
-        return qaoa_qc
+
+        return {
+            "qc": qaoa_qc,
+            "result_path": self.qaoa_result_image_path,
+            "circuit_path": self.qaoa_circuit_image_path,
+        }
 
     def _vqe_latex(self, doc, pos, directory):
         qubo = self.to_qubo().Q
         vqe_dict = vqe_optimization(qubo, layers=3)
         vqe_qc = vqe_dict["qc"]
-        parameters = vqe_dict["parameters"]
-        theta = vqe_dict["theta"]
+        parameters = vqe_dict.get("parameters")
+        theta = vqe_dict.get("theta")
         from src.algorithms.VQE.VQE import sample_results
-        vqe_solution = sample_results(vqe_qc, parameters, theta)
+        if parameters is not None and theta is not None:
+            vqe_solution = sample_results(vqe_qc, parameters, theta)
+        else:
+            vqe_solution = [0] * vqe_qc.num_qubits
         doc.append("Most Probable Solution for VQE:\n")
         doc.append(NoEscape(r"\begin{itemize}"))
         for i, state in enumerate(vqe_solution):
@@ -275,6 +261,11 @@ class NPC(Base):
         with doc.create(Figure(position='h!')) as vqe_fig:
             vqe_fig.add_image(self.vqe_circuit_image_path, width="180px")
             vqe_fig.add_caption("VQE Quantum Circuit")
+
+        return {
+            "result_path": self.vqe_result_image_path,
+            "circuit_path": self.vqe_circuit_image_path,
+        }
 
     def _grover_latex(self, doc, pos, directory):
         grover_qc = self.grover_sat(iterations=1)
@@ -321,6 +312,8 @@ class NPC(Base):
             graph_fig.add_image(self.graph_image_path, width="360px")
             graph_fig.add_caption("Graph Visualization")
 
+        return self.graph_image_path
+
     def _oracle_latex(self, doc, directory):
         problem_name = self.__class__.__name__
         doc.append(f'The corresponding oracle for the {problem_name} is shown below:\n')
@@ -335,6 +328,31 @@ class NPC(Base):
         with doc.create(Figure(position='h!')) as oracle_fig:
             oracle_fig.add_image(self.oracle_circuit_image_path, width="300px")
             oracle_fig.add_caption(f'Corresponding Oracle Visualization for the {problem_name} Problem')
+
+    def _device_recommendation_latex(self, doc, qaoa_qc, directory):
+        string, _ = recommender(qaoa_qc, save_figures=True)
+        image_paths = []
+        for plot_name, caption in zip([
+            "recommender_errors_devices.png",
+            "recommender_times_devices.png",
+            "recommender_prices_devices.png",
+        ], [
+            "Estimated total error with each quantum computer",
+            "Estimated total time with each quantum computer",
+            "Estimated price with each quantum computer",
+        ]):
+            fig_path = os.path.join(directory, plot_name)
+            if os.path.exists(fig_path):
+                with doc.create(Figure(position='h!')) as fig:
+                    fig.add_image(fig_path, width="360px")
+                    fig.add_caption(caption)
+                image_paths.append(fig_path)
+
+        with doc.create(Subsection("Device Recommendation Summary", numbering=False)):
+            doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
+            doc.append(string)
+
+        return image_paths
 
     def interpret(self):
         raise NotImplementedError("Interpretation not implemented")
