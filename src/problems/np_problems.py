@@ -1,6 +1,17 @@
-from pysat.formula import CNF
-from src.problems.problem import *
+from qiskit import transpile
+from qiskit_aer import AerSimulator
+
+from src.algorithms.QAOA.QAOA import qaoa_optimize
+from src.algorithms.VQE.VQE import vqe_optimization
+from src.algorithms.grover import grover
+from src.circuits_library import (
+    cnf_to_quantum_oracle_optimized,
+    maximal_independent_set_to_sat,
+)
+from src.reduction import sat_to_3sat
+from src.sat_to_qubo import Chancellor
 from src.recommender.recommender_engine import recommender
+from src.problems.problem import Problem
 
 
 def _grover(sat, iterations=2):
@@ -40,7 +51,10 @@ class NP(Problem):
         if directory is None:
             directory = os.getcwd()
         start_time = time.time()
-        print("Starting Independent Set problem report generation with LaTeX formatting...")
+        print(
+            "Starting Independent Set problem report generation with "
+            "LaTeX formatting..."
+        )
 
         # Initialize LaTeX document
         doc = Document()
@@ -49,8 +63,9 @@ class NP(Problem):
 
         # Compute layout once
         pos = nx.spring_layout(self.graph)
-        title = self.__str__()
-        with doc.create(Section("Independent Set Problem Report", numbering=False)):
+        with doc.create(
+            Section("Independent Set Problem Report", numbering=False)
+        ):
             doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
 
             # Graph details
@@ -75,24 +90,43 @@ class NP(Problem):
             with doc.create(Subsection('QUBO Matrix Visualization')):
                 doc.append("Converted QUBO matrix visualization:\n")
                 qubo_matrix = self.to_qubo().Q
-                matrix_latex = "$\\begin{bmatrix}\n" + \
-                               "\\\\".join(" & ".join(f"{val:.1f}" for val in row) for row in qubo_matrix) + \
-                               "\n\\end{bmatrix}$"
+                matrix_latex = (
+                    "$\\begin{bmatrix}\n"
+                    + "\\\\".join(
+                        " & ".join(f"{val:.1f}" for val in row)
+                        for row in qubo_matrix
+                    )
+                    + "\n\\end{bmatrix}$"
+                )
                 doc.append(NoEscape(matrix_latex))
 
             # Oracle Visualization
             with doc.create(Subsection("Oracle Visualization")):
-                doc.append("The corresponding oracle for the Independent Set problem is shown below:\n")
-                oracle_circuit_image_path = os.path.join(directory, "quantum_circuit_oracle.png")
-                maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
-                oracle = cnf_to_quantum_oracle_optimized(maximal_independent_set_cnf)
+                doc.append(
+                    "The corresponding oracle for the Independent Set problem "
+                    "is shown below:\n"
+                )
+                oracle_circuit_image_path = os.path.join(
+                    directory, "quantum_circuit_oracle.png"
+                )
+                maximal_independent_set_cnf = maximal_independent_set_to_sat(
+                    self.graph
+                )
+                oracle = cnf_to_quantum_oracle_optimized(
+                    maximal_independent_set_cnf
+                )
                 oracle.draw(style="mpl")
                 plt.savefig(oracle_circuit_image_path)
                 plt.close()
 
                 with doc.create(Figure(position='h!')) as oracle_fig:
-                    oracle_fig.add_image(oracle_circuit_image_path, width="300px")
-                    oracle_fig.add_caption("Corresponding Oracle Visualization for the Independent Set Problem")
+                    oracle_fig.add_image(
+                        oracle_circuit_image_path, width="300px"
+                    )
+                    oracle_fig.add_caption(
+                        "Corresponding Oracle Visualization for the Independent"
+                        " Set Problem"
+                    )
 
             # QAOA Section
             with doc.create(Subsection("QAOA Optimization Results", numbering=False)):
@@ -107,18 +141,26 @@ class NP(Problem):
                 doc.append(NoEscape(r"\begin{itemize}"))
                 for i, state in enumerate(qaoa_solution):
                     assignment = "true" if state else "false"
-                    doc.append(NoEscape(rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"))
+                    doc.append(
+                        NoEscape(
+                            rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"
+                        )
+                    )
                 doc.append(NoEscape(r"\end{itemize}"))
 
                 self.draw_result(qaoa_solution, pos=pos)
-                qaoa_result_image_path = os.path.join(directory, "qaoa_result.png")
+                qaoa_result_image_path = os.path.join(
+                    directory, "qaoa_result.png"
+                )
                 plt.savefig(qaoa_result_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as qaoa_res_fig:
                     qaoa_res_fig.add_image(qaoa_result_image_path, width="180px")
                     qaoa_res_fig.add_caption("QAOA Result")
 
-                qaoa_circuit_image_path = os.path.join(directory, "quantum_circuit_qaoa.png")
+                qaoa_circuit_image_path = os.path.join(
+                    directory, "quantum_circuit_qaoa.png"
+                )
                 qaoa_qc.decompose().draw(style="mpl")
                 plt.savefig(qaoa_circuit_image_path)
                 plt.close()
@@ -138,18 +180,26 @@ class NP(Problem):
                 doc.append(NoEscape(r"\begin{itemize}"))
                 for i, state in enumerate(vqe_solution):
                     assignment = "true" if state else "false"
-                    doc.append(NoEscape(rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"))
+                    doc.append(
+                        NoEscape(
+                            rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"
+                        )
+                    )
                 doc.append(NoEscape(r"\end{itemize}"))
 
                 self.draw_result(vqe_solution, pos=pos)
-                vqe_result_image_path = os.path.join(directory, "vqe_result.png")
+                vqe_result_image_path = os.path.join(
+                    directory, "vqe_result.png"
+                )
                 plt.savefig(vqe_result_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as vqe_res_fig:
                     vqe_res_fig.add_image(vqe_result_image_path, width="180px")
                     vqe_res_fig.add_caption("VQE Result")
 
-                vqe_circuit_image_path = os.path.join(directory, "quantum_circuit_vqe.png")
+                vqe_circuit_image_path = os.path.join(
+                    directory, "quantum_circuit_vqe.png"
+                )
                 vqe_qc.decompose().draw(style="mpl")
                 plt.savefig(vqe_circuit_image_path)
                 plt.close()
@@ -166,18 +216,26 @@ class NP(Problem):
                 doc.append(NoEscape(r"\begin{itemize}"))
                 for i, state in enumerate(grover_solution):
                     assignment = "true" if state else "false"
-                    doc.append(NoEscape(rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"))
+                    doc.append(
+                        NoEscape(
+                            rf"\item Variable \( x_{{{i + 1}}} \) is set to {assignment}"
+                        )
+                    )
                 doc.append(NoEscape(r"\end{itemize}"))
                 # print(grover_solution)
                 self.draw_result(grover_solution, pos=pos)
-                grover_result_image_path = os.path.join(directory, "grover_result.png")
+                grover_result_image_path = os.path.join(
+                    directory, "grover_result.png"
+                )
                 plt.savefig(grover_result_image_path)
                 plt.close()
                 with doc.create(Figure(position='h!')) as grover_res_fig:
                     grover_res_fig.add_image(grover_result_image_path, width="180px")
                     grover_res_fig.add_caption("Grover's Algorithm Result")
 
-                grover_circuit_image_path = os.path.join(directory, "quantum_circuit_grover.png")
+                grover_circuit_image_path = os.path.join(
+                    directory, "quantum_circuit_grover.png"
+                )
                 grover_qc.draw(style="mpl")
                 plt.savefig(grover_circuit_image_path)
                 plt.close()
