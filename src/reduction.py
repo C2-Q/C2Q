@@ -222,4 +222,5 @@ def sat_to_3sat(cnf: CNF) -> CNF:
 
         new_clauses.append(pad_to_three(clause))
 
+
     return CNF(from_clauses=new_clauses)

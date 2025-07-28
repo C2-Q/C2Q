@@ -48,9 +48,9 @@ class MyTestCase(unittest.TestCase):
         qubo_instance.display()
         qubo_instance.display_matrix()
         result = qubo_instance.solve_brute_force()
-        list = clique_problem.interpret(result[0])
+        result_list = clique_problem.interpret(result[0])
         print(result[0])
-        print(list)
+        print(result_list)
         clique_problem.draw_result(result[0])
 
     def test_ims(self):
@@ -64,7 +64,7 @@ class MyTestCase(unittest.TestCase):
         qubo_instance.display()
         qubo_instance.display_matrix()
         result = qubo_instance.solve_brute_force()
-        list = mis.interpret(result[0])
+        result_list = mis.interpret(result[0])
         mis.draw_result(result[0])
 
     def test_max_cut(self):
@@ -74,7 +74,7 @@ class MyTestCase(unittest.TestCase):
         qubo = maxcut.to_qubo()
         qubo.display_matrix()
         result = qubo.solve_brute_force()
-        list = maxcut.interpret(result[0])
+        result_list = maxcut.interpret(result[0])
         maxcut.draw_result(result[0])
 
     def test_tsp(self):
@@ -86,8 +86,8 @@ class MyTestCase(unittest.TestCase):
         qubo.display_matrix()
         result = qubo.solve_brute_force()
         print(result[0])
-        list = tsp.interpret(result[0])
-        print(list)
+        result_list = tsp.interpret(result[0])
+        print(result_list)
         tsp.draw_result(result[0])
 
     def test_vc(self):
@@ -111,8 +111,8 @@ class MyTestCase(unittest.TestCase):
         print(f"Most probable solution: {highest_possible_solution}")
         vc.draw_result(highest_possible_solution)
         print(result[0])
-        list = vc.interpret(result[0])
-        print(list)
+        result_list = vc.interpret(result[0])
+        print(result_list)
 
     def test_k_coloring(self):
         print("Most probable solution: [1 0 1 1 0]")
@@ -125,9 +125,9 @@ class MyTestCase(unittest.TestCase):
         qubo = kc.to_qubo()
         qubo.display_matrix()
         result = qubo.solve_brute_force()
-        list = kc.interpret(result[0])
+        result_list = kc.interpret(result[0])
         print(result[0])
-        print(list)
+        print(result_list)
         kc.draw_result(result[0])
 
     def test_mul(self):
