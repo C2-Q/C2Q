@@ -166,37 +166,47 @@ def solve_all_cnf_solutions(cnf_formula):
     return solutions
 
 
-def sat_to_3sat(cnf):
-    """
-    Converts a CNF with more than three literals per clause into a 3-SAT CNF
-    using Tseytin transformation.
-    reference: https://en.wikipedia.org/wiki/Tseytin_transformation
-    Parameters:
-        cnf (CNF): The CNF formula object (from pysat.formula.CNF) to be converted.
+def sat_to_3sat(cnf: CNF) -> CNF:
+    """Convert an arbitrary CNF formula into an equivalent 3-SAT CNF.
 
-    Returns:
-        CNF: The converted 3-SAT CNF formula object.
+    Clauses with more than three literals are reduced using the Tseytin
+    transformation. Clauses shorter than three literals are padded by
+    repeating their last literal so that every clause in the output contains
+    exactly three literals.
+
+    Parameters
+    ----------
+    cnf : CNF
+        Input formula to convert.
+
+    Returns
+    -------
+    CNF
+        A new CNF instance representing the equivalent 3-SAT formula.
     """
+
+    if not cnf.clauses:
+        return CNF()
+
+    def pad_to_three(literals):
+        """Ensure a clause has length three by repeating the last literal."""
+        if len(literals) < 3:
+            literals.extend([literals[-1]] * (3 - len(literals)))
+        return literals
+
     new_clauses = []
-    aux_var_counter = max(abs(lit) for clause in cnf for lit in clause) + 1  # Start for auxiliary variables
+    next_var = max(abs(l) for clause in cnf.clauses for l in clause) + 1
 
-    for clause in cnf:
-        # todo deal with len(clause < 3)
+    for original in cnf.clauses:
+        clause = list(original)  # avoid mutating the input CNF
+
         while len(clause) > 3:
-            first_literal = clause[0]
-            second_literal = clause[1]
+            first, second, *rest = clause
+            for sub in tseytin_or_to_cnf(first, second, next_var):
+                new_clauses.append(pad_to_three(list(sub)))
+            clause = [next_var] + rest
+            next_var += 1
 
-            # Introduce a new auxiliary variable
-            aux_var = aux_var_counter
-            aux_var_counter += 1
-
-            # Apply Tseytin transformation for (first_literal OR second_literal) = aux_var
-            new_clauses += tseytin_or_to_cnf(first_literal, second_literal, aux_var)
-
-            # Now create a new clause starting with the auxiliary variable and the rest of the literals
-            clause = [aux_var] + clause[2:]
-
-        # After the loop, the clause has three or fewer literals, so append it as-is
-        new_clauses.append(clause)
+        new_clauses.append(pad_to_three(clause))
 
     return CNF(from_clauses=new_clauses)
