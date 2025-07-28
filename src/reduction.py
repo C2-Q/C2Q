@@ -1,8 +1,8 @@
 import networkx as nx
 from pysat.formula import CNF
 from pysat.solvers import Solver
-from collections import defaultdict
 from itertools import combinations
+
 
 def independent_set_to_sat(graph: nx.Graph) -> CNF:
     """
@@ -16,10 +16,10 @@ def independent_set_to_sat(graph: nx.Graph) -> CNF:
         CNF: The SAT formula in CNF representing the Independent Set problem.
     """
     cnf = CNF()
-    n = len(graph.nodes)
 
-    # Variables: x_v where v is the vertex in the graph
-    var = lambda v: v + 1  # Create unique variables (v is 0-based)
+    def var(v: int) -> int:
+        """Return the SAT variable for vertex v."""
+        return v + 1
 
     # Clause 1: No two adjacent vertices can be in the independent set
     # For each edge (u, v) in the graph, add the clause ¬x_u ∨ ¬x_v
@@ -27,6 +27,8 @@ def independent_set_to_sat(graph: nx.Graph) -> CNF:
         cnf.append([-var(u), -var(v)])
 
     return cnf
+
+
 def maximal_independent_set_to_sat(graph: nx.Graph) -> CNF:
     """
     Converts the Maximal Independent Set problem to a SAT problem.
@@ -34,14 +36,16 @@ def maximal_independent_set_to_sat(graph: nx.Graph) -> CNF:
     Parameters:
         graph (nx.Graph): The input graph.
 
-    Returns:
-        CNF: The SAT formula in CNF representing the Maximal Independent Set problem.
+    Returns
+    -------
+    CNF
+        The SAT formula representing the Maximal Independent Set problem.
     """
     cnf = CNF()
-    n = len(graph.nodes)
 
-    # Variables: x_v where v is the vertex in the graph
-    var = lambda v: v + 1  # Create unique variables (1-based indexing)
+    def var(v: int) -> int:
+        """Return the SAT variable for vertex v."""
+        return v + 1
 
     # Clause 1: No two adjacent vertices can both be in the independent set
     # For each edge (u, v) in the graph, add the clause ¬x_u ∨ ¬x_v
@@ -54,11 +58,14 @@ def maximal_independent_set_to_sat(graph: nx.Graph) -> CNF:
         neighbor_clause = []
         for neighbor in graph.neighbors(v):
             neighbor_clause.append(var(neighbor))
-        # Add clause that at least one neighbor must be in the independent set if v is not
+        # Add clause that at least one neighbor must be in the independent set
+        # if v is not in the set
         if neighbor_clause:
             cnf.append(neighbor_clause + [var(v)])
 
     return cnf
+
+
 def independent_set_to_k_sat(graph: nx.Graph, k: int) -> CNF:
     """
     Converts the Independent Set problem to a SAT problem.
@@ -73,8 +80,9 @@ def independent_set_to_k_sat(graph: nx.Graph, k: int) -> CNF:
     cnf = CNF()
     n = len(graph.nodes)
 
-    # Variables: x_v where v is the vertex in the graph
-    var = lambda v: v + 1  # Create unique variables (v is 0-based)
+    def var(v: int) -> int:
+        """Return the SAT variable for vertex v."""
+        return v + 1
 
     # Clause 1: No two adjacent vertices can be in the independent set
     # For each edge (u, v) in the graph, add the clause ¬x_u ∨ ¬x_v
@@ -82,10 +90,11 @@ def independent_set_to_k_sat(graph: nx.Graph, k: int) -> CNF:
         cnf.append([-var(u), -var(v)])
 
     # Clause 2: At least k vertices must be in the independent set
-    # Generate clauses ensuring at least k vertices are in the independent set
-    # Choose n - k + 1 vertices to be not in the independent set
+    # Generate clauses ensuring at least k vertices are in the independent set.
+    # Choose n - k + 1 vertices to be excluded from the independent set.
     for subset in combinations(range(n), n - k + 1):
-        # At least one vertex in this subset must be false (not in the independent set)
+        # At least one vertex in this subset must be false (not in the
+        # independent set)
         cnf.append([var(v) for v in subset])
 
     return cnf
@@ -105,11 +114,12 @@ def clique_to_sat(graph: nx.Graph, k: int) -> CNF:
     cnf = CNF()
     n = len(graph.nodes)
 
-    # Variables: x_iv where i is the position in the clique and v is the vertex
-    var = lambda i, v: i * n + v + 1  # Create unique variables (i is 0-based, v is 0-based)
+    def var(i: int, v: int) -> int:
+        """Return the SAT variable for vertex ``v`` at position ``i``."""
+        return i * n + v + 1
 
-    # Clause 1: Each position in the clique must be occupied by exactly one vertex
-    # k + \frac{kn(n+1)}{2} clauses
+    # Clause 1: Each position in the clique must be occupied by exactly one
+    # vertex. There are k + \frac{kn(n+1)}{2} clauses.
     for i in range(k):
         # At least one vertex occupies the i-th position in the clique
         cnf.append([var(i, v) for v in range(n)])
@@ -156,8 +166,11 @@ def solve_all_cnf_solutions(cnf_formula):
 
     Args:
         cnf_formula: The CNF formula to solve.
-    Returns:
-        list: A list of all satisfying assignments, where each assignment is a list of literals.
+    Returns
+    -------
+    list
+        A list of all satisfying assignments, where each assignment is a list
+        of literals.
     """
     solutions = []
     with Solver(bootstrap_with=cnf_formula) as solver:
@@ -195,7 +208,7 @@ def sat_to_3sat(cnf: CNF) -> CNF:
         return literals
 
     new_clauses = []
-    next_var = max(abs(l) for clause in cnf.clauses for l in clause) + 1
+    next_var = max(abs(lit) for clause in cnf.clauses for lit in clause) + 1
 
     for original in cnf.clauses:
         clause = list(original)  # avoid mutating the input CNF
