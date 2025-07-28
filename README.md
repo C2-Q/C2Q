@@ -51,6 +51,14 @@ git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
 pip install -r requirements.txt
 ```
+
+### 🧪 Running Tests
+
+Run the unit tests with `pytest` after installing the dependencies:
+
+```bash
+PYTHONPATH=. pytest -q
+```
 ## 🤝 Contributing
 
 We welcome contributions from researchers, developers, and practitioners interested in quantum software engineering.
