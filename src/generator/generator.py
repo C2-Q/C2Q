@@ -20,29 +20,36 @@ PROBLEM_CLASS = {
     "MUL": Mul,  # Multiplication
     "SUB": Sub,  # Subtraction
     "VC": MVC,  # Vertex Cover
-    "Unknown": 10
 }
 
 
 class Generator:
     @staticmethod
     def generate_algorithms_circuits(problem_type, data):
+        """Generate QAOA and VQE circuits for the given problem type.
+
+        Args:
+            problem_type (str): Key of the problem in ``PROBLEM_CLASS``.
+            data: Input data to initialize the problem.
+
+        Returns:
+            dict: Mapping of algorithm name to generated circuit.
         """
-        :param problem_type:
-        :param data:
-        :return: dict of generated circuits
-        """
-        problem = PROBLEM_CLASS[problem_type](data)
+        problem_cls = PROBLEM_CLASS.get(problem_type)
+        if problem_cls is None:
+            raise ValueError(f"Unknown problem type: {problem_type}")
+
+        problem = problem_cls(data)
         qaoa_circuit = problem.qaoa()
         vqe_circuit = problem.vqe()
-        return {'qaoa': qaoa_circuit, 'vqe': vqe_circuit}
+        return {"qaoa": qaoa_circuit, "vqe": vqe_circuit}
 
     @staticmethod
     def report(problem_type, data):
-        """
-        :param problem_type:
-        :param data:
-        pdf of report of the problem
-        """
-        problem = PROBLEM_CLASS[problem_type](data)
+        """Generate a PDF report for the specified problem type."""
+        problem_cls = PROBLEM_CLASS.get(problem_type)
+        if problem_cls is None:
+            raise ValueError(f"Unknown problem type: {problem_type}")
+
+        problem = problem_cls(data)
         problem.report()
