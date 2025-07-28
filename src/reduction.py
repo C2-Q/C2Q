@@ -181,7 +181,7 @@ def sat_to_3sat(cnf):
     aux_var_counter = max(abs(lit) for clause in cnf for lit in clause) + 1  # Start for auxiliary variables
 
     for clause in cnf:
-        # todo deal with len(clause < 3)
+        clause = list(clause)  # copy so we don't mutate the input CNF
         while len(clause) > 3:
             first_literal = clause[0]
             second_literal = clause[1]
@@ -196,7 +196,9 @@ def sat_to_3sat(cnf):
             # Now create a new clause starting with the auxiliary variable and the rest of the literals
             clause = [aux_var] + clause[2:]
 
-        # After the loop, the clause has three or fewer literals, so append it as-is
+        if len(clause) < 3:
+            clause += [clause[-1]] * (3 - len(clause))
+
         new_clauses.append(clause)
 
     return CNF(from_clauses=new_clauses)
