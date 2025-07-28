@@ -25,21 +25,26 @@ class Graph:
 
     @staticmethod
     def random_graph(num_nodes=5, edge_prob=0.5, weighted=True, max_weight=10):
-        """
-        Generate a random graph by creating random edges between nodes.
+        """Generate and return a ``Graph`` instance with random edges.
+
+        This helper previously returned a plain ``networkx`` graph which was
+        inconsistent with the rest of the API and caused attribute errors when
+        calling ``Graph`` specific methods (e.g. ``visualize``) on the returned
+        object.  The method now returns an initialized ``Graph`` object.
 
         :param num_nodes: Number of nodes in the graph.
         :param edge_prob: Probability of creating an edge between two nodes.
         :param weighted: Whether to assign random weights to the edges.
         :param max_weight: Maximum weight of the edges if weighted.
-        :return: A Graph object with random edges.
+        :return: A :class:`Graph` object populated with random edges.
         """
-        # Initialize the graph
-        graph = nx.Graph()
+
+        # Build a temporary networkx graph
+        tmp_graph = nx.Graph()
 
         # Add all nodes to the graph
         for i in range(num_nodes):
-            graph.add_node(i)
+            tmp_graph.add_node(i)
 
         # Create random edges with probabilities
         for i in range(num_nodes):
@@ -47,15 +52,20 @@ class Graph:
                 if np.random.rand() < edge_prob:
                     if weighted:
                         weight = np.random.randint(1, max_weight)
-                        graph.add_edge(i, j, weight=weight)
+                        tmp_graph.add_edge(i, j, weight=weight)
                     else:
-                        graph.add_edge(i, j)
+                        tmp_graph.add_edge(i, j, weight=1)
 
         # Check if any edges were added
-        if len(graph.edges()) == 0:
+        if len(tmp_graph.edges()) == 0:
             raise ValueError("No edges were generated for the graph. Try increasing edge_prob.")
 
-        return graph
+        # Convert the edges back to the expected list format for ``Graph``
+        edges_with_weights = [
+            (u, v, data.get("weight", 1)) for u, v, data in tmp_graph.edges(data=True)
+        ]
+
+        return Graph(edges_with_weights)
 
     def _is_matrix(self, data):
         """
