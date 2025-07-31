@@ -6,8 +6,8 @@ from src.algorithms.VQE.VQE import vqe_optimization
 from src.algorithms.grover import grover
 from src.circuits_library import (
     cnf_to_quantum_oracle_optimized,
-    maximal_independent_set_to_sat,
 )
+from src.reduction import maximal_independent_set_to_sat
 from src.reduction import sat_to_3sat
 from src.sat_to_qubo import Chancellor
 from src.recommender.recommender_engine import recommender
