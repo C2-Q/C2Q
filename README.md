@@ -106,3 +106,5 @@ This project is licensed under the [Apache 2.0 License](LICENSE).
 For research collaboration or substantial contributions, contact the maintainer:
 
 📧 boshuai.ye@oulu.fi
+📧 Teemu.Pihkakoski@oulu.fi
+📧 arif.khan@oulu.fi (Project Principal Investigator (PI))
