@@ -41,7 +41,7 @@ class Clique(NPC):
         self.nodes = list(self.graph.nodes())
         if size is None:
             size = len(self.nodes) - 1
-            print(len(self.nodes))
+            # print(len(self.nodes))
         self.size = size  # The desired clique size (K)
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}

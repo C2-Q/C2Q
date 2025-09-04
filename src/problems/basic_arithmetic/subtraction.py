@@ -8,8 +8,8 @@ from src.problems.basic_arithmetic.utils import decimal_to_complement_binary_lis
 
 
 class Sub(Arithmetic):
-    def __init__(self, left, right):
-        super().__init__(left, right)
+    def __init__(self, data):
+        super().__init__(data)
 
     def quantum_circuit(self):
         """

@@ -55,7 +55,6 @@ class TSP(NPC):
         n = len(self.nodes)
         Q = np.zeros((n * n, n * n))  # QUBO matrix (n^2 variables)
         max_weight = self._get_max_weight()
-        print(max_weight)
         A = B * max_weight + 10  # Ensure A is larger than B * max(W_uv)
         # start to construct H_B
         # variables x_v^i means node v is visited ith

@@ -28,7 +28,49 @@ dirname = os.path.dirname(__file__)
 
 # To get the native gate set of IonQ
 ionq_provider = IonQProvider()
+def _sanitize_errors(errs: dict, dev_name: str) -> dict:
+    if dev_name.startswith("ibm_"):
+        bounds = {"single_qubit": (0.0, 0.02), "two_qubit": (0.0, 0.05), "measurement": (0.0, 0.05)}
+    elif "ionq" in dev_name.lower() or "quantinuum" in dev_name.lower():
+        bounds = {"single_qubit": (0.0, 0.01), "two_qubit": (0.0, 0.03), "measurement": (0.0, 0.02)}
+    elif "rigetti" in dev_name.lower():
+        bounds = {"single_qubit": (0.0, 0.02), "two_qubit": (0.0, 0.20), "measurement": (0.0, 0.10)}
+    elif "iqm" in dev_name.lower():
+        bounds = {"single_qubit": (0.0, 0.02), "two_qubit": (0.0, 0.08), "measurement": (0.0, 0.06)}
+    else:
+        bounds = {"single_qubit": (0.0, 0.05), "two_qubit": (0.0, 0.20), "measurement": (0.0, 0.10)}
 
+    out = {}
+    for k, v in errs.items():
+        x = float(v) if np.isfinite(v) else float("nan")
+        lo, hi = bounds[k]
+        if not np.isfinite(x) or x < lo or x > hi:
+            warnings.warn(f"[SANITY] {dev_name}: {k}={v} outside [{lo},{hi}] -> clamp")
+            x = lo if not np.isfinite(x) else min(max(x, lo), hi)
+        out[k] = x
+    return out
+import math
+
+def compute_total_error(device_errors, gate_counts, clamp=True):
+    e1 = float(device_errors.get("single_qubit", 0.0))
+    e2 = float(device_errors.get("two_qubit",   0.0))
+    em = float(device_errors.get("measurement", 0.0))
+
+    if clamp:
+        def _clip(p):
+            # keep small errors as-is, but prevent >0.5 disasters
+            return min(max(p, 0.0), 0.5)
+        e1, e2, em = _clip(e1), _clip(e2), _clip(em)
+
+    N1, N2, Nm = (int(gate_counts.get(k, 0)) for k in ["single_qubit","two_qubit","measurement"])
+
+    logF = 0.0
+    if N1: logF += N1 * math.log1p(-e1)
+    if N2: logF += N2 * math.log1p(-e2)
+    if Nm: logF += Nm * math.log1p(-em)
+
+    F = math.exp(logF)
+    return 1.0 - F
 # Calculate number of gates.. using transpiled circuit. Return a dict of data
 def export_circuit_data(circuit, circuit_transpiled):
     """
@@ -51,7 +93,7 @@ def export_circuit_data(circuit, circuit_transpiled):
     num_qubits = circuit.num_qubits
 
     # Number of qubits in the circuit_transpiled
-    #num_qubits = circuit_transpiled.num_qubits
+    # num_qubits = circuit_transpiled.num_qubits
 
     # Total number of gates in the circuit_transpiled
     operations = circuit_transpiled.count_ops()
@@ -120,7 +162,7 @@ provider_list = [
     "IBM Quantum",
     "Amazon Braket",
     "Azure Quantum",
-    #"IQM Resonance"
+    # "IQM Resonance"
 ]
 
 
@@ -157,7 +199,8 @@ def select_provider(provider, available_devices):
         # Fetch saved devices
         device_list = []
         device_file_path = os.path.join(dirname, f'device_information/')
-        loaded_ibm_saved_device_list = [filename for filename in os.listdir(device_file_path) if filename.startswith("ibm_")]
+        loaded_ibm_saved_device_list = [filename for filename in os.listdir(device_file_path) if
+                                        filename.startswith("ibm_")]
         for loaded_ibm_device in loaded_ibm_saved_device_list:
             device_list.append(loaded_ibm_device.removesuffix('.pkl'))
 
@@ -166,7 +209,7 @@ def select_provider(provider, available_devices):
             if device.startswith("ibm_") and device not in device_list:
                 device_list.append(device)
 
-        price_list_shots = [96]*len(device_list) # Pay-as-you-go pricing https://www.ibm.com/quantum/pricing
+        price_list_shots = [96] * len(device_list)  # Pay-as-you-go pricing https://www.ibm.com/quantum/pricing
 
     if provider == "Amazon Braket":
         device_list = [
@@ -174,7 +217,7 @@ def select_provider(provider, available_devices):
             "IQM Garnet",
             "Rigetti Ankaa-2"
         ]
-        
+
         # https://aws.amazon.com/braket/pricing
         price_list_shots = [
             0.03,
@@ -182,14 +225,14 @@ def select_provider(provider, available_devices):
             0.0009
         ]
 
-    if provider == "IQM Resonance": #not used
+    if provider == "IQM Resonance":  # not used
         device_list = [
             "IQM Garnet"
         ]
 
         price_list_shots = [30]
-    
-    if provider == "CSC": #not used yet (hard to get the calibration data, have to go through LUMI)
+
+    if provider == "CSC":  # not used yet (hard to get the calibration data, have to go through LUMI)
         device_list = [
             "IQM Helmi"
         ]
@@ -215,43 +258,89 @@ def select_device(device, ibm_service, available_devices):
         if ibm_service and device in available_devices:
             ibm_device = ibm_service.backend(device)
             # Fetch SX gate information
-            sxlist = ibm_device.target["sx"]
-            sxlist = list(sxlist.items())
-            # Calculate mean SX error and duration
+            sxlist = list(ibm_device.target["sx"].items())
+            # Calculate mean SX error and duration (ignore None/NaN; use safe fallbacks)
             sx_errorlist = []
             sx_durationlist = []
             for i in range(len(sxlist)):
-                sx_errorlist.append(sxlist[i][1].error)
-                sx_durationlist.append(sxlist[i][1].duration)
-            single_qubit_gate_error = mean(sx_errorlist)
-            single_qubit_gate_timing = mean(sx_durationlist)
+                err = sxlist[i][1].error
+                dur = sxlist[i][1].duration
+                if err is not None and np.isfinite(err):
+                    sx_errorlist.append(err)
+                if dur is not None and np.isfinite(dur):
+                    sx_durationlist.append(dur)
+            single_qubit_gate_error = mean(sx_errorlist) if sx_errorlist else 0.002  # fallback
+            single_qubit_gate_timing = mean(sx_durationlist) if sx_durationlist else 35e-9
 
-            # Fetch ECR gate information
-            ecrlist = ibm_device.target["ecr"]
-            ecrlist = list(ecrlist.items())
-            # Calculate mean ECR error and duration
+            # Fetch ECR (two-qubit) information
+            ecrlist = list(ibm_device.target["ecr"].items())
             ecr_errorlist = []
             ecr_durationlist = []
             for i in range(len(ecrlist)):
-                ecr_errorlist.append(ecrlist[i][1].error)
-                ecr_durationlist.append(ecrlist[i][1].duration)
-            two_qubit_gate_error = mean(ecr_errorlist)
-            two_qubit_gate_timing = mean(ecr_durationlist)
+                err = ecrlist[i][1].error
+                dur = ecrlist[i][1].duration
+                if err is not None and np.isfinite(err):
+                    ecr_errorlist.append(err)
+                if dur is not None and np.isfinite(dur):
+                    ecr_durationlist.append(dur)
+            two_qubit_gate_error = mean(ecr_errorlist) if ecr_errorlist else 0.03  # fallback
+            two_qubit_gate_timing = mean(ecr_durationlist) if ecr_durationlist else 300e-9
 
             # Fetch measurement information
-            measlist = ibm_device.target["measure"]
-            measlist = list(measlist.items())
-            # Calculate mean measurement error
+            measlist = list(ibm_device.target["measure"].items())
             meas_errorlist = []
             for i in range(len(measlist)):
-                meas_errorlist.append(measlist[i][1].error)
-            measurement_error = mean(meas_errorlist)
+                err = measlist[i][1].error
+                if err is not None and np.isfinite(err):
+                    meas_errorlist.append(err)
+            measurement_error = mean(meas_errorlist) if meas_errorlist else 0.03  # fallback
+
+            # --- Manual overrides for IBM devices ---
+            if device == "ibm_kyiv":
+                single_qubit_gate_error = 2.8e-4
+                two_qubit_gate_error = 1.2e-2
+                measurement_error = 7.0e-3
+                t1_relaxation_time = 50e-9
+                t2_relaxation_time = 500e-9
+
+            elif device == "ibm_sherbrooke":
+                single_qubit_gate_error = 2.2e-4
+                two_qubit_gate_error = 7.8e-3
+                measurement_error = 1.3e-2
+                t1_relaxation_time = 57e-9
+                t2_relaxation_time = 530e-9
+
+            elif device == "ibm_brisbane":
+                single_qubit_gate_error = 2.5e-4
+                two_qubit_gate_error = 7.7e-3
+                measurement_error = 1.3e-2
+                t1_relaxation_time = 60e-9
+                t2_relaxation_time = 660e-9
+
+            errors = _sanitize_errors(
+                {
+                    "single_qubit": single_qubit_gate_error,
+                    "two_qubit": two_qubit_gate_error,
+                    "measurement": measurement_error,
+                },
+                device
+            )
+
+
+            single_qubit_gate_error = errors["single_qubit"]
+            two_qubit_gate_error = errors["two_qubit"]
+            measurement_error = errors["measurement"]
 
             t1_list = []
             t2_list = []
-            for i in range (0, 127):
-                t1_list.append(ibm_device.qubit_properties(i).t1)
-                t2_list.append(ibm_device.qubit_properties(i).t2)
+            # for i in range(0, 127):
+            #     t1_list.append(ibm_device.qubit_properties(i).t1)
+            #     t2_list.append(ibm_device.qubit_properties(i).t2)
+            for i in range(ibm_device.num_qubits):
+                qp = ibm_device.qubit_properties(i)
+                if qp is not None:
+                    t1_list.append(qp.t1)
+                    t2_list.append(qp.t2)
             t1_relaxation_time = mean(t1_list)
             t2_relaxation_time = mean(t2_list)
 
@@ -288,10 +377,10 @@ def select_device(device, ibm_service, available_devices):
             device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
             with open(device_file_path, 'rb') as f:
                 saved_dict = pickle.load(f)
-            
+
             if available_devices:
                 device = device + " (unavailable)"
-            
+
             coupling_map = saved_dict["coupling_map"]
             basis_gates = saved_dict["basis_gates"]
             device_qubits = saved_dict["device_qubits"]
@@ -303,6 +392,50 @@ def select_device(device, ibm_service, available_devices):
             two_qubit_gate_timing = saved_dict["gate_timings"]["two_qubit"]
             t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
             t2_relaxation_time = saved_dict["relaxation_times"]["t2"]
+
+            # --- Manual overrides for IBM devices ---
+            if device == "ibm_kyiv":
+                single_qubit_gate_error = 2.8e-4
+                two_qubit_gate_error = 1.2e-2
+                measurement_error = 7.0e-3
+                t1_relaxation_time = 50e-9
+                t2_relaxation_time = 500e-9
+
+            elif device == "ibm_sherbrooke":
+                single_qubit_gate_error = 2.2e-4
+                two_qubit_gate_error = 7.8e-3
+                measurement_error = 1.3e-2
+                t1_relaxation_time = 57e-9
+                t2_relaxation_time = 530e-9
+
+            elif device == "ibm_brisbane":
+                single_qubit_gate_error = 2.5e-4
+                two_qubit_gate_error = 7.7e-3
+                measurement_error = 1.3e-2
+                t1_relaxation_time = 60e-9
+                t2_relaxation_time = 660e-9
+
+            errors = _sanitize_errors(
+                {
+                    "single_qubit": single_qubit_gate_error,
+                    "two_qubit": two_qubit_gate_error,
+                    "measurement": measurement_error,
+                },
+                device
+            )
+
+
+            errors = _sanitize_errors(
+                {
+                    "single_qubit": single_qubit_gate_error,
+                    "two_qubit": two_qubit_gate_error,
+                    "measurement": measurement_error,
+                },
+                device
+            )
+            single_qubit_gate_error = errors["single_qubit"]
+            two_qubit_gate_error = errors["two_qubit"]
+            measurement_error = errors["measurement"]
 
     if device == "Rigetti Ankaa-2":
         if available_devices and device not in available_devices:
@@ -316,8 +449,8 @@ def select_device(device, ibm_service, available_devices):
         t1_relaxation_time = 13.012 * 10 ** (-6)
         t2_relaxation_time = 11.999 * 10 ** (-6)
         # Gate timings for estimating the time to execute a circuit
-        single_qubit_gate_timing = 40*10**(-9)
-        two_qubit_gate_timing = 70*10**(-9)
+        single_qubit_gate_timing = 40 * 10 ** (-9)
+        two_qubit_gate_timing = 70 * 10 ** (-9)
 
         # Rigetti Ankaa-2 84-qubit fake backend
         coupling_map_path = os.path.join(dirname, 'coupling_maps/rigetti_ankaa2_coupling_map.npy')
@@ -331,12 +464,12 @@ def select_device(device, ibm_service, available_devices):
         # Error rates for estimating the error
         single_qubit_gate_error = 0.001
         two_qubit_gate_error = 0.008
-        measurement_error = 0.06565 # Not found, using the Rigetti Ankaa-2 measurement error instead
+        measurement_error = 0.019  # Not found, using the Rigetti Ankaa-2 measurement error instead
         t1_relaxation_time = 21 * 10 ** (-6)
         t2_relaxation_time = 24 * 10 ** (-6)
         # Gate timings for estimating the time to execute a circuit
-        single_qubit_gate_timing = 40 * 10 ** (-9) # Not found, using the Rigetti Ankaa-2 timing instead
-        two_qubit_gate_timing = 70 * 10 ** (-9) # Not found, using the Rigetti Ankaa-2 timing instead
+        single_qubit_gate_timing = 40 * 10 ** (-9)  # Not found, using the Rigetti Ankaa-2 timing instead
+        two_qubit_gate_timing = 70 * 10 ** (-9)  # Not found, using the Rigetti Ankaa-2 timing instead
 
         # Rigetti Ankaa-9Q-3 9-qubit fake backend
         coupling_map_path = os.path.join(dirname, 'coupling_maps/rigetti_ankaa_9q_3_coupling_map.npy')
@@ -349,7 +482,7 @@ def select_device(device, ibm_service, available_devices):
             device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
             with open(device_file_path, 'rb') as f:
                 saved_dict = pickle.load(f)
-            
+
             if available_devices:
                 device = device + " (unavailable)"
 
@@ -360,6 +493,19 @@ def select_device(device, ibm_service, available_devices):
             single_qubit_gate_error = saved_dict["errors"]["single_qubit"]
             two_qubit_gate_error = saved_dict["errors"]["two_qubit"]
             measurement_error = saved_dict["errors"]["measurement"]
+
+            errors = _sanitize_errors(
+                {
+                    "single_qubit": single_qubit_gate_error,
+                    "two_qubit": two_qubit_gate_error,
+                    "measurement": measurement_error,
+                },
+                device
+            )
+            single_qubit_gate_error = errors["single_qubit"]
+            two_qubit_gate_error = errors["two_qubit"]
+            measurement_error = errors["measurement"]
+
             single_qubit_gate_timing = saved_dict["gate_timings"]["single_qubit"]
             two_qubit_gate_timing = saved_dict["gate_timings"]["two_qubit"]
             t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
@@ -371,9 +517,10 @@ def select_device(device, ibm_service, available_devices):
             measurement_error = []
             t1_relaxation_time = []
             t2_relaxation_time = []
-            
+
             for qubit in aws_device.properties.provider.properties["one_qubit"]:
-                single_qubit_gate_error.append(1 - aws_device.properties.provider.properties["one_qubit"][qubit]["f1Q_simultaneous_RB"])
+                single_qubit_gate_error.append(
+                    1 - aws_device.properties.provider.properties["one_qubit"][qubit]["f1Q_simultaneous_RB"])
                 t1_relaxation_time.append(aws_device.properties.provider.properties["one_qubit"][qubit]["T1"])
                 t2_relaxation_time.append(aws_device.properties.provider.properties["one_qubit"][qubit]["T2"])
                 measurement_error.append(1 - aws_device.properties.provider.properties["one_qubit"][qubit]["fRO"])
@@ -384,7 +531,8 @@ def select_device(device, ibm_service, available_devices):
 
             two_qubit_gate_error = []
             for qubit_pair in aws_device.properties.provider.properties["two_qubit"]:
-                two_qubit_gate_error.append(1 - aws_device.properties.provider.properties["two_qubit"][qubit_pair]["f2Q_simultaneous_RB_Clifford"])
+                two_qubit_gate_error.append(1 - aws_device.properties.provider.properties["two_qubit"][qubit_pair][
+                    "f2Q_simultaneous_RB_Clifford"])
             two_qubit_gate_error = mean(two_qubit_gate_error)
 
             # Gate timings for estimating the time to execute a circuit
@@ -450,6 +598,17 @@ def select_device(device, ibm_service, available_devices):
             single_qubit_gate_error = saved_dict["errors"]["single_qubit"]
             two_qubit_gate_error = saved_dict["errors"]["two_qubit"]
             measurement_error = saved_dict["errors"]["measurement"]
+            errors = _sanitize_errors(
+                {
+                    "single_qubit": single_qubit_gate_error,
+                    "two_qubit": two_qubit_gate_error,
+                    "measurement": measurement_error,
+                },
+                device
+            )
+            single_qubit_gate_error = errors["single_qubit"]
+            two_qubit_gate_error = errors["two_qubit"]
+            measurement_error = errors["measurement"]
             single_qubit_gate_timing = saved_dict["gate_timings"]["single_qubit"]
             two_qubit_gate_timing = saved_dict["gate_timings"]["two_qubit"]
             t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
@@ -462,6 +621,17 @@ def select_device(device, ibm_service, available_devices):
             single_qubit_gate_error = 1 - aws_device.properties.provider.fidelity["1Q"]["mean"]
             two_qubit_gate_error = 1 - aws_device.properties.provider.fidelity["2Q"]["mean"]
             measurement_error = 1 - aws_device.properties.provider.fidelity["spam"]["mean"]
+            errors = _sanitize_errors(
+                {
+                    "single_qubit": single_qubit_gate_error,
+                    "two_qubit": two_qubit_gate_error,
+                    "measurement": measurement_error,
+                },
+                device
+            )
+            single_qubit_gate_error = errors["single_qubit"]
+            two_qubit_gate_error = errors["two_qubit"]
+            measurement_error = errors["measurement"]
             single_qubit_gate_timing = aws_device.properties.provider.timing["1Q"]
             two_qubit_gate_timing = aws_device.properties.provider.timing["2Q"]
             t1_relaxation_time = aws_device.properties.provider.timing["T1"]
@@ -505,16 +675,27 @@ def select_device(device, ibm_service, available_devices):
         single_qubit_gate_error = saved_dict["errors"]["single_qubit"]
         two_qubit_gate_error = saved_dict["errors"]["two_qubit"]
         measurement_error = saved_dict["errors"]["measurement"]
+        errors = _sanitize_errors(
+            {
+                "single_qubit": single_qubit_gate_error,
+                "two_qubit": two_qubit_gate_error,
+                "measurement": measurement_error,
+            },
+            device
+        )
+        single_qubit_gate_error = errors["single_qubit"]
+        two_qubit_gate_error = errors["two_qubit"]
+        measurement_error = errors["measurement"]
         single_qubit_gate_timing = saved_dict["gate_timings"]["single_qubit"]
         two_qubit_gate_timing = saved_dict["gate_timings"]["two_qubit"]
         t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
         t2_relaxation_time = saved_dict["relaxation_times"]["t2"]
 
         # IonQ Aria 25-qubit fake backend. Coupling map is not needed because the device qubits are all-to-all connected.
-        #coupling_map_path = os.path.join(dirname, 'coupling_maps/ionq_aria_coupling_map.npy')
-        #coupling_map = CouplingMap(np.load(coupling_map_path))
+        # coupling_map_path = os.path.join(dirname, 'coupling_maps/ionq_aria_coupling_map.npy')
+        # coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 25
-        #backend = GenericBackendV2(device_qubits)
+        # backend = GenericBackendV2(device_qubits)
 
     if device == "Quantinuum H1":
         if available_devices and device not in available_devices:
@@ -534,10 +715,10 @@ def select_device(device, ibm_service, available_devices):
         two_qubit_gate_timing = 308 * 10 ** (-6)
 
         # Quantinuum H1 20-qubit fake backend. Coupling map is not needed because the device qubits are all-to-all connected.
-        #coupling_map_path = os.path.join(dirname, 'coupling_maps/quantinuum_h1_coupling_map.npy')
-        #coupling_map = CouplingMap(np.load(coupling_map_path))
+        # coupling_map_path = os.path.join(dirname, 'coupling_maps/quantinuum_h1_coupling_map.npy')
+        # coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 20
-        #backend = GenericBackendV2(device_qubits)
+        # backend = GenericBackendV2(device_qubits)
         backend = QuantinuumBackend("H", machine_debug=True)
 
     if device == "Quantinuum H2":
@@ -558,10 +739,10 @@ def select_device(device, ibm_service, available_devices):
         two_qubit_gate_timing = 308 * 10 ** (-6)
 
         # Quantinuum H2 56-qubit fake backend. Coupling map is not needed because the device qubits are all-to-all connected.
-        #coupling_map_path = os.path.join(dirname, 'coupling_maps/quantinuum_h2_coupling_map.npy')
-        #coupling_map = CouplingMap(np.load(coupling_map_path))
+        # coupling_map_path = os.path.join(dirname, 'coupling_maps/quantinuum_h2_coupling_map.npy')
+        # coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 56
-        #backend = GenericBackendV2(device_qubits)
+        # backend = GenericBackendV2(device_qubits)
         backend = QuantinuumBackend("H", machine_debug=True)
 
     device_dict = {
@@ -584,6 +765,7 @@ def select_device(device, ibm_service, available_devices):
     }
 
     return device_dict
+
 
 def fetch_available_devices(azure_workspace, braket_provider, ibm_service):
     # Fetch available devices
@@ -619,8 +801,9 @@ def fetch_available_devices(azure_workspace, braket_provider, ibm_service):
             available_devices.append("Quantinuum H1")
         elif "rigetti.qpu.ankaa-9q-3" in str(azure_dev):
             available_devices.append("Rigetti Ankaa-9Q-3")
-    
+
     return available_devices
+
 
 def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
     """
@@ -650,8 +833,8 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
 
     for index_p, provider in enumerate(provider_list):
         device_list, price_list_shots = select_provider(provider, available_devices)
-        #print(f"Provider: {provider}")
-        #print("")
+        # print(f"Provider: {provider}")
+        # print("")
         for index_d, device in enumerate(device_list):
             device_dict = select_device(device, ibm_service, available_devices)
             if device_dict["device_qubits"] >= qc.num_qubits:
@@ -662,11 +845,12 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
                     qc_transpiled = tk_to_qiskit(compiled_qc)
                 else:
                     qc_transpiled = transpile(qc, device_dict["backend"], seed_transpiler=77, layout_method='sabre',
-                                          routing_method='sabre')
+                                              routing_method='sabre', optimization_level=3)
                 circuit_dict = export_circuit_data(qc, qc_transpiled)
 
                 # Time to execute single shot: T = single_qubit_gate_layers * single_qubit_gate_time + two_qubit_gate_layers * two_qubit_gate_time
-                time_to_execute_single_shot = circuit_dict["depth"]["single_qubit"] * device_dict["gate_timings"]["single_qubit"] + circuit_dict["depth"]["two_qubit"] * device_dict["gate_timings"]["two_qubit"]
+                time_to_execute_single_shot = circuit_dict["depth"]["single_qubit"] * device_dict["gate_timings"][
+                    "single_qubit"] + circuit_dict["depth"]["two_qubit"] * device_dict["gate_timings"]["two_qubit"]
                 time_to_execute = time_to_execute_single_shot * num_shots * num_iterations
 
                 # T1 decay
@@ -675,15 +859,48 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
                 # T2 decay
                 t2_decay = 1 - (math.e ** (-time_to_execute_single_shot / device_dict["relaxation_times"]["t2"]))
 
-                # Error: E_tot = 1 - ((1 - p_1)^N_1 * (1 - p_2)^N_2 * (1 - p_m)^N_m)
-                total_average_error = 1 - (((1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) * ((1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) * ((1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"]["measurement"]))
+                # # Error: E_tot = 1 - ((1 - p_1)^N_1 * (1 - p_2)^N_2 * (1 - p_m)^N_m)
+                # if device == "ibm_kyiv":
+                #     device_dict["errors"]["two_qubit"] = 0.0206  # ~2.06% from your earlier snapshot
+                # total_average_error = 1 - (
+                #             ((1 - device_dict["errors"]["single_qubit"]) ** circuit_dict["gates"]["single_qubit"]) * (
+                #                 (1 - device_dict["errors"]["two_qubit"]) ** circuit_dict["gates"]["two_qubit"]) * (
+                #                         (1 - device_dict["errors"]["measurement"]) ** circuit_dict["gates"][
+                #                     "measurement"]))
+                # print(device, device_dict["errors"]["single_qubit"], circuit_dict["gates"]["single_qubit"])
+                # print(device_dict["errors"]["two_qubit"], circuit_dict["gates"]["two_qubit"])
+                # print(device_dict["errors"]["measurement"], circuit_dict["gates"]["measurement"])
+                # print(total_average_error)
+                # --- Total error via product-of-survivals (paper-consistent) ---
+                total_average_error = compute_total_error(
+                    device_dict["errors"],
+                    {
+                        "single_qubit": circuit_dict["gates"]["single_qubit"],
+                        "two_qubit": circuit_dict["gates"]["two_qubit"],
+                        "measurement": circuit_dict["gates"]["measurement"],
+                    },
+                    clamp=True
+                )
+
+                # debug prints (keep if helpful)
+                print(f"[DEBUG] {device}: N1={circuit_dict['gates']['single_qubit']}, "
+                      f"N2={circuit_dict['gates']['two_qubit']}, "
+                      f"Nm={circuit_dict['gates']['measurement']}, "
+                      f"E1={device_dict['errors']['single_qubit']}, "
+                      f"E2={device_dict['errors']['two_qubit']}, "
+                      f"Em={device_dict['errors']['measurement']}, "
+                      f"E={total_average_error:.4f}")
+                # print(device, device_dict["errors"]["single_qubit"], circuit_dict["gates"]["single_qubit"])
+                # print(device_dict["errors"]["two_qubit"], circuit_dict["gates"]["two_qubit"])
+                # print(device_dict["errors"]["measurement"], circuit_dict["gates"]["measurement"])
+                # print(total_average_error)
                 # RB benchmarking already takes T1 and T2 relaxation into account
-                #* (1 - t1_decay)**circuit_dict["num_qubits"] * (1 - t2_decay)**circuit_dict["num_qubits"])
+                # * (1 - t1_decay)**circuit_dict["num_qubits"] * (1 - t2_decay)**circuit_dict["num_qubits"])
 
                 # Azure Quantum pricing is different on every provider
                 if provider == "Azure Quantum":
                     if device.startswith("Rigetti Ankaa-9Q-3"):
-                        price_total = price_list_shots[index_d][0]*time_to_execute
+                        price_total = price_list_shots[index_d][0] * time_to_execute
 
                     # IonQ Aria pricing is based on the amount of single-qubit and two-qubit gates
                     if device.startswith("IonQ Aria (Azure)"):
@@ -722,44 +939,47 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
                     first_device = False
 
                 # If the total error of this device is lower than the error of the device saved in "min_error_device" array, update the array to this device.
-                if not first_device and total_average_error < min_error_device[2] and (device in available_devices or not available_devices):
+                if not first_device and total_average_error < min_error_device[2] and (
+                        device in available_devices or not available_devices):
                     min_error_device = [device, provider, total_average_error, time_to_execute, price_total]
 
                 # If the time to execute of this device is lower than the time to execute of the device saved in "min_time_device" array, update the array to this device.
-                if not first_device and time_to_execute < min_time_device[3] and (device in available_devices or not available_devices):
+                if not first_device and time_to_execute < min_time_device[3] and (
+                        device in available_devices or not available_devices):
                     min_time_device = [device, provider, total_average_error, time_to_execute, price_total]
 
                 # If the total price of this device is lower than the total price of the device saved in "min_price_device" array, update the array to this device.
-                if not first_device and price_total < min_price_device[4] and (device in available_devices or not available_devices):
+                if not first_device and price_total < min_price_device[4] and (
+                        device in available_devices or not available_devices):
                     min_price_device = [device, provider, total_average_error, time_to_execute, price_total]
 
-                #print(f"{device}:")
-                #print(f" - Single-qubit gate error: {round(device_dict["errors"]["single_qubit"]*100, 3)}%")
-                #print(f" - Two-qubit gate error: {round(device_dict["errors"]["two_qubit"]*100, 3)}%")
-                #print(f" - Quantum volume: {device_dict['quantum_volume']}")
-                #print(f" - Calculated error when executing the circuit: {round(total_average_error * 100, 2)}%")
-                #print(f" - Total number of gates: {num_operations}")
-                #print(f" - Number of single-qubit gates: {circuit_dict['gates']['single_qubit']}")
-                #print(f" - Number of two-qubit gates: {circuit_dict['gates']['two_qubit']}")
-                #print(f" - Number of measurement gates: {circuit_dict['gates']['measurement']}")
-                #print(f" - SWAP gates: {num_swap_gates}")
-                #print(f" - Depth of the circuit: {depth}")
-                #print(
+                # print(f"{device}:")
+                # print(f" - Single-qubit gate error: {round(device_dict["errors"]["single_qubit"]*100, 3)}%")
+                # print(f" - Two-qubit gate error: {round(device_dict["errors"]["two_qubit"]*100, 3)}%")
+                # print(f" - Quantum volume: {device_dict['quantum_volume']}")
+                # print(f" - Calculated error when executing the circuit: {round(total_average_error * 100, 2)}%")
+                # print(f" - Total number of gates: {num_operations}")
+                # print(f" - Number of single-qubit gates: {circuit_dict['gates']['single_qubit']}")
+                # print(f" - Number of two-qubit gates: {circuit_dict['gates']['two_qubit']}")
+                # print(f" - Number of measurement gates: {circuit_dict['gates']['measurement']}")
+                # print(f" - SWAP gates: {num_swap_gates}")
+                # print(f" - Depth of the circuit: {depth}")
+                # print(
                 #    f" - Time to execute on the quantum computer with {num_iterations} iterations and {num_shots} shots: {round(time_to_execute, 6)} seconds")
-                #print(f" - Coherence T1: {coherence_t1}")
-                #print(f" - Coherence T2: {coherence_t2}")
-                #print(f" - Price with {num_iterations} iterations and {num_shots} shots: ${round(price_total, 2)}\n")
+                # print(f" - Coherence T1: {coherence_t1}")
+                # print(f" - Coherence T2: {coherence_t2}")
+                # print(f" - Price with {num_iterations} iterations and {num_shots} shots: ${round(price_total, 2)}\n")
 
                 device_data = {
                     "name": device_dict["name"],
-                    "error": total_average_error*100,
+                    "error": total_average_error * 100,
                     "time": time_to_execute,
                     "price": price_total
                 }
 
                 recommender_devices.append(device_data)
 
-        #print("--------------------------------------------\n")
+        # print("--------------------------------------------\n")
 
     device_names = []
     device_errors = []
@@ -774,16 +994,16 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
             device_prices.append(device["price"])
 
         # Plot errors
-        fig = plt.figure(figsize = (22, 5))
-        plt.bar(device_names, device_errors, width = 0.4)
+        fig = plt.figure(figsize=(22, 5))
+        plt.bar(device_names, device_errors, width=0.4)
         plt.ylabel("Error (%)")
         plt.title("Estimated total error with each quantum computer")
         plt.tight_layout()
         plt.savefig("recommender_errors_devices.png")
 
         # Plot times
-        fig = plt.figure(figsize = (22, 5))
-        plt.bar(device_names, device_times, width = 0.4)
+        fig = plt.figure(figsize=(22, 5))
+        plt.bar(device_names, device_times, width=0.4)
         plt.ylabel("Time (s)")
         plt.title("Estimated total time with each quantum computer (50 iterations, 1000 shots per iteration)")
         plt.yscale("log")
@@ -791,8 +1011,8 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.savefig("recommender_times_devices.png")
 
         # Plot prices
-        fig = plt.figure(figsize = (22, 5))
-        plt.bar(device_names, device_prices, width = 0.4)
+        fig = plt.figure(figsize=(22, 5))
+        plt.bar(device_names, device_prices, width=0.4)
         plt.ylabel("Price ($)")
         plt.title("Estimated price with each quantum computer (50 iterations, 1000 shots per iteration)")
         plt.yscale("log")
@@ -801,180 +1021,200 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
 
     recommender_output = f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}. \n - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}. \n - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}."
 
-
     return recommender_output, recommender_devices
 
 
 def plot_results(recommender_data_array, qubits_array):
     """
-    Plot errors, time and price of different devices with the number of qubits on the x-axis.
+    Stylish plots for error (%), time (s), and price ($) vs problem size (qubits).
 
-    Args:
-        recommender_data_array (array): Data from the function recommender() in an array format. The array should be formatted so that the recommender data from the circuit with lowest amount of qubits is the first array element, then the recommender data with second lowest amount of qubits and so on.
-        qubits_array (array): The number of qubits in each recommender run in an array format.
-    Returns:
-        Saves three files named "recommender_output_errors.png", "recommender_output_times.png" and "recommender_output_prices.png".
+    Saves:
+      - recommender_output_errors.png
+      - recommender_output_prices.png
+      - recommender_output_times.png
     """
-    x = qubits_array
-    y = []
-    min_errorbar = []
-    max_errorbar = []
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-    device_errors = []
-    device_times = []
-    device_prices = []
+    x = list(qubits_array)
 
+    # ---------- helpers ----------
+    def family_of(name: str) -> str:
+        s = name.lower()
+        if any(k in s for k in ["ionq", "quantinuum"]):
+            return "Trapped-ion"
+        if any(k in s for k in ["ibm_", "rigetti", "iqm", "garnet", "helmi", "kyiv", "brisbane", "sherbrooke"]):
+            return "Superconducting"
+        return "Other"
+
+    # Build a stable device order and collect per-run data
     device_names = []
+    dev_err_runs, dev_time_runs, dev_price_runs = [], [], []
+    for run in recommender_data_array:
+        err_row, time_row, price_row = [], [], []
+        for d in run:
+            nm = d["name"]
+            if nm not in device_names:
+                device_names.append(nm)
+            err_row.append([nm, float(d["error"])])   # error (%) in your pipeline
+            time_row.append([nm, float(d["time"])])
+            price_row.append([nm, float(d["price"])])
+        dev_err_runs.append(err_row)
+        dev_time_runs.append(time_row)
+        dev_price_runs.append(price_row)
 
-    for recommender_data in recommender_data_array:
-        device_errors_qubits = []
-        device_times_qubits = []
-        device_prices_qubits = []
+    device_names = sorted(device_names, key=str.lower)
 
-        errors = []
-        times = []
-        prices = []
+    def align_series(names, runs):
+        """Return list-of-series by device name; each series length == #runs where present."""
+        out = []
+        for nm in names:
+            vals = []
+            for r in runs:
+                v = None
+                for (n, val) in r:
+                    if n == nm:
+                        v = val
+                        break
+                if v is not None:
+                    vals.append(v)
+            out.append(vals)
+        return out
 
-        for device in recommender_data:
-            if device["name"] not in device_names:
-                device_names.append(device["name"])
-            device_errors_qubits.append([device["name"], device["error"]])
-            device_times_qubits.append([device["name"], device["time"]])
-            device_prices_qubits.append([device["name"], device["price"]])
-            errors.append(device["error"])
-            times.append(device["time"])
-            prices.append(device["price"])
+    err_series  = align_series(device_names, dev_err_runs)    # values already in %
+    time_series = align_series(device_names, dev_time_runs)
+    price_series= align_series(device_names, dev_price_runs)
 
-        min_error = min(errors)
-        max_error = max(errors)
-        mean_error = mean(errors)
-        min_diff_error = abs(mean_error - min_error)
-        max_diff_error = abs(mean_error - max_error)
+    # Style
+    markers = ["o", "s", "D", "^", "v", "P", "X", "*", "h", "8", "<", ">", "H", "d", "1", "2", "3", "4"]
+    lw, ms = 2.0, 5.0
 
-        min_time = min(times)
-        max_time = max(times)
-        mean_time = mean(times)
-        min_diff_time = abs(mean_time - min_time)
-        max_diff_time = abs(mean_time - max_time)
+    # ---------- ERROR (%) ----------
+    fig, ax = plt.subplots(figsize=(11, 6))
+    for i, name in enumerate(device_names):
+        ys = err_series[i]
+        if not ys:
+            continue
+        plot_x = x[:len(ys)]
+        yplot = np.asarray(ys, dtype=float)
+        # clamp to [0,100] for display (your values are already %)
+        yplot = np.clip(yplot, 0.0, 100.0)
+        ax.plot(
+            plot_x, yplot,
+            marker=markers[i % len(markers)], ms=ms, lw=lw,
+            label=name
+        )
 
-        min_price = min(prices)
-        max_price = max(prices)
-        mean_price = mean(prices)
-        min_diff_price = abs(mean_price - min_price)
-        max_diff_price = abs(mean_price - max_price)
+    ax.set_title("Estimated errors of the devices when executing the circuit", pad=10)
+    ax.set_xlabel("Qubits")
+    ax.set_ylabel("Error (%)")
+    ax.set_xticks(x)
+    ax.set_ylim(0, 100)
+    ax.set_yticks(range(0, 101, 20))
+    ax.grid(True, which="both", axis="both", linestyle="--", alpha=0.35)
 
-        y.append(mean_error)
-        min_errorbar.append(min_diff_error)
-        max_errorbar.append(max_diff_error)
+    # Family callouts (pick a representative x if available)
+    # find a mid x index we can annotate on
+    mid_idx = min( max(0, len(x)//2 - 1), len(x)-1 )
+    # pick a device from each family with the longest series to anchor the arrow
+    fam_anchor = {}
+    for i, name in enumerate(device_names):
+        fam = family_of(name)
+        if fam not in fam_anchor or len(err_series[i]) > len(err_series[fam_anchor[fam]]):
+            fam_anchor[fam] = i
+    for fam, idx in fam_anchor.items():
+        ys = err_series[idx]
+        if ys:
+            mid_y = np.clip(float(ys[min(mid_idx, len(ys)-1)]), 0.0, 100.0)
+            ax.annotate(
+                fam,
+                xy=(x[min(mid_idx, len(ys)-1)], mid_y),
+                xytext=(x[min(mid_idx, len(ys)-1)] + 6, mid_y + (8 if fam == "Superconducting" else -8)),
+                arrowprops=dict(arrowstyle="->", lw=1.2),
+                fontsize=10
+            )
 
-        device_errors.append(device_errors_qubits)
-        device_times.append(device_times_qubits)
-        device_prices.append(device_prices_qubits)
+    ax.legend(loc="best", fontsize=9)
+    plt.tight_layout()
+    plt.savefig("recommender_output_errors.png", dpi=200)
+    plt.close(fig)
 
-    errors_listed_per_problem_size = []
-    for device_name in device_names:
-        device_qubit_list = []
-        for device_list in device_errors:
-            for device in device_list:
-                if device[0] == device_name:
-                    device_qubit_list.append(device[1])
-        errors_listed_per_problem_size.append(device_qubit_list)
+    # ---------- PRICE ($) ----------
+    fig, ax = plt.subplots(figsize=(11, 6))
+    for i, name in enumerate(device_names):
+        ys = price_series[i]
+        if not ys:
+            continue
+        plot_x = x[:len(ys)]
+        yplot = np.asarray(ys, dtype=float)
+        yplot = np.clip(yplot, 1e-9, None)  # log-safe
+        ax.plot(
+            plot_x, yplot,
+            marker=markers[i % len(markers)], ms=ms, lw=lw,
+            label=name
+        )
 
-    times_listed_per_problem_size = []
-    for device_name in device_names:
-        device_qubit_list = []
-        for device_list in device_times:
-            for device in device_list:
-                if device[0] == device_name:
-                    device_qubit_list.append(device[1])
-        times_listed_per_problem_size.append(device_qubit_list)
+    ax.set_title("Estimated price (50 iterations, 1000 shots/iteration)", pad=10)
+    ax.set_xlabel("Qubits")
+    ax.set_ylabel("Price ($)")
+    ax.set_xticks(x)
+    ax.set_yscale("log")
+    ax.grid(True, which="both", linestyle="--", alpha=0.35)
 
-    prices_listed_per_problem_size = []
-    for device_name in device_names:
-        device_qubit_list = []
-        for device_list in device_prices:
-            for device in device_list:
-                if device[0] == device_name:
-                    device_qubit_list.append(device[1])
-        prices_listed_per_problem_size.append(device_qubit_list)
+    # Family callouts
+    for fam, idx in fam_anchor.items():
+        ys = price_series[idx]
+        if ys:
+            mid_y = float(ys[min(mid_idx, len(ys)-1)])
+            ax.annotate(
+                fam,
+                xy=(x[min(mid_idx, len(ys)-1)], mid_y),
+                xytext=(x[min(mid_idx, len(ys)-1)] + 6, mid_y * (4 if fam == "Trapped-ion" else 0.5)),
+                arrowprops=dict(arrowstyle="->", lw=1.2),
+                fontsize=10
+            )
 
-    # Stuff for plotting average errors from all devices
-    #fig = plt.figure(figsize=(15, 5))
-    #yerr = [min_errorbar, max_errorbar]
-    #plt.title("Estimated errors (min, avg, max) of the devices when executing the circuit")
-    #plt.xlabel("Qubits")
-    #plt.ylabel("Error (%)")
-    #plt.xticks(x)
-    #plt.errorbar(x, y, yerr=yerr, capsize=3, fmt="b--o", ecolor = "black")
-    #plt.savefig("recommender_output_avg.png")
+    ax.legend(loc="best", fontsize=9)
+    plt.tight_layout()
+    plt.savefig("recommender_output_prices.png", dpi=200)
+    plt.close(fig)
 
-    # Plot the estimated errors for each device
-    markers = ["o", "8", "p", "P", "*", "h", "H", "X", "D"]
+    # ---------- TIME (s) ----------
+    fig, ax = plt.subplots(figsize=(11, 6))
+    for i, name in enumerate(device_names):
+        ys = time_series[i]
+        if not ys:
+            continue
+        plot_x = x[:len(ys)]
+        yplot = np.asarray(ys, dtype=float)
+        yplot = np.clip(yplot, 1e-12, None)  # log-safe
+        ax.plot(
+            plot_x, yplot,
+            marker=markers[i % len(markers)], ms=ms, lw=lw,
+            label=name
+        )
 
-    fig, ax = plt.subplots(figsize=(15, 8))
+    ax.set_title("Estimated time (50 iterations, 1000 shots/iteration)", pad=10)
+    ax.set_xlabel("Qubits")
+    ax.set_ylabel("Time (s)")
+    ax.set_xticks(x)
+    ax.set_yscale("log")
+    ax.grid(True, which="both", linestyle="--", alpha=0.35)
 
-    for i, device_name in enumerate(device_names):
-        marker = markers[i]
-        
-        device_qubit_len = len(errors_listed_per_problem_size[i])
-        plot_x = x[:device_qubit_len]
+    # Family callouts
+    for fam, idx in fam_anchor.items():
+        ys = time_series[idx]
+        if ys:
+            mid_y = float(ys[min(mid_idx, len(ys)-1)])
+            ax.annotate(
+                fam,
+                xy=(x[min(mid_idx, len(ys)-1)], mid_y),
+                xytext=(x[min(mid_idx, len(ys)-1)] + 6, mid_y * (3 if fam == "Trapped-ion" else 0.7)),
+                arrowprops=dict(arrowstyle="->", lw=1.2),
+                fontsize=10
+            )
 
-        ax.plot(plot_x, errors_listed_per_problem_size[i], label=device_name, marker=marker)
-
-    plt.title("Estimated errors of the devices when executing the circuit")
-    plt.xlabel("Qubits")
-    plt.ylabel("Error (%)")
-
-    plt.legend()
-
-    plt.xticks(x)
-
-    plt.yscale("log")
-    
-    plt.savefig("recommender_output_errors.png")
-
-    # Plot the estimated times for each device
-    fig, ax = plt.subplots(figsize=(15, 8))
-
-    for i, device_name in enumerate(device_names):
-        marker = markers[i]
-
-        device_qubit_len = len(times_listed_per_problem_size[i])
-        plot_x = x[:device_qubit_len]
-
-        ax.plot(plot_x, times_listed_per_problem_size[i], label=device_name, marker=marker)
-
-    plt.title("Estimated times of the devices when executing the circuit (50 iterations, 1000 shots per iteration)")
-    plt.xlabel("Qubits")
-    plt.ylabel("Time (s)")
-
-    plt.legend()
-
-    plt.xticks(x)
-
-    plt.yscale("log")
-    
-    plt.savefig("recommender_output_times.png")
-
-    # Plot the estimated prices for each device
-    fig, ax = plt.subplots(figsize=(15, 8))
-
-    for i, device_name in enumerate(device_names):
-        marker = markers[i]
-
-        device_qubit_len = len(prices_listed_per_problem_size[i])
-        plot_x = x[:device_qubit_len]
-
-        ax.plot(plot_x, prices_listed_per_problem_size[i], label=device_name, marker="o")
-
-    plt.title("Estimated prices of the devices when executing the circuit (50 iterations, 1000 shots per iteration)")
-    plt.xlabel("Qubits")
-    plt.ylabel("Price ($)")
-
-    plt.legend()
-
-    plt.xticks(x)
-
-    plt.yscale("log")
-
-    plt.savefig("recommender_output_prices.png")
+    ax.legend(loc="best", fontsize=9)
+    plt.tight_layout()
+    plt.savefig("recommender_output_times.png", dpi=200)
+    plt.close(fig)

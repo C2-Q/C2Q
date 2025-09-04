@@ -12,7 +12,8 @@ tags = {"Add": "+", "Sub": "-", "Mul": "*"}
 
 
 class Arithmetic:
-    def __init__(self, left, right):
+    def __init__(self, data):
+        left, right = data
         if not isinstance(left, int) or not isinstance(right, int):
             raise ValueError("Both 'left' and 'right' must be integers.")
 
@@ -45,7 +46,7 @@ class Arithmetic:
             result = complement_binary_list_to_decimal(decimal_to_complement_binary_list(result, n_bits))
         return result
 
-    def report_latex(self, directory=None):
+    def report_latex(self, directory=None, output_path=None):
         import time
         import os
         import matplotlib.pyplot as plt
@@ -75,8 +76,8 @@ class Arithmetic:
                 #     print(e.__str__())
                 #     doc.append("not implemented yet\n")
                 self._qc_latex(doc, directory=directory)
-
-        output_path = os.path.join(directory, f'{problems_name}_report')
+        if output_path is None:
+            output_path = os.path.join(directory, f'{problems_name}_report')
 
         doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
         for img_name in [

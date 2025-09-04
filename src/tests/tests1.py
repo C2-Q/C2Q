@@ -1,8 +1,10 @@
+import os
 import unittest
 import ast
 import json
 import random
 import unittest
+from collections import defaultdict
 
 import networkx as nx
 from matplotlib import pyplot as plt
@@ -32,7 +34,15 @@ from src.sat_to_qubo import *
 from src.circuits_library import *
 import csv
 import ast
+import os, csv, ast
+from collections import defaultdict
+import signal
 
+class TimeoutErrorInLoop(Exception):
+    pass
+
+def _timeout_handler(signum, frame):
+    raise TimeoutErrorInLoop("Iteration exceeded time limit")
 
 class MyTestCase(unittest.TestCase):
     def setUp(self):
@@ -43,41 +53,52 @@ class MyTestCase(unittest.TestCase):
         self.tsp_snippet = "def a(cost_matrix):\n    n = len(cost_matrix)\n    visited = [0]\n    total_cost = 0\n    current = 0\n    while len(visited) < n:\n        next_city = min([city for city in range(n) if city not in visited], key=lambda city: cost_matrix[current][city])\n        total_cost += cost_matrix[current][next_city]\n        visited.append(next_city)\n        current = next_city\n    total_cost += cost_matrix[visited[-1]][0]\n    return total_cost, visited\n\n# Input data\ncost_matrix = [[0, 11, 30], [11, 0, 35], [30, 35, 0]]\ncost, route = a(cost_matrix)\nprint(cost, route)"
         self.kcolor_snippet = "import networkx as nx\n\ndef kcoloring_networkx_dfs(G, k):\n    def dfs(node, colors):\n        if node == len(G.nodes):\n            return colors\n        for color in range(k):\n            if all(colors[neighbor] != color for neighbor in G.neighbors(node)):\n                colors[node] = color\n                result = dfs(node + 1, colors)\n                if result:\n                    return result\n                colors[node] = -1\n        return None\n    return dfs(0, [-1] * len(G.nodes))\n\nG = nx.Graph()\nG.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0)])\ncolors = kcoloring_networkx_dfs(G, 3)\nprint(colors)"
         self.vc_snippet = "def vertex_cover_greedy(n, edges):\n    cover = set()\n    remaining_edges = set(edges)\n    while remaining_edges:\n        u, v = remaining_edges.pop()\n        cover.add(u)\n        cover.add(v)\n        remaining_edges = {e for e in remaining_edges if u not in e and v not in e}\n    return cover\n\n# Input data\nedges = [(0, 1), (1, 2), (2, 3), (3, 4)]\ncover = vertex_cover_greedy(5, edges)\nprint(cover)"
-        parser = Parser(model_path="../parser/saved_models")
 
+
+
+    def evaluation(self):
         # file_path = '../parser/data.csv'
         file_path = '../parser/extra_data.csv'
         first_column = []
-
-        # 读取 CSV 文件第一列
         with open(file_path, 'r', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 if row:
                     first_column.append(row[0])
 
-        num = 0  # 统计 'Unknown' 类型的个数
+        num = 0
         mis_code = ""
-        # 遍历每条记录
+        # 🔧 Set up LaTeX output directory and tracking
+        latex_output_dir = "latex_reports"
+        os.makedirs(latex_output_dir, exist_ok=True)
+        problem_counts = defaultdict(int)
+
         for item in first_column:
             try:
-                # 尝试将字符串中的 \n 等还原成真实代码
                 try:
                     clean_code = ast.literal_eval(item)
                 except Exception:
                     clean_code = item.encode().decode('unicode_escape')
 
-                # 使用 parser 解析 clean_code
-                problem_type, data = parser.parse(clean_code)
+                problem_type, data = self.parser.parse(clean_code)
+                problem = PROBLEMS[problem_type](data)
 
-                # 打印结果
-                print("→", problem_type, data, )
+                # 🔧 Generate unique LaTeX filename
+                problem_counts[problem_type] += 1
+                count = problem_counts[problem_type]
+                suffix = f"{count}" if count > 1 else ""
+                filename = f"{problem_type}{suffix}.tex"
+                full_path = os.path.join(latex_output_dir, filename)
 
-                # 统计 Unknown 类型
+                # 🔧 Write LaTeX report
+                problem.report_latex(full_path)
+
                 if problem_type == 'Unknown':
                     num += 1
                 if problem_type == "MIS":
                     self.mis_code = clean_code
+
+                print("→", problem_type, data, problem)
 
             except Exception as e:
                 print("parse failed:", clean_code[:60].replace('\n', ' ') + "...")
@@ -144,7 +165,68 @@ class MyTestCase(unittest.TestCase):
         problem = PROBLEMS[tag](data)
         problem.report_latex()
 
+    def test(self):
+        # file_path = '../parser/data.csv'
+        file_path = '../parser/data.csv'
+        first_column = []
+        with open(file_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if row:
+                    first_column.append(row[0])
 
+        num = 0
+        mis_code = ""
+        # 🔧 Set up LaTeX output directory and tracking
+        latex_output_dir = "latex_reports"
+        os.makedirs(latex_output_dir, exist_ok=True)
+        problem_counts = defaultdict(int)
+
+        # Set up alarm-based timeout (Unix/macOS)
+        signal.signal(signal.SIGALRM, _timeout_handler)
+        TIME_LIMIT_SECS = 60  # 1 minute per item
+
+        for item in first_column:
+            # Arm the per-iteration timer
+            signal.alarm(TIME_LIMIT_SECS)
+            try:
+                try:
+                    clean_code = ast.literal_eval(item)
+                except Exception:
+                    clean_code = item.encode().decode('unicode_escape')
+
+                problem_type, data = self.parser.parse(clean_code)
+                problem = PROBLEMS[problem_type](data)
+
+                # 🔧 Generate unique LaTeX filename
+                problem_counts[problem_type] += 1
+                count = problem_counts[problem_type]
+                suffix = f"{count}" if count > 1 else ""
+                filename = f"{problem_type}{suffix}.tex"
+                full_path = os.path.join(latex_output_dir, filename)
+
+                # 🔧 Write LaTeX report
+                problem.report_latex(output_path=full_path)
+
+                if problem_type == 'Unknown':
+                    num += 1
+                if problem_type == "MIS":
+                    self.mis_code = clean_code
+
+                print("→", problem_type, data, problem)
+
+            except TimeoutErrorInLoop:
+                # Skip this item if it ran too long
+                snippet = (item[:60] if isinstance(item, str) else str(item)[:60]).replace('\n', ' ')
+                print(f"⏱️ Timeout: processing took over {TIME_LIMIT_SECS}s, skipping this item → {snippet}...")
+                continue
+            except Exception as e:
+                snippet = (item[:60] if isinstance(item, str) else str(item)[:60]).replace('\n', ' ')
+                print("parse failed:", snippet + "...")
+                print("error info:", e)
+            finally:
+                # Always disarm the timer before the next iteration
+                signal.alarm(0)
 
 if __name__ == '__main__':
     unittest.main()

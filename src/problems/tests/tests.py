@@ -10,6 +10,7 @@ from qiskit_aer.primitives import Sampler
 
 from src.algorithms.VQE.VQE import vqe_optimization
 from src.graph import Graph
+from src.problems.basic_arithmetic.addition import Add
 from src.problems.basic_arithmetic.multiplication import Mul
 from src.problems.clique import Clique
 from src.problems.factorization import Factor
@@ -155,6 +156,9 @@ class MyTestCase(unittest.TestCase):
     def test_factor_grover(self):
         factor = Factor(18)
         print(factor.execute())
+    def test_add1(self):
+        add = Add([500, 84])
+        add.report_latex()
 
 
 if __name__ == '__main__':

@@ -77,7 +77,7 @@ class NPC(Base):
         chancellor.fillQ()
         chancellor.visualizeQ()
 
-    def report_latex(self, directory: str = None):
+    def report_latex(self, directory: str = None, output_path=None):
         import time
         import os
         import matplotlib.pyplot as plt
@@ -165,8 +165,8 @@ class NPC(Base):
             # Optional: recommend device
             if qaoa_qc is not None:
                 self._device_recommendation_latex(doc, qaoa_qc, directory)
-
-        output_path = os.path.join(directory, f'{problems_name}_report')
+        if output_path is None:
+            output_path = os.path.join(directory, f'{problems_name}_report')
         # output_path = "independent_set_report_with_latex.pdf"
         doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
 
