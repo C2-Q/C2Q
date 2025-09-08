@@ -30,7 +30,7 @@ class Generator:
 
         Args:
             problem_type (str): Key of the problem in ``PROBLEM_CLASS``.
-            data: Input data to initialize the problem.
+            data: Input json to initialize the problem.
 
         Returns:
             dict: Mapping of algorithm name to generated circuit.

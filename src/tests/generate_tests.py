@@ -43,50 +43,50 @@ def euclid_dist_matrix(pts):
 def gen_maxcut():
     # 4–8 nodes
     M = rand_graph(4, 8)
-    return {"problem_type": "maxcut", "data": {"matrix": M}}
+    return {"problem_type": "maxcut", "json": {"matrix": M}}
 
 def gen_mis():
     # 4–8 nodes
     M = rand_graph(4, 8)
-    return {"problem_type": "mis", "data": {"matrix": M}}
+    return {"problem_type": "mis", "json": {"matrix": M}}
 
 def gen_tsp():
     # 4–6 nodes
     n = random.randint(4, 6)
     pts = rand_points(n)
     D = euclid_dist_matrix(pts)
-    return {"problem_type": "tsp", "data": {"distance_matrix": D}}
+    return {"problem_type": "tsp", "json": {"distance_matrix": D}}
 
 def gen_clique():
     # 4–6 nodes, small k
     M = rand_graph(4, 6)
     n = len(M)
     k = random.randint(2, min(4, n))
-    return {"problem_type": "clique", "data": {"matrix": M, "k": k}}
+    return {"problem_type": "clique", "json": {"matrix": M, "k": k}}
 
 def gen_kcolor():
     # 4–6 nodes, small k
     M = rand_graph(4, 6)
     n = len(M)
     k = random.randint(2, min(4, n))
-    return {"problem_type": "kcolor", "data": {"matrix": M, "k": k}}
+    return {"problem_type": "kcolor", "json": {"matrix": M, "k": k}}
 
 def gen_vc():
     # 4–6 nodes
     M = rand_graph(4, 6)
-    return {"problem_type": "vc", "data": {"matrix": M}}
+    return {"problem_type": "vc", "json": {"matrix": M}}
 
 def gen_factor():
     # semiprimes 15 (=3×5) or 21 (=3×7)
     n = random.choice([15, 21])
-    return {"problem_type": "factor", "data": {"n": n}}
+    return {"problem_type": "factor", "json": {"n": n}}
 
 def gen_add():
     # 2–3 bit operands
     bits = random.randint(2, 3)
     a = random.randint(0, (1 << bits) - 1)
     b = random.randint(0, (1 << bits) - 1)
-    return {"problem_type": "add", "data": {"operands": [a, b], "bits": bits}}
+    return {"problem_type": "add", "json": {"operands": [a, b], "bits": bits}}
 
 def gen_mul():
     # 2×2 or 3×2 bit-widths
@@ -95,7 +95,7 @@ def gen_mul():
     b = random.randint(0, (1 << b_bits) - 1)
     return {
         "problem_type": "mul",
-        "data": {"operands": [a, b], "a_bits": a_bits, "b_bits": b_bits}
+        "json": {"operands": [a, b], "a_bits": a_bits, "b_bits": b_bits}
     }
 
 def gen_sub():
@@ -103,7 +103,7 @@ def gen_sub():
     bits = random.randint(2, 3)
     a = random.randint(0, (1 << bits) - 1)
     b = random.randint(0, (1 << bits) - 1)
-    return {"problem_type": "sub", "data": {"operands": [a, b], "bits": bits}}
+    return {"problem_type": "sub", "json": {"operands": [a, b], "bits": bits}}
 
 GENERATORS = {
     "maxcut": gen_maxcut,
@@ -135,5 +135,5 @@ def generate_cases_for_all(out_root: Path, count_per_type: int = 10):
         print(f"✅ Saved {count_per_type} cases to {out_dir}")
 
 if __name__ == "__main__":
-    # Creates 10 folders under data/, each with 10 JSON files.
+    # Creates 10 folders under json/, each with 10 JSON files.
     generate_cases_for_all(Path("json"), count_per_type=10)

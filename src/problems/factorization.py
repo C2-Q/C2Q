@@ -24,7 +24,6 @@ class Factor(Problem):
 
     def grover(self, iterations=2):
         oracle, prep_state, obj_bits, working_bits = quantum_factor_mul_oracle(self.number)
-        print(list(range(prep_state.num_qubits)))
         grover_circuit = grover(oracle,
                                 objective_qubits=obj_bits,
                                 iterations=iterations,
@@ -41,7 +40,6 @@ class Factor(Problem):
         shots = 10000
 
         counts = backend.run(transpiled, shots=shots).result().get_counts()
-        print(counts)
         return counts
 
     def interpret(self, result):
@@ -53,7 +51,7 @@ class Factor(Problem):
 
         return top_two_decimals
 
-    def report_latex(self, directory=None):
+    def report_latex(self, directory=None, output_path=None):
         import time
         import os
         import matplotlib.pyplot as plt
@@ -81,7 +79,9 @@ class Factor(Problem):
                     self._grover_latex(doc, directory)
                 except Exception as e:
                     doc.append("not implemented yet\n")
-        output_path = os.path.join(directory, f'{problems_name}_report')
+
+        if output_path is None:
+            output_path = os.path.join(directory, f'{problems_name}_report')
 
         doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
         for img_name in [

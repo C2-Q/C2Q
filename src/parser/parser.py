@@ -33,7 +33,8 @@ PROBLEM_TAGS = {
     "Unknown": 10
 }
 GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"]
-ARITHMETIC_TAGS = ["ADD", "MUL", "SUB", "Factor"]
+ARITHMETIC_TAGS = ["ADD", "MUL", "SUB"]
+ALGEBRAIC_TAGS = ["Factor"]
 PROBLEMS = {
     "MaxCut": MaxCut,
     "MIS": MIS,
@@ -64,7 +65,7 @@ class Parser:
 
     def parse(self, classical_code: str):
         """
-        Parse the classical code to determine the problem type and extract relevant data.
+        Parse the classical code to determine the problem type and extract relevant json.
 
         - Workflow:
             - First, extract a dataset and identify if any function calls' arguments are suitable.
@@ -81,7 +82,7 @@ class Parser:
                 - If no suitable variable is found that fits the required format, raise an error.
 
         :param classical_code: str - The input classical code snippet.
-        :return: problem_type: str, data: any - Returns the identified problem type and associated data.
+        :return: problem_type: str, json: any - Returns the identified problem type and associated json.
         """
         try:
             # Check if the classical code is syntactically correct
@@ -92,15 +93,17 @@ class Parser:
         # predict labels of problem
         prediction = self._predict_classical_code(classical_code=classical_code)
         problem_class = self._recognize_problem_class(prediction)
-        # ast traverse and extract data
+        # ast traverse and extract json
         visitor = CodeVisitor()
         visitor.visit(tree)
         vars, calls = visitor.get_extracted_data()
-        # Use extracted data for specific problem types
+        # Use extracted json for specific problem types
         if problem_class == "GRAPH":
             data = self._process_graph_data(vars, calls)
         elif problem_class == "ARITHMETIC":
             data = self._process_arithmetic_data(vars, calls)
+        elif problem_class == "ALGEBRAIC":
+            data = self._process_algebraic_data(vars, calls)
         else:
             data = None
         return PROBLEM_POOLS[prediction], data
@@ -124,11 +127,13 @@ class Parser:
             return "GRAPH"
         elif PROBLEM_POOLS[prediction] in ARITHMETIC_TAGS:
             return "ARITHMETIC"
+        elif PROBLEM_POOLS[prediction] in ALGEBRAIC_TAGS:
+            return "ALGEBRAIC"
         return "UNKNOWN"
 
     def _process_graph_data(self, variables, function_calls):
         """
-        Iterate over all extracted variables and attempt to create a graph. If successful, return the graph data.
+        Iterate over all extracted variables and attempt to create a graph. If successful, return the graph json.
         Also, iterate through function calls to check if the arguments can be used to create a graph.
         """
         # First try variables
@@ -140,11 +145,14 @@ class Parser:
                 continue  # Skip and try the next variable if an exception is raised
 
         # Now function calls
-        for func_name, args in function_calls.items():
+        for args in function_calls.values():
             for arg in args:
                 try:
                     graph = Graph(arg)
-                    return graph  # If 👌 return graph
+                    if len(graph.get_G().nodes) > 0:
+                        return graph  # If 👌 return graph
+                    else:
+                        continue
                 except ValueError:
                     continue
 
@@ -188,6 +196,75 @@ class Parser:
         return [16, 16]
         #raise ValueError("No valid arithmetic function calls with two integer arguments found.")
 
+    def _process_algebraic_data(self, variables, function_calls):
+        """
+        Resolve a single integer operand for algebraic problems (e.g., Factorization).
+        Strategy:
+          1) Prefer obvious integer-like variables (n, num, etc.).
+          2) Inspect function call arguments: accept a single integer, or a variable
+             that resolves to an integer.
+          3) Fallback to a safe default (35) if nothing valid is found.
+
+        Rules:
+          - n must be >= 2.
+          - If n > 512, fall back to 35.
+        """
+
+        def _validate_n(v: int) -> int:
+            """Return a valid n, or None if unusable."""
+            if not isinstance(v, int):
+                return None
+            if v < 2:
+                return None
+            if v > 512:  # too big, fallback rule
+                return 35
+            return v
+
+        # ---- 1) Try variables: prioritize common names ----
+        preferred_keys = ("n", "num", "number", "N", "value", "x")
+        for key in preferred_keys:
+            if key in variables and isinstance(variables[key], int):
+                n = _validate_n(variables[key])
+                if n is not None:
+                    return n
+
+        # Otherwise, check any integer-valued variable
+        for k, v in variables.items():
+            if isinstance(v, int):
+                n = _validate_n(v)
+                if n is not None:
+                    return n
+
+        # ---- 2) Try function calls ----
+        for func_name, args in function_calls.items():
+            if isinstance(args, (list, tuple)):
+                # single argument case
+                if len(args) == 1:
+                    arg = args[0]
+                    if isinstance(arg, int):
+                        n = _validate_n(arg)
+                        if n is not None:
+                            return n
+                    elif isinstance(arg, str) and arg in variables and isinstance(variables[arg], int):
+                        n = _validate_n(variables[arg])
+                        if n is not None:
+                            return n
+
+                # multiple arguments: take first as candidate
+                if len(args) >= 1:
+                    arg = args[0]
+                    if isinstance(arg, int):
+                        n = _validate_n(arg)
+                        if n is not None:
+                            return n
+                    elif isinstance(arg, str) and arg in variables and isinstance(variables[arg], int):
+                        n = _validate_n(variables[arg])
+                        if n is not None:
+                            return n
+
+        # ---- 3) Fallback ----
+        return 35
+
 
 class CodeVisitor(ast.NodeVisitor):
     def __init__(self):
@@ -196,7 +273,7 @@ class CodeVisitor(ast.NodeVisitor):
 
     def visit_Assign(self, node):
         """
-        Capture assignments in the code, e.g., variables or data structures.
+        Capture assignments in the code, e.g., variables or json structures.
         """
         for target in node.targets:
             if isinstance(target, ast.Tuple):
@@ -282,7 +359,7 @@ class CodeVisitor(ast.NodeVisitor):
 
     def get_extracted_data(self):
         """
-        Return the extracted data from the AST traversal.
+        Return the extracted json from the AST traversal.
         :return: dict of extracted variables, and extracted function calls (with arguments).
         """
         return self.variables, self.function_calls

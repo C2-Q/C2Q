@@ -52,11 +52,11 @@ def main():
     print("📥 Loading problem from JSON...")
     task = load_input(args.input)
     problem_type = task["problem_type"]
-    input_data = task["data"]
+    input_data = task["json"]
     config = task.get("config", {})
 
     print(f"🔍 Parsing problem: {problem_type}")
-    print(f"📊 Parsed data: {input_data.items()}")
+    print(f"📊 Parsed json: {input_data.items()}")
     problem_class = recognize_problem_class(problem_type)
     if problem_class == "GRAPH":
         for key, value in input_data.items():

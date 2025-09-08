@@ -14,7 +14,7 @@ data = [
     {'name': 'IQM Garnet', 'error': 26.27917220330216, 'time': 0.18299999999999997, 'price': 87.5}
 ]
 
-# Extract data for plotting
+# Extract json for plotting
 names = [item['name'] for item in data]
 errors = [item['error'] for item in data]
 times = [item['time'] for item in data]

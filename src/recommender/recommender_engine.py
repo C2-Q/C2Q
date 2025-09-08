@@ -71,17 +71,17 @@ def compute_total_error(device_errors, gate_counts, clamp=True):
 
     F = math.exp(logF)
     return 1.0 - F
-# Calculate number of gates.. using transpiled circuit. Return a dict of data
+# Calculate number of gates.. using transpiled circuit. Return a dict of json
 def export_circuit_data(circuit, circuit_transpiled):
     """
-    Export numerical data from a quantum circuit which has been transpiled to a device.
+    Export numerical json from a quantum circuit which has been transpiled to a device.
 
     Args:
         circuit (QuantumCircuit): Original quantum circuit, without transpiling.
         circuit_transpiled (QuantumCircuit): Transpiled quantum circuit.
 
     Returns:
-        circuit_dict (dict): Dictionary containing numerical data of the quantum circuit.
+        circuit_dict (dict): Dictionary containing numerical json of the quantum circuit.
     """
 
     direct_mapping_to_device = True
@@ -232,7 +232,7 @@ def select_provider(provider, available_devices):
 
         price_list_shots = [30]
 
-    if provider == "CSC":  # not used yet (hard to get the calibration data, have to go through LUMI)
+    if provider == "CSC":  # not used yet (hard to get the calibration json, have to go through LUMI)
         device_list = [
             "IQM Helmi"
         ]
@@ -251,7 +251,7 @@ def select_device(device, ibm_service, available_devices):
         device (str): Quantum device as a string
 
     Returns:
-        device_dict (dict): Dictionary containing numerical data of the quantum device.
+        device_dict (dict): Dictionary containing numerical json of the quantum device.
     """
 
     if device.startswith("ibm_"):
@@ -441,7 +441,7 @@ def select_device(device, ibm_service, available_devices):
         if available_devices and device not in available_devices:
             device = device + " (unavailable)"
         # Error rates for estimating the error
-        # Calibration data from the Braket Console:
+        # Calibration json from the Braket Console:
         # https://eu-north-1.console.aws.amazon.com/braket/home?region=eu-north-1#/devices/arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2
         single_qubit_gate_error = 0.001931
         two_qubit_gate_error = 0.11794
@@ -536,7 +536,7 @@ def select_device(device, ibm_service, available_devices):
             two_qubit_gate_error = mean(two_qubit_gate_error)
 
             # Gate timings for estimating the time to execute a circuit
-            # Gate timing calibration data not available, using:
+            # Gate timing calibration json not available, using:
             # https://web.archive.org/web/20241126104255/https://aws.amazon.com/braket/quantum-computers/iqm/
             single_qubit_gate_timing = 20 * 10 ** (-9)
             two_qubit_gate_timing = 40 * 10 ** (-9)
@@ -661,7 +661,7 @@ def select_device(device, ibm_service, available_devices):
         device_qubits = 25
 
     if device == "IonQ Aria (Azure)":
-        # Using the calibration data from Amazon Braket for IonQ Aria, since the data is not available from Azure Quantum.
+        # Using the calibration json from Amazon Braket for IonQ Aria, since the json is not available from Azure Quantum.
 
         device_file_path = os.path.join(dirname, f'device_information/IonQ Aria (Amazon).pkl')
         with open(device_file_path, 'rb') as f:
@@ -1047,7 +1047,7 @@ def plot_results(recommender_data_array, qubits_array):
             return "Superconducting"
         return "Other"
 
-    # Build a stable device order and collect per-run data
+    # Build a stable device order and collect per-run json
     device_names = []
     dev_err_runs, dev_time_runs, dev_price_runs = [], [], []
     for run in recommender_data_array:

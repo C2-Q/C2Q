@@ -22,13 +22,6 @@ class Clique(NPC):
     """
 
     def __init__(self, graph: nx.Graph, size: int = None) -> None:
-        """
-        Args:
-            graph: A graph representing the problem. It can be specified directly as a
-                   NetworkX graph, or as an array or list format suitable to build a NetworkX graph.
-            size: The desired size of the clique (K).
-        """
-        # If the graph is not a NetworkX graph, convert it
         super().__init__()
         if isinstance(graph, nx.Graph):
             self.graph = graph
@@ -37,58 +30,42 @@ class Clique(NPC):
         else:
             raise TypeError("The graph must be a NetworkX graph")
 
-        # Store nodes and mappings
         self.nodes = list(self.graph.nodes())
+        n = len(self.nodes)
+        if n == 0:
+            raise ValueError("Clique problem has an empty graph (no nodes).")
+
         if size is None:
-            size = len(self.nodes) - 1
-            # print(len(self.nodes))
-        self.size = size  # The desired clique size (K)
+            size = max(1, n - 1)
+        # Clamp K safely into [1, n]
+        self.size = max(1, min(size, n))
+
         self.node_indices = {node: idx for idx, node in enumerate(self.nodes)}
         self.indices_node = {idx: node for idx, node in enumerate(self.nodes)}
+
+    def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
+        n = len(self.nodes)
+        K = self.size
+        if n == 0:
+            raise ValueError("Cannot build QUBO for empty graph.")
+        if K < 1 or K > n:
+            raise ValueError(f"Invalid clique size K={K} for n={n}.")
+
+        A = K * B + 10
+        Q = np.zeros((n, n))
+        linear_coeff = -2 * A * K + A
+        for idx in range(n):
+            Q[idx, idx] += linear_coeff
+        for i in range(n):
+            for j in range(i + 1, n):
+                Q[i, j] += 2 * A
+                if self.graph.has_edge(self.nodes[i], self.nodes[j]):
+                    Q[i, j] += -B
+        return QUBO(Q)
 
     def reduce_to_sat(self):
         self.sat = clique_to_sat(self.graph, self.size)
 
-    def to_qubo(self, A: float = 1.0, B: float = 1.0) -> 'QUBO':
-        """
-        Converts the clique problem into a QUBO problem represented by a QUBO class instance
-        based on the Hamiltonian H = A(K - sum_v x_v)^2 + B(K(K-1)/2 - sum_{(u,v)∈E} x_u x_v)
-        Preliminary: A > KB, so we set B = 1 and A = KB+10
-        !!! notice the index of matrix row and column represents the index of nodes in nodes list
-        For example: in list [3,4,5,2,1] node_i = 3 represents node with number 2 here!!!
-        Args:
-            A: Penalty weight for the clique size constraint.
-            B: Penalty weight for the edge constraint.
-
-        Returns:
-            An instance of the QUBO class representing the problem.
-        """
-        A = self.size * B + 10
-        n = len(self.nodes)
-        Q = np.zeros((n, n))
-
-        K = self.size  # Desired clique size
-
-        # Add linear terms to Q diagonal
-        linear_coeff = -2 * A * K + A  # Coefficient for x_v
-        for idx in range(n):
-            Q[idx, idx] += linear_coeff
-
-        # Add quadratic terms (upper triangular part only)
-        for i in range(n):
-            for j in range(i + 1, n):
-                # From H1: 2A for all pairs
-                Q[i, j] += 2 * A
-
-                # From H2: -B if (i, j) is an edge in E
-                node_i = self.nodes[i]
-                node_j = self.nodes[j]
-                if self.graph.has_edge(node_i, node_j):
-                    Q[i, j] += -B
-                # Else, no change needed (we only modify upper triangular part)
-
-        # Return an instance of the QUBO class with an upper triangular matrix
-        return QUBO(Q)
 
     def interpret(self, result: Union[np.ndarray, List[int]]) -> List[int]:
         """

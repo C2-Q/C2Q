@@ -80,7 +80,6 @@ class NPC(Base):
     def report_latex(self, directory: str = None, output_path=None):
         import time
         import os
-        import matplotlib.pyplot as plt
         import networkx as nx
         from pylatex import Document, Section, Subsection, Figure, NoEscape, Package
 
@@ -89,13 +88,12 @@ class NPC(Base):
 
         start_time = time.time()
         problems_name = self.__class__.__name__
-
         print(f'Starting {problems_name} report generation with LaTeX formatting...')
 
-        # Initialize LaTeX document
+        # ---------------- LaTeX doc ----------------
         doc = Document()
         doc.packages.append(Package("amsmath"))
-        doc.packages.append(Package("qcircuit"))
+        doc.packages.append(Package("qcircuit"))  # OK if available; otherwise wrap in try/except
 
         # Compute layout once
         pos = nx.spring_layout(self.graph)
@@ -109,14 +107,14 @@ class NPC(Base):
             # QUBO Matrix Visualization
             with doc.create(Subsection('QUBO Matrix Visualization')):
                 doc.append("Converted QUBO matrix visualization:\n")
-
                 qubo_matrix = self.to_qubo().Q
-                assert all(
-                    len(row) == len(qubo_matrix[0]) for row in qubo_matrix), "Inconsistent row length in QUBO matrix"
 
-                num_cols = len(qubo_matrix[0])
-                col_format = "c" * num_cols  # e.g., 'cccccc' for 6 columns
+                # sanity check: rectangular
+                first_len = len(qubo_matrix[0]) if len(qubo_matrix) > 0 else 0
+                assert all(len(row) == first_len for row in qubo_matrix), "Inconsistent row length in QUBO matrix"
 
+                num_cols = first_len
+                col_format = "c" * num_cols
                 rows = [" & ".join(f"{val:.1f}" for val in row) + r" \\" for row in qubo_matrix]
 
                 matrix_code = r"\[" + "\n"
@@ -124,26 +122,20 @@ class NPC(Base):
                 matrix_code += "\n".join(rows) + "\n"
                 matrix_code += r"\end{array}" + "\n"
                 matrix_code += r"\]"
-
                 doc.append(NoEscape(matrix_code))
-
-                # matrix_latex = "$\\begin{bmatrix}\n" + \
-                #                "\\\\".join(" & ".join(f"{val:.1f}" for val in row) for row in qubo_matrix) + \
-                #                "\n\\end{bmatrix}$"
-                # doc.append(NoEscape(matrix_latex))
 
             # Oracle Visualization
             with doc.create(Subsection("Oracle Visualization")):
                 try:
                     self._oracle_latex(doc, directory)
-                except Exception as e:
+                except Exception:
                     doc.append("not implemented yet\n")
 
             # QAOA Section
             with doc.create(Subsection("QAOA Optimization Results", numbering=False)):
                 try:
                     qaoa_dict = self._qaoa_latex(doc, pos, directory)
-                    qaoa_qc = qaoa_dict["qc"]
+                    qaoa_qc = qaoa_dict.get("qc", None)
                 except Exception:
                     qaoa_qc = None
                     doc.append("not implemented yet\n")
@@ -165,25 +157,42 @@ class NPC(Base):
             # Optional: recommend device
             if qaoa_qc is not None:
                 self._device_recommendation_latex(doc, qaoa_qc, directory)
-        if output_path is None:
-            output_path = os.path.join(directory, f'{problems_name}_report')
-        # output_path = "independent_set_report_with_latex.pdf"
-        doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
 
-        # Cleanup temporary images
-        for img_name in [
-            self.graph_image_path, self.qaoa_result_image_path, self.qaoa_circuit_image_path,
-            self.vqe_result_image_path, self.vqe_circuit_image_path,
-            self.grover_result_image_path, self.grover_circuit_image_path,
-            self.oracle_circuit_image_path
+        # ------------- Normalize output path (STEM only) -------------
+        if output_path is None:
+            stem = os.path.join(directory, f'{problems_name}_report')
+        else:
+            # Drop any .pdf/.tex/etc. so pylatex can add its own extension
+            stem, _ = os.path.splitext(output_path)
+
+            # If caller passed ".../dir/file.tex" (with extension), ensure output dir exists
+            out_dir = os.path.dirname(stem) or directory
+            os.makedirs(out_dir, exist_ok=True)
+
+        # ------------- Generate PDF -------------
+        try:
+            # Use 'pdflatex' from PATH. If you need the absolute path, set compiler="/Library/TeX/texbin/pdflatex"
+            doc.generate_pdf(stem, compiler="pdflatex", clean_tex=True)
+        except Exception as e:
+            # surface a clear error; your batch harness can catch and write a placeholder
+            raise RuntimeError(f"LaTeX generation failed for {stem}: {e}")
+
+        # ------------- Cleanup temp images (existence-safe) -------------
+        for attr in [
+            "graph_image_path", "qaoa_result_image_path", "qaoa_circuit_image_path",
+            "vqe_result_image_path", "vqe_circuit_image_path",
+            "grover_result_image_path", "grover_circuit_image_path",
+            "oracle_circuit_image_path"
         ]:
-            print(img_name)
-            if img_name is None:
+            img_name = getattr(self, attr, None)
+            if not img_name:
                 continue
             img_path = os.path.join(directory, img_name)
             if os.path.exists(img_path):
-                os.remove(img_path)
-
+                try:
+                    os.remove(img_path)
+                except OSError:
+                    pass
 
         end_time = time.time()
         print(f"PDF report generated in {end_time - start_time:.2f} seconds.")

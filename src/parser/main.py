@@ -5,7 +5,7 @@ from transformers import RobertaTokenizer, RobertaForSequenceClassification, Tra
 import ast
 
 # Load my dataset
-dataset = load_dataset('csv', data_files={'data': 'data.csv'})
+dataset = load_dataset('csv', data_files={'json': 'json.csv'})
 # CodeBERT tokenizer
 tokenizer = RobertaTokenizer.from_pretrained("microsoft/codebert-base")
 
@@ -15,7 +15,7 @@ def tokenize_function(examples):
     return tokenizer(code_snippet, padding="max_length", truncation=True)
 
 
-tokenized_datasets = dataset['data'].map(tokenize_function, batched=True)
+tokenized_datasets = dataset['json'].map(tokenize_function, batched=True)
 
 model = AutoModelForSequenceClassification.from_pretrained("microsoft/codebert-base", num_labels=6)
 training_args = TrainingArguments(output_dir="../../others/test_trainer",
