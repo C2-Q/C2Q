@@ -37,7 +37,7 @@ This repository accompanies the article:
 
 ## Architecture
 
-![Framework Overview](./src/assets/classiq_flow.pdf)
+![Framework Overview](./src/assets/workflow_editted-1.png)
 
 Refer to [`src/assets/workflow_editted-1.png`](src/assets/classiq_flow.pdf) for detailed component diagrams and workflow explanations.
 
