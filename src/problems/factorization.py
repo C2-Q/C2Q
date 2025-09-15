@@ -72,7 +72,7 @@ class Factor(Problem):
         doc.packages.append(Package("qcircuit"))
 
         with doc.create(Section(f'{problems_name} Problem Report', numbering=False)):
-            doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
+            doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))} \n")
             doc.append(f'factorization problem: {self.number}')
             with doc.create(Subsection("Grover's Circuit Visualization")):
                 try:

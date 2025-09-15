@@ -882,14 +882,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
                     clamp=True
                 )
 
-                # debug prints (keep if helpful)
-                print(f"[DEBUG] {device}: N1={circuit_dict['gates']['single_qubit']}, "
-                      f"N2={circuit_dict['gates']['two_qubit']}, "
-                      f"Nm={circuit_dict['gates']['measurement']}, "
-                      f"E1={device_dict['errors']['single_qubit']}, "
-                      f"E2={device_dict['errors']['two_qubit']}, "
-                      f"Em={device_dict['errors']['measurement']}, "
-                      f"E={total_average_error:.4f}")
+
                 # print(device, device_dict["errors"]["single_qubit"], circuit_dict["gates"]["single_qubit"])
                 # print(device_dict["errors"]["two_qubit"], circuit_dict["gates"]["two_qubit"])
                 # print(device_dict["errors"]["measurement"], circuit_dict["gates"]["measurement"])
@@ -976,7 +969,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
                     "time": time_to_execute,
                     "price": price_total
                 }
-
+                print(device_data)
                 recommender_devices.append(device_data)
 
         # print("--------------------------------------------\n")

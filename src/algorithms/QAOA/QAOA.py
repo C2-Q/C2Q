@@ -103,6 +103,7 @@ def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
     exp_value_list = []
 
     # Here we can change the optimization method etc.
+    # SPSA by default, but here we use powell optimizer for testing...
     min_minimized_optimization = minimize(cost_estimator, theta, method="Powell", options={'maxiter':500, 'maxfev':500},
                                           args=(qc_transpiled, ising, estimator, exp_value_list))
 

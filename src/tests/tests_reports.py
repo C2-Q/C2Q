@@ -335,7 +335,13 @@ class MyTestCase(unittest.TestCase):
         else:
             log(f"Parser returned unregistered type in test_clique: {problem_type}")
 
+    def test_mis(self):
+        is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input json\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
 
+        tag, data = self.parser.parse(is_snippet)
+        print(tag, data)
+        mis = PROBLEMS[tag](data.G)
+        mis.report_latex()
 if __name__ == '__main__':
     # On macOS, using 'spawn' avoids forking the parent (safer with native libs).
     try:
