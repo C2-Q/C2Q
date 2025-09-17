@@ -265,7 +265,7 @@ def select_device(device, ibm_service, available_devices):
             for i in range(len(sxlist)):
                 err = sxlist[i][1].error
                 dur = sxlist[i][1].duration
-                if err is not None and np.isfinite(err):
+                if err is not None and np.isfinite(err) and err < 1:
                     sx_errorlist.append(err)
                 if dur is not None and np.isfinite(dur):
                     sx_durationlist.append(dur)
@@ -279,7 +279,7 @@ def select_device(device, ibm_service, available_devices):
             for i in range(len(ecrlist)):
                 err = ecrlist[i][1].error
                 dur = ecrlist[i][1].duration
-                if err is not None and np.isfinite(err):
+                if err is not None and np.isfinite(err) and err < 1:
                     ecr_errorlist.append(err)
                 if dur is not None and np.isfinite(dur):
                     ecr_durationlist.append(dur)
@@ -297,25 +297,25 @@ def select_device(device, ibm_service, available_devices):
 
             # --- Manual overrides for IBM devices ---
             if device == "ibm_kyiv":
-                single_qubit_gate_error = 2.8e-4
-                two_qubit_gate_error = 1.2e-2
+                single_qubit_gate_error = 2.786e-4
+                two_qubit_gate_error = 1.179e-2
                 measurement_error = 7.0e-3
-                t1_relaxation_time = 50e-9
-                t2_relaxation_time = 500e-9
+                t1_relaxation_time = 257.84e-6
+                t2_relaxation_time = 108.63e-6
 
             elif device == "ibm_sherbrooke":
-                single_qubit_gate_error = 2.2e-4
-                two_qubit_gate_error = 7.8e-3
-                measurement_error = 1.3e-2
-                t1_relaxation_time = 57e-9
-                t2_relaxation_time = 530e-9
+                single_qubit_gate_error = 2.212e-4
+                two_qubit_gate_error = 7.749e-3
+                measurement_error = 1.29e-2
+                t1_relaxation_time = 261.13e-6
+                t2_relaxation_time = 168.22e-6
 
             elif device == "ibm_brisbane":
-                single_qubit_gate_error = 2.5e-4
-                two_qubit_gate_error = 7.7e-3
-                measurement_error = 1.3e-2
-                t1_relaxation_time = 60e-9
-                t2_relaxation_time = 660e-9
+                single_qubit_gate_error = 2.482e-4
+                two_qubit_gate_error = 7.689e-3
+                measurement_error = 1.29e-2
+                t1_relaxation_time = 220.89e-6
+                t2_relaxation_time = 133.75e-6
 
             errors = _sanitize_errors(
                 {
@@ -395,25 +395,25 @@ def select_device(device, ibm_service, available_devices):
 
             # --- Manual overrides for IBM devices ---
             if device == "ibm_kyiv":
-                single_qubit_gate_error = 2.8e-4
-                two_qubit_gate_error = 1.2e-2
+                single_qubit_gate_error = 2.786e-4
+                two_qubit_gate_error = 1.179e-2
                 measurement_error = 7.0e-3
-                t1_relaxation_time = 50e-9
-                t2_relaxation_time = 500e-9
+                t1_relaxation_time = 257.84e-6
+                t2_relaxation_time = 108.63e-6
 
             elif device == "ibm_sherbrooke":
-                single_qubit_gate_error = 2.2e-4
-                two_qubit_gate_error = 7.8e-3
-                measurement_error = 1.3e-2
-                t1_relaxation_time = 57e-9
-                t2_relaxation_time = 530e-9
+                single_qubit_gate_error = 2.212e-4
+                two_qubit_gate_error = 7.749e-3
+                measurement_error = 1.29e-2
+                t1_relaxation_time = 261.13e-6
+                t2_relaxation_time = 168.22e-6
 
             elif device == "ibm_brisbane":
-                single_qubit_gate_error = 2.5e-4
-                two_qubit_gate_error = 7.7e-3
-                measurement_error = 1.3e-2
-                t1_relaxation_time = 60e-9
-                t2_relaxation_time = 660e-9
+                single_qubit_gate_error = 2.482e-4
+                two_qubit_gate_error = 7.689e-3
+                measurement_error = 1.29e-2
+                t1_relaxation_time = 220.89e-6
+                t2_relaxation_time = 133.75e-6
 
             errors = _sanitize_errors(
                 {
@@ -464,7 +464,7 @@ def select_device(device, ibm_service, available_devices):
         # Error rates for estimating the error
         single_qubit_gate_error = 0.001
         two_qubit_gate_error = 0.008
-        measurement_error = 0.019  # Not found, using the Rigetti Ankaa-2 measurement error instead
+        measurement_error = 0.06565  # Not found, using the Rigetti Ankaa-2 measurement error instead
         t1_relaxation_time = 21 * 10 ** (-6)
         t2_relaxation_time = 24 * 10 ** (-6)
         # Gate timings for estimating the time to execute a circuit
@@ -711,7 +711,7 @@ def select_device(device, ibm_service, available_devices):
         t2_relaxation_time = 4
         # Gate timings for estimating the time to execute a circuit (interzone + gate time)
         # https://arxiv.org/abs/2003.01293
-        single_qubit_gate_timing = 288 * 10 ** (-6)
+        single_qubit_gate_timing = 63 * 10 ** (-6)
         two_qubit_gate_timing = 308 * 10 ** (-6)
 
         # Quantinuum H1 20-qubit fake backend. Coupling map is not needed because the device qubits are all-to-all connected.
@@ -735,7 +735,7 @@ def select_device(device, ibm_service, available_devices):
         t2_relaxation_time = 4
         # Gate timings for estimating the time to execute a circuit (interzone + gate time)
         # https://arxiv.org/abs/2003.01293
-        single_qubit_gate_timing = 288 * 10 ** (-6)
+        single_qubit_gate_timing = 63 * 10 ** (-6)
         two_qubit_gate_timing = 308 * 10 ** (-6)
 
         # Quantinuum H2 56-qubit fake backend. Coupling map is not needed because the device qubits are all-to-all connected.
@@ -992,7 +992,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.ylabel("Error (%)")
         plt.title("Estimated total error with each quantum computer")
         plt.tight_layout()
-        plt.savefig("recommender_errors_devices.png")
+        plt.savefig("recommender_errors_devices.pdf")
 
         # Plot times
         fig = plt.figure(figsize=(22, 5))
@@ -1001,7 +1001,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.title("Estimated total time with each quantum computer (50 iterations, 1000 shots per iteration)")
         plt.yscale("log")
         plt.tight_layout()
-        plt.savefig("recommender_times_devices.png")
+        plt.savefig("recommender_times_devices.pdf")
 
         # Plot prices
         fig = plt.figure(figsize=(22, 5))
@@ -1010,7 +1010,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.title("Estimated price with each quantum computer (50 iterations, 1000 shots per iteration)")
         plt.yscale("log")
         plt.tight_layout()
-        plt.savefig("recommender_prices_devices.png")
+        plt.savefig("recommender_prices_devices.pdf")
 
     recommender_output = f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}. \n - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}. \n - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}."
 
@@ -1022,9 +1022,9 @@ def plot_results(recommender_data_array, qubits_array):
     Stylish plots for error (%), time (s), and price ($) vs problem size (qubits).
 
     Saves:
-      - recommender_output_errors.png
-      - recommender_output_prices.png
-      - recommender_output_times.png
+      - recommender_output_errors.pdf
+      - recommender_output_prices.pdf
+      - recommender_output_times.pdf
     """
     import numpy as np
     import matplotlib.pyplot as plt
@@ -1129,7 +1129,7 @@ def plot_results(recommender_data_array, qubits_array):
 
     ax.legend(loc="best", fontsize=9)
     plt.tight_layout()
-    plt.savefig("recommender_output_errors.png", dpi=200)
+    plt.savefig("recommender_output_errors.pdf")
     plt.close(fig)
 
     # ---------- PRICE ($) ----------
@@ -1169,7 +1169,7 @@ def plot_results(recommender_data_array, qubits_array):
 
     ax.legend(loc="best", fontsize=9)
     plt.tight_layout()
-    plt.savefig("recommender_output_prices.png", dpi=200)
+    plt.savefig("recommender_output_prices.pdf")
     plt.close(fig)
 
     # ---------- TIME (s) ----------
@@ -1209,5 +1209,5 @@ def plot_results(recommender_data_array, qubits_array):
 
     ax.legend(loc="best", fontsize=9)
     plt.tight_layout()
-    plt.savefig("recommender_output_times.png", dpi=200)
+    plt.savefig("recommender_output_times.pdf")
     plt.close(fig)
