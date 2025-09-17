@@ -291,7 +291,7 @@ def select_device(device, ibm_service, available_devices):
             meas_errorlist = []
             for i in range(len(measlist)):
                 err = measlist[i][1].error
-                if err is not None and np.isfinite(err):
+                if err is not None and np.isfinite(err) and err < 1:
                     meas_errorlist.append(err)
             measurement_error = mean(meas_errorlist) if meas_errorlist else 0.03  # fallback
 
