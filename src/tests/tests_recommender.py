@@ -4,7 +4,7 @@ import networkx as nx
 
 from src.algorithms.QAOA.QAOA import qaoa_no_optimization
 from src.problems.max_cut import MaxCut
-from src.recommender.recommender_engine import recommender, plot_results
+from src.recommender.recommender_engine import recommender, plot_results, save_recommender_csvs
 
 
 class MyTestCase(unittest.TestCase):
@@ -18,7 +18,8 @@ class MyTestCase(unittest.TestCase):
         qubits_array = []
 
         # Define the range of qubits
-        for z in range(4, 10, 2):
+        for z in range(4, 60, 2):
+            print(z)
             qubits_array.append(z)
 
             # Generate 3-regular graphs.
@@ -36,6 +37,10 @@ class MyTestCase(unittest.TestCase):
             recommender_data_array.append(recommender_devices)
 
         plot_results(recommender_data_array, qubits_array)
+        save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_intermediate.csv")
+
+    # def test_recommender(self):
+
 
 if __name__ == '__main__':
     unittest.main()

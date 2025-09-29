@@ -8,7 +8,9 @@ from qiskit_aer import AerSimulator
 from qiskit_ionq import IonQProvider
 from pytket.extensions.quantinuum import QuantinuumBackend
 from pytket.extensions.qiskit import qiskit_to_tk, tk_to_qiskit
-
+import os
+import pandas as pd
+from collections import defaultdict
 import numpy as np
 
 from statistics import mean
@@ -1211,3 +1213,88 @@ def plot_results(recommender_data_array, qubits_array):
     plt.tight_layout()
     plt.savefig("recommender_output_times.pdf")
     plt.close(fig)
+
+
+
+def save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_intermediate.csv"):
+    """
+    Save three CSV files from the recommender outputs:
+      - errors_wide.csv,  times_wide.csv,  prices_wide.csv   (wide format)
+      - errors_long.csv,  times_long.csv,  prices_long.csv   (long/tidy format)
+
+    Inputs:
+      recommender_data_array: list[list[dict]]  # one list per qubit size, each dict has keys: name, error, time, price
+      qubits_array:           list[int]         # same length as recommender_data_array
+
+    Notes:
+      - If a device is missing at some qubit size, its value is left blank (NaN) in wide CSVs.
+      - Device order is stable, based on first appearance across runs.
+    """
+    os.makedirs(outdir, exist_ok=True)
+
+    # Determine a stable device order (first seen wins)
+    device_order = []
+    seen = set()
+    for run in recommender_data_array:
+        for d in run:
+            nm = str(d["name"])
+            if nm not in seen:
+                seen.add(nm)
+                device_order.append(nm)
+
+    # Build WIDE dicts: {qubits: {device: value}}
+    wide_err = defaultdict(dict)
+    wide_time = defaultdict(dict)
+    wide_price = defaultdict(dict)
+
+    # Build LONG rows
+    long_err_rows, long_time_rows, long_price_rows = [], [], []
+
+    for q, run in zip(qubits_array, recommender_data_array):
+        for d in run:
+            nm = str(d["name"])
+            err = float(d["error"])
+            tm  = float(d["time"])
+            pr  = float(d["price"])
+
+            wide_err[q][nm] = err
+            wide_time[q][nm] = tm
+            wide_price[q][nm] = pr
+
+            long_err_rows.append({"qubits": q, "device": nm, "value": err})
+            long_time_rows.append({"qubits": q, "device": nm, "value": tm})
+            long_price_rows.append({"qubits": q, "device": nm, "value": pr})
+
+    # Convert to DataFrames (WIDE)
+    def wide_df(wide_map):
+        # rows sorted by qubits; columns in stable device order
+        qs = sorted(wide_map.keys())
+        df = pd.DataFrame(index=qs, columns=device_order, dtype=float)
+        for q in qs:
+            for nm, val in wide_map[q].items():
+                if nm in df.columns:
+                    df.loc[q, nm] = val
+        df.index.name = "qubits"
+        return df.reset_index()
+
+    err_wide_df  = wide_df(wide_err)
+    time_wide_df = wide_df(wide_time)
+    price_wide_df= wide_df(wide_price)
+
+    # Convert to DataFrames (LONG)
+    err_long_df   = pd.DataFrame(long_err_rows).sort_values(["qubits","device"])
+    time_long_df  = pd.DataFrame(long_time_rows).sort_values(["qubits","device"])
+    price_long_df = pd.DataFrame(long_price_rows).sort_values(["qubits","device"])
+
+    # Save CSVs
+    err_wide_df.to_csv(os.path.join(outdir, "errors_wide.csv"), index=False)
+    time_wide_df.to_csv(os.path.join(outdir, "times_wide.csv"), index=False)
+    price_wide_df.to_csv(os.path.join(outdir, "prices_wide.csv"), index=False)
+
+    err_long_df.to_csv(os.path.join(outdir, "errors_long.csv"), index=False)
+    time_long_df.to_csv(os.path.join(outdir, "times_long.csv"), index=False)
+    price_long_df.to_csv(os.path.join(outdir, "prices_long.csv"), index=False)
+
+    print(f"Saved to: {os.path.abspath(outdir)}")
+    print(" - errors_wide.csv,  times_wide.csv,  prices_wide.csv")
+    print(" - errors_long.csv,  times_long.csv,  prices_long.csv")
