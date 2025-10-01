@@ -37,7 +37,7 @@ class MyTestCase(unittest.TestCase):
             recommender_data_array.append(recommender_devices)
 
         plot_results(recommender_data_array, qubits_array)
-        save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_intermediate.csv")
+        save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_recommender.csv")
 
     # def test_recommender(self):
 

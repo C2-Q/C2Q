@@ -1021,7 +1021,9 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
 
 def plot_results(recommender_data_array, qubits_array):
     """
-    Stylish plots for error (%), time (s), and price ($) vs problem size (qubits).
+    Plots error (%), time (s), and price ($) vs problem size (qubits).
+
+    Excludes: Rigetti Ankaa-2
 
     Saves:
       - recommender_output_errors.pdf
@@ -1033,35 +1035,31 @@ def plot_results(recommender_data_array, qubits_array):
 
     x = list(qubits_array)
 
-    # ---------- helpers ----------
-    def family_of(name: str) -> str:
-        s = name.lower()
-        if any(k in s for k in ["ionq", "quantinuum"]):
-            return "Trapped-ion"
-        if any(k in s for k in ["ibm_", "rigetti", "iqm", "garnet", "helmi", "kyiv", "brisbane", "sherbrooke"]):
-            return "Superconducting"
-        return "Other"
+    # Devices to exclude (normalized to lowercase)
+    EXCLUDE = {"rigetti ankaa-2"}
 
-    # Build a stable device order and collect per-run json
+    # ---------- assemble device data ----------
     device_names = []
     dev_err_runs, dev_time_runs, dev_price_runs = [], [], []
     for run in recommender_data_array:
         err_row, time_row, price_row = [], [], []
         for d in run:
             nm = d["name"]
+            if nm.lower() in EXCLUDE:
+                continue
             if nm not in device_names:
                 device_names.append(nm)
-            err_row.append([nm, float(d["error"])])   # error (%) in your pipeline
-            time_row.append([nm, float(d["time"])])
-            price_row.append([nm, float(d["price"])])
-        dev_err_runs.append(err_row)
-        dev_time_runs.append(time_row)
-        dev_price_runs.append(price_row)
+            err_row.append((nm, float(d["error"])))   # error in %
+            time_row.append((nm, float(d["time"])))
+            price_row.append((nm, float(d["price"])))
+        if err_row or time_row or price_row:
+            dev_err_runs.append(err_row)
+            dev_time_runs.append(time_row)
+            dev_price_runs.append(price_row)
 
     device_names = sorted(device_names, key=str.lower)
 
     def align_series(names, runs):
-        """Return list-of-series by device name; each series length == #runs where present."""
         out = []
         for nm in names:
             vals = []
@@ -1076,13 +1074,18 @@ def plot_results(recommender_data_array, qubits_array):
             out.append(vals)
         return out
 
-    err_series  = align_series(device_names, dev_err_runs)    # values already in %
-    time_series = align_series(device_names, dev_time_runs)
-    price_series= align_series(device_names, dev_price_runs)
+    err_series   = align_series(device_names, dev_err_runs)    # %
+    time_series  = align_series(device_names, dev_time_runs)   # s
+    price_series = align_series(device_names, dev_price_runs)  # $
 
     # Style
     markers = ["o", "s", "D", "^", "v", "P", "X", "*", "h", "8", "<", ">", "H", "d", "1", "2", "3", "4"]
     lw, ms = 2.0, 5.0
+    legend_args = dict(loc="center left", bbox_to_anchor=(1.02, 0.5),
+                       fontsize=9, frameon=True, fancybox=True, borderaxespad=0.0)
+
+    # Tiny epsilon so markers at 100% don't cross the top border
+    EPS = 1e-2  # 0.01%
 
     # ---------- ERROR (%) ----------
     fig, ax = plt.subplots(figsize=(11, 6))
@@ -1092,46 +1095,24 @@ def plot_results(recommender_data_array, qubits_array):
             continue
         plot_x = x[:len(ys)]
         yplot = np.asarray(ys, dtype=float)
-        # clamp to [0,100] for display (your values are already %)
         yplot = np.clip(yplot, 0.0, 100.0)
-        ax.plot(
-            plot_x, yplot,
-            marker=markers[i % len(markers)], ms=ms, lw=lw,
-            label=name
-        )
+        yplot = np.where(yplot >= 100.0, 100.0 - EPS, yplot)
+        line, = ax.plot(plot_x, yplot,
+                        marker=markers[i % len(markers)], ms=ms, lw=lw,
+                        label=name, clip_on=True, zorder=2)
+        line.set_clip_path(ax.patch)
 
-    ax.set_title("Estimated errors of the devices when executing the circuit", pad=10)
+    # (titles removed)
     ax.set_xlabel("Qubits")
     ax.set_ylabel("Error (%)")
     ax.set_xticks(x)
     ax.set_ylim(0, 100)
-    ax.set_yticks(range(0, 101, 20))
-    ax.grid(True, which="both", axis="both", linestyle="--", alpha=0.35)
-
-    # Family callouts (pick a representative x if available)
-    # find a mid x index we can annotate on
-    mid_idx = min( max(0, len(x)//2 - 1), len(x)-1 )
-    # pick a device from each family with the longest series to anchor the arrow
-    fam_anchor = {}
-    for i, name in enumerate(device_names):
-        fam = family_of(name)
-        if fam not in fam_anchor or len(err_series[i]) > len(err_series[fam_anchor[fam]]):
-            fam_anchor[fam] = i
-    for fam, idx in fam_anchor.items():
-        ys = err_series[idx]
-        if ys:
-            mid_y = np.clip(float(ys[min(mid_idx, len(ys)-1)]), 0.0, 100.0)
-            ax.annotate(
-                fam,
-                xy=(x[min(mid_idx, len(ys)-1)], mid_y),
-                xytext=(x[min(mid_idx, len(ys)-1)] + 6, mid_y + (8 if fam == "Superconducting" else -8)),
-                arrowprops=dict(arrowstyle="->", lw=1.2),
-                fontsize=10
-            )
-
-    ax.legend(loc="best", fontsize=9)
-    plt.tight_layout()
-    plt.savefig("recommender_output_errors.pdf")
+    ax.set_yticks([0, 20, 40, 60, 80, 100])
+    ax.grid(False)                         # <-- remove background grid
+    ax.legend(**legend_args)
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("white")
+    fig.savefig("recommender_output_errors.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
     # ---------- PRICE ($) ----------
@@ -1143,35 +1124,21 @@ def plot_results(recommender_data_array, qubits_array):
         plot_x = x[:len(ys)]
         yplot = np.asarray(ys, dtype=float)
         yplot = np.clip(yplot, 1e-9, None)  # log-safe
-        ax.plot(
-            plot_x, yplot,
-            marker=markers[i % len(markers)], ms=ms, lw=lw,
-            label=name
-        )
+        line, = ax.plot(plot_x, yplot,
+                        marker=markers[i % len(markers)], ms=ms, lw=lw,
+                        label=name, clip_on=True, zorder=2)
+        line.set_clip_path(ax.patch)
 
-    ax.set_title("Estimated price (50 iterations, 1000 shots/iteration)", pad=10)
+    # (titles removed)
     ax.set_xlabel("Qubits")
     ax.set_ylabel("Price ($)")
     ax.set_xticks(x)
     ax.set_yscale("log")
-    ax.grid(True, which="both", linestyle="--", alpha=0.35)
-
-    # Family callouts
-    for fam, idx in fam_anchor.items():
-        ys = price_series[idx]
-        if ys:
-            mid_y = float(ys[min(mid_idx, len(ys)-1)])
-            ax.annotate(
-                fam,
-                xy=(x[min(mid_idx, len(ys)-1)], mid_y),
-                xytext=(x[min(mid_idx, len(ys)-1)] + 6, mid_y * (4 if fam == "Trapped-ion" else 0.5)),
-                arrowprops=dict(arrowstyle="->", lw=1.2),
-                fontsize=10
-            )
-
-    ax.legend(loc="best", fontsize=9)
-    plt.tight_layout()
-    plt.savefig("recommender_output_prices.pdf")
+    ax.grid(False)                         # <-- remove background grid
+    ax.legend(**legend_args)
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("white")
+    fig.savefig("recommender_output_prices.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
     # ---------- TIME (s) ----------
@@ -1183,40 +1150,26 @@ def plot_results(recommender_data_array, qubits_array):
         plot_x = x[:len(ys)]
         yplot = np.asarray(ys, dtype=float)
         yplot = np.clip(yplot, 1e-12, None)  # log-safe
-        ax.plot(
-            plot_x, yplot,
-            marker=markers[i % len(markers)], ms=ms, lw=lw,
-            label=name
-        )
+        line, = ax.plot(plot_x, yplot,
+                        marker=markers[i % len(markers)], ms=ms, lw=lw,
+                        label=name, clip_on=True, zorder=2)
+        line.set_clip_path(ax.patch)
 
-    ax.set_title("Estimated time (50 iterations, 1000 shots/iteration)", pad=10)
+    # (titles removed)
     ax.set_xlabel("Qubits")
     ax.set_ylabel("Time (s)")
     ax.set_xticks(x)
     ax.set_yscale("log")
-    ax.grid(True, which="both", linestyle="--", alpha=0.35)
-
-    # Family callouts
-    for fam, idx in fam_anchor.items():
-        ys = time_series[idx]
-        if ys:
-            mid_y = float(ys[min(mid_idx, len(ys)-1)])
-            ax.annotate(
-                fam,
-                xy=(x[min(mid_idx, len(ys)-1)], mid_y),
-                xytext=(x[min(mid_idx, len(ys)-1)] + 6, mid_y * (3 if fam == "Trapped-ion" else 0.7)),
-                arrowprops=dict(arrowstyle="->", lw=1.2),
-                fontsize=10
-            )
-
-    ax.legend(loc="best", fontsize=9)
-    plt.tight_layout()
-    plt.savefig("recommender_output_times.pdf")
+    ax.grid(False)                         # <-- remove background grid
+    ax.legend(**legend_args)
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("white")
+    fig.savefig("recommender_output_times.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
 
-def save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_intermediate.csv"):
+def save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_recommender.csv"):
     """
     Save three CSV files from the recommender outputs:
       - errors_wide.csv,  times_wide.csv,  prices_wide.csv   (wide format)

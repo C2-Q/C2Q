@@ -1,436 +1,436 @@
 case_idx,snippet_id,problem_type,status,reason,tex_path,pdf_path,compiled_pdf,duration_sec
-1,0512e437cbab,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_1_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_1_SUB.pdf,0,8.651
-2,d4b22571f12d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_2_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_2_MaxCut.pdf,0,13.697
-3,d4b22571f12d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_3_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_3_MaxCut.pdf,0,13.885
-4,e59fb24fb2fa,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_4_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_4_MaxCut.pdf,0,15.217
-5,53337a8d05bb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_5_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_5_MaxCut.pdf,0,15.955
-6,f9ad51ef4fd6,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_6_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_6_MaxCut.pdf,0,16.478
-7,7842a83111f1,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_7_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_7_MaxCut.pdf,0,15.2
-8,c634f6132a5e,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_8_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_8_MaxCut.pdf,0,15.457
-9,bbda6d95c365,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_9_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_9_MaxCut.pdf,0,14.747
-10,eb1067487b24,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_10_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_10_MaxCut.pdf,0,15.878
-11,6d9a8a0f2647,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_11_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_11_MaxCut.pdf,0,15.233
-12,e5577268fa65,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_12_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_12_MaxCut.pdf,0,15.72
-13,6d9a8a0f2647,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_13_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_13_MaxCut.pdf,0,16.721
-14,15d5fd558e9d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_14_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_14_MIS.pdf,0,27.584
-15,7bc014a35252,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_15_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_15_MIS.pdf,0,37.739
-16,981307f5fddb,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_16_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_16_MIS.pdf,0,31.041
-17,9841b58ced38,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_17_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_17_MIS.pdf,0,71.668
-18,e8f7e9f3e088,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_18_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_18_MIS.pdf,0,71.786
-19,36f9ee79685d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_19_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_19_MIS.pdf,0,67.287
-20,233c72c23bb6,UNKNOWN,error,No result from worker,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_20_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_20_UNKNOWN.pdf,1,66.562
-21,a68a031e6637,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_21_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_21_MIS.pdf,0,40.281
-22,32bc714b1adb,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_22_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_22_MIS.pdf,0,40.247
-23,ec04f121c513,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_23_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_23_MIS.pdf,0,41.164
-24,2b8d6ac903ba,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_24_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_24_MIS.pdf,0,76.952
-25,5b0b123d451d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_25_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_25_MIS.pdf,0,65.119
-26,d5e43ac853b8,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_26_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_26_MaxCut.pdf,0,14.901
-27,0751db13127f,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_27_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_27_MaxCut.pdf,0,15.093
-28,76823b3bb459,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_28_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_28_MaxCut.pdf,0,15.055
-29,5ef602514fc5,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_29_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_29_MaxCut.pdf,0,14.94
-30,b6b0638c87e1,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_30_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_30_MaxCut.pdf,0,15.044
-31,c057268fb476,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_31_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_31_MIS.pdf,0,29.517
-32,9b18f2b4b6e4,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_32_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_32_MIS.pdf,0,41.661
-33,bb064c28b196,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_33_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_33_MIS.pdf,0,32.562
-34,d0a3ddf5f16c,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_34_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_34_MaxCut.pdf,0,16.537
-35,61b482644759,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_35_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_35_MaxCut.pdf,0,15.555
-36,e07a06a3ca9d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_36_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_36_MIS.pdf,0,42.444
-37,7051148616e2,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_37_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_37_MIS.pdf,0,30.897
-38,ab8b5b53f968,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_38_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_38_UNKNOWN.pdf,1,6.542
-39,e5cff6418b82,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_39_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_39_UNKNOWN.pdf,1,5.993
-40,972fa49ae1a4,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_40.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_40.pdf,1,240.426
-41,4bcf10002b48,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_41_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_41_MaxCut.pdf,0,13.813
-42,7b71ff05293a,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_42_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_42_MaxCut.pdf,0,14.13
-43,a16ac8789a32,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_43_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_43_MIS.pdf,0,25.417
-44,8fa3016f706e,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_44_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_44_MIS.pdf,0,27.231
-45,269b1c1db2f7,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_45.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_45.pdf,1,240.421
-46,c8481d73d864,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_46_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_46_MaxCut.pdf,0,26.02
-47,ac4c92fdd3c7,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_47_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_47_MaxCut.pdf,0,14.336
-48,1d26e719092c,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_48_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_48_MIS.pdf,0,28.852
-49,b30b8a6e19aa,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_49_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_49_MIS.pdf,0,32.92
-50,8a1ae0c83c8b,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_50.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_50.pdf,1,240.422
-51,27a4ec9089e4,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_51.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_51.pdf,1,240.426
-52,6d76a6a35815,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_52.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_52.pdf,1,240.414
-53,81e42ce032cc,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_53_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_53_MaxCut.pdf,0,12.675
-54,55d51cd275ef,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_54_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_54_MaxCut.pdf,0,12.169
-55,9344fb9c1a1b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_55_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_55_MIS.pdf,0,19.415
-56,e3f232afca62,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_56_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_56_MIS.pdf,0,19.524
-57,092e80c29401,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_57_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_57_TSP.pdf,0,16.294
-58,0ec1e34b7058,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_58_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_58_TSP.pdf,0,27.642
-59,e1d8c74c19b0,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_59_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_59_MaxCut.pdf,0,14.223
-60,4e830024c8f8,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_60_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_60_MaxCut.pdf,0,13.194
-61,4e8bc88d9a5d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_61_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_61_MaxCut.pdf,0,10.959
-62,6b6290f13417,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_62_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_62_MaxCut.pdf,0,13.329
-63,3a7977d5c81b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_63_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_63_MaxCut.pdf,0,13.479
-64,e3f232afca62,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_64_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_64_MIS.pdf,0,22.052
-65,8a151201b198,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_65_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_65_MIS.pdf,0,23.832
-66,29ad0f03d04b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_66_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_66_MIS.pdf,0,22.213
-67,9a7f2d9120ee,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_67_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_67_MIS.pdf,0,18.024
-68,7f074b3fb59d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_68_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_68_MIS.pdf,0,21.386
-69,cba92c006332,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_69_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_69_TSP.pdf,0,15.558
-70,0bf31b6e145b,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_70_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_70_TSP.pdf,0,28.594
-71,500b6d503c75,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_71_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_71_TSP.pdf,0,15.658
-72,fa9c5a1c3932,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_72_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_72_TSP.pdf,0,26.769
-73,092e80c29401,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_73_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_73_TSP.pdf,0,29.554
-74,677fcb30c4f2,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_74_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_74_MaxCut.pdf,0,14.282
-75,2e44dcef0063,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_75_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_75_MaxCut.pdf,0,14.829
-76,2b60be0c65cb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_76_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_76_MaxCut.pdf,0,10.942
-77,00b6e9bb532e,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_77_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_77_MaxCut.pdf,0,11.751
-78,834cf59a2761,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_78_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_78_MaxCut.pdf,0,14.012
-79,eae7e10d30df,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_79_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_79_MIS.pdf,0,28.37
-80,9183267e960e,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_80_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_80_MIS.pdf,0,28.619
-81,3327e28454c8,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_81_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_81_MIS.pdf,0,29.234
-82,0dabae348d92,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_82_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_82_MIS.pdf,0,26.436
-83,816f4699e534,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_83_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_83_MIS.pdf,0,30.835
-84,a06089dfe502,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_84.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_84.pdf,1,240.429
-85,8860a8b12572,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_85.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_85.pdf,1,240.412
-86,b42f216a6bd9,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_86.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_86.pdf,1,240.421
-87,1cd020e80f53,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_87.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_87.pdf,1,240.418
-88,b2079f55f5e8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_88_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_88_Clique.pdf,0,13.14
-89,4cf425173bc6,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_89_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_89_Clique.pdf,0,13.654
-90,77f6133fd5b0,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_90_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_90_Clique.pdf,0,14.362
-91,e8e8e3136ac4,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_91_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_91_Clique.pdf,0,13.12
-92,df106fbe15e7,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_92_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_92_Clique.pdf,0,11.739
-93,7cc327d17f18,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_93_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_93_Clique.pdf,0,14.609
-94,e7c116646ec4,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_94_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_94_Clique.pdf,0,13.788
-95,228b0c15b92f,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_95_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_95_Clique.pdf,0,12.146
-96,8abf32b2aabf,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_96_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_96_Clique.pdf,0,14.783
-97,889a792e47eb,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_97_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_97_Clique.pdf,0,11.817
-98,9595de512ecf,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_98_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_98_KColor.pdf,0,36.609
-99,67bb63f92b54,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_99_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_99_KColor.pdf,0,37.692
-100,ca6cd577c9b8,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_100_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_100_KColor.pdf,0,34.486
-101,9baf74fa1a1f,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_101_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_101_KColor.pdf,0,38.674
-102,a74fa5d41298,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_102_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_102_KColor.pdf,0,36.849
-103,d0274414dc6b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_103_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_103_KColor.pdf,0,36.948
-104,832fbaee0d15,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_104_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_104_KColor.pdf,0,36.583
-105,61b96b71e5e1,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_105_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_105_KColor.pdf,0,37.958
-106,e08ced5cf66d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_106_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_106_KColor.pdf,0,37.994
-107,fd4ec1e18167,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_107_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_107_KColor.pdf,0,38.143
-108,b450652c1c59,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_108_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_108_KColor.pdf,0,38.837
-109,0306b19aeb84,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_109_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_109_KColor.pdf,0,38.618
-110,974e15e10b78,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_110_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_110_KColor.pdf,0,36.442
-111,529e1690aac3,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_111_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_111_KColor.pdf,0,37.673
-112,72b4e2cfa468,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_112_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_112_KColor.pdf,0,32.381
-113,05ac834ddc76,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_113_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_113_KColor.pdf,0,37.51
-114,75d23d2897b2,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_114_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_114_KColor.pdf,0,37.185
-115,fa71e119f209,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_115_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_115_KColor.pdf,0,36.168
-116,5bbe707859bb,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_116_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_116_KColor.pdf,0,34.408
-117,d7693bae7879,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_117_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_117_KColor.pdf,0,38.923
-118,f0311edb28d5,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_118_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_118_KColor.pdf,0,36.179
-119,6de43adf9faa,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_119_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_119_MaxCut.pdf,0,13.789
-120,7278e253ff48,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_120_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_120_MaxCut.pdf,0,13.747
-121,22fec4e90f2b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_121_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_121_MIS.pdf,0,29.311
-122,ea68b3e5a442,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_122_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_122_MIS.pdf,0,25.754
-123,d784f94a6d06,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_123.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_123.pdf,1,240.426
-124,d293aa2188a4,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_124.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_124.pdf,1,240.445
-125,5e32ebce2c26,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_125_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_125_Clique.pdf,0,25.805
-126,a1440877666f,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_126_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_126_Clique.pdf,0,16.248
-127,b6bdeb87ae16,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_127_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_127_KColor.pdf,0,38.787
-128,04f76e990ea9,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_128_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_128_KColor.pdf,0,37.844
-129,52686f74ef7b,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_129_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_129_Factor.pdf,0,8.106
-130,3e40fa4e4db7,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_130_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_130_Factor.pdf,0,7.318
-131,6fcfd15407c4,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_131_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_131_Factor.pdf,0,6.884
-132,af3989e2fd29,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_132_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_132_Factor.pdf,0,7.767
-133,2146632b51a2,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_133_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_133_Factor.pdf,0,6.42
-134,a63e13dcd2af,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_134_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_134_Factor.pdf,0,7.252
-135,30eb89568587,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_135_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_135_Factor.pdf,0,7.027
-136,609340da957a,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_136_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_136_Factor.pdf,0,7.108
-137,fddd723e7b55,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_137_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_137_Factor.pdf,0,6.619
-138,e325228d743d,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_138_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_138_Factor.pdf,0,7.064
-139,8d58c36ba4bf,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_139_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_139_Factor.pdf,0,6.755
-140,bad6e75411bb,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_140_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_140_Factor.pdf,0,6.66
-141,94b57175437f,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_141_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_141_UNKNOWN.pdf,1,5.971
-142,7a3e80e5582c,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_142_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_142_UNKNOWN.pdf,1,5.547
-143,5982818d1402,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_143_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_143_UNKNOWN.pdf,1,5.545
-144,28b8cd3ada20,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_144_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_144_UNKNOWN.pdf,1,5.494
-145,381475eca5bb,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_145_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_145_UNKNOWN.pdf,1,5.824
-146,8420327719e8,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_146_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_146_UNKNOWN.pdf,1,5.738
-147,8420327719e8,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_147_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_147_UNKNOWN.pdf,1,5.562
-148,b49cba018712,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_148_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_148_UNKNOWN.pdf,1,5.616
-149,1dccb78dc13b,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_149_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_149_UNKNOWN.pdf,1,5.763
-150,182c258a3bea,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_150_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_150_UNKNOWN.pdf,1,5.447
-151,2dfffcc15bdb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_151_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_151_MaxCut.pdf,0,13.658
-152,cc32b1cf00bb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_152_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_152_MaxCut.pdf,0,16.148
-153,e6e69a32cf35,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_153_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_153_MIS.pdf,0,31.075
-154,26d9e3023803,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_154_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_154_MaxCut.pdf,0,16.598
-155,46401b137af1,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_155_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_155_MIS.pdf,0,43.014
-156,9875ad122993,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_156_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_156_MaxCut.pdf,0,15.894
-157,efe692fca580,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_157_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_157_MaxCut.pdf,0,13.995
-158,4b89a100562a,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_158_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_158_MIS.pdf,0,59.648
-159,4d4328edfdfb,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_159_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_159_MIS.pdf,0,30.419
-160,f99e6f46d130,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_160_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_160_UNKNOWN.pdf,1,6.346
-161,55bc7b7cc900,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_161_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_161_UNKNOWN.pdf,1,5.437
-162,1ae718c1f69b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_162_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_162_MaxCut.pdf,0,14.908
-163,b11eca846f88,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_163_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_163_MIS.pdf,0,33.337
-164,856e7f766134,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_164.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_164.pdf,1,240.466
-165,81e42ce032cc,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_165_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_165_MaxCut.pdf,0,12.755
-166,9344fb9c1a1b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_166_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_166_MIS.pdf,0,19.306
-167,092e80c29401,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_167_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_167_TSP.pdf,0,15.427
-168,677fcb30c4f2,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_168_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_168_MaxCut.pdf,0,14.788
-169,93f3aa5069ec,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_169_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_169_MaxCut.pdf,0,15.725
-170,eae7e10d30df,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_170_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_170_MIS.pdf,0,33.557
-171,3327e28454c8,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_171_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_171_MIS.pdf,0,35.041
-172,a06089dfe502,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_172.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_172.pdf,1,240.472
-173,8860a8b12572,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_173.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_173.pdf,1,240.444
-174,1cd020e80f53,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_174.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_174.pdf,1,240.45
-175,816f4699e534,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_175_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_175_MIS.pdf,0,30.182
-176,b2079f55f5e8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_176_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_176_Clique.pdf,0,16.263
-177,7cc327d17f18,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_177_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_177_Clique.pdf,0,16.388
-178,0015e8b60cb5,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_178_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_178_Clique.pdf,0,15.361
-179,e930fd4bb628,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_179_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_179_Clique.pdf,0,15.055
-180,13000cce5714,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_180_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_180_Clique.pdf,0,15.964
-181,f7160f42c43f,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_181_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_181_Clique.pdf,0,15.854
-182,e94410617707,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_182_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_182_Clique.pdf,0,15.811
-183,697731e061ba,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_183_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_183_Clique.pdf,0,15.078
-184,88e1390d6d2e,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_184_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_184_Clique.pdf,0,15.715
-185,e024ad9eb4f8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_185_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_185_Clique.pdf,0,15.783
-186,a03f0621ac62,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_186_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_186_KColor.pdf,0,40.107
-187,cb9a0627190c,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_187_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_187_KColor.pdf,0,40.589
-188,7c4476cc37dd,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_188_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_188_KColor.pdf,0,39.43
-189,e518d80c33aa,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_189_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_189_KColor.pdf,0,38.515
-190,eff47eba5b76,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_190_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_190_KColor.pdf,0,38.681
-191,b814ff441e87,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_191_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_191_KColor.pdf,0,39.594
-192,e3dd3ea7d401,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_192_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_192_KColor.pdf,0,40.968
-193,d70927b70bb3,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_193_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_193_KColor.pdf,0,40.298
-194,64e676a1a73d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_194_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_194_KColor.pdf,0,42.411
-195,9b333241cc30,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_195_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_195_KColor.pdf,0,37.306
-196,3fbce54a4c54,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_196_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_196_KColor.pdf,0,34.952
-197,04f76e990ea9,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_197_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_197_KColor.pdf,0,49.836
-198,5980aabef13e,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_198_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_198_KColor.pdf,0,39.768
-199,58b83163c33a,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_199_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_199_KColor.pdf,0,40.125
-200,7954f70b45aa,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_200_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_200_KColor.pdf,0,36.992
-201,f23ec654532e,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_201_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_201_KColor.pdf,0,39.531
-202,93900ad7a100,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_202_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_202_KColor.pdf,0,38.667
-203,289579c55267,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_203_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_203_KColor.pdf,0,38.026
-204,46766d8b08a5,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_204_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_204_KColor.pdf,0,41.711
-205,f75e5ef5e62b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_205_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_205_KColor.pdf,0,40.197
-206,e6e918df2b2b,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_206_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_206_Factor.pdf,0,8.318
-207,553476db7b01,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_207_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_207_Factor.pdf,0,7.344
-208,745111992706,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_208_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_208_Factor.pdf,0,7.667
-209,83be6b41f6ff,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_209_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_209_Factor.pdf,0,6.624
-210,cc87e8d934c3,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_210_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_210_Factor.pdf,0,8.197
-211,435965602543,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_211_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_211_Factor.pdf,0,6.528
-212,5ca4f786eea4,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_212_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_212_Factor.pdf,0,6.714
-213,72fbbada04c6,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_213_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_213_Factor.pdf,0,6.426
-214,11e6bd81ad02,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_214_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_214_Factor.pdf,0,6.769
-215,150a24f01193,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_215_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_215_MaxCut.pdf,0,13.386
-216,22fec4e90f2b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_216_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_216_MIS.pdf,0,33.889
-217,d784f94a6d06,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_217.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_217.pdf,1,240.475
-218,f0b40d99cf6e,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_218_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_218_Clique.pdf,0,16.109
-219,b6bdeb87ae16,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_219_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_219_KColor.pdf,0,36.383
-220,064557dd044d,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_220_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_220_Factor.pdf,0,8.955
-221,7c262a6717a1,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_221_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_221_MaxCut.pdf,0,16.374
-222,ea68b3e5a442,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_222_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_222_MIS.pdf,0,28.722
-223,dcd254891ebb,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_223.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_223.pdf,1,240.455
-224,8f6a4ffc450e,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_224_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_224_Clique.pdf,0,15.265
-225,3fbce54a4c54,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_225_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_225_KColor.pdf,0,38.895
-226,5ae4ecede012,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_226_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_226_MaxCut.pdf,0,14.625
-227,4126fa2aa9b0,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_227_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_227_MIS.pdf,0,34.194
-228,babc12028d95,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_228.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_228.pdf,1,240.416
-229,47b458cf14e8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_229_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_229_Clique.pdf,0,16.558
-230,bf7277f09a1d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_230_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_230_KColor.pdf,0,40.349
-231,1c97cbfde0e0,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_231_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_231_Factor.pdf,0,8.021
-232,01e192a36125,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_232_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_232_MaxCut.pdf,0,18.955
-233,a0a90d877dcf,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_233_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_233_MIS.pdf,0,31.084
-234,b45a973555da,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_234.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_234.pdf,1,240.53
-235,991190394caf,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_235_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_235_Clique.pdf,0,18.574
-236,ce28aa5dcb75,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_236_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_236_KColor.pdf,0,39.774
-237,7e765e8a4d39,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_237_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_237_Factor.pdf,0,9.251
-238,97f7d2fdff05,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_238_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_238_Factor.pdf,0,7.928
-239,9c867e289643,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_239_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_239_MaxCut.pdf,0,13.49
-240,2449a9b5bce8,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_240.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_240.pdf,1,240.473
-241,352a5fb962d2,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_241_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_241_MIS.pdf,0,39.447
-242,83857875e9a7,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_242_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_242_KColor.pdf,0,41.273
-243,97f7d2fdff05,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_243_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_243_Factor.pdf,0,8.907
-244,0c3608e8e073,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_244_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_244_MaxCut.pdf,0,14.101
-245,a5b7267d3a37,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_245.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_245.pdf,1,240.468
-246,e510ad2f8413,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_246_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_246_MIS.pdf,0,34.164
-247,dd3ae1220e46,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_247_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_247_KColor.pdf,0,35.763
-248,70baef42ee25,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_248_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_248_Factor.pdf,0,9.113
-249,97f7d2fdff05,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_249_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_249_Factor.pdf,0,8.192
-250,0c3608e8e073,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_250_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_250_MaxCut.pdf,0,14.201
-251,a5b7267d3a37,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_251.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_251.pdf,1,240.448
-252,e510ad2f8413,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_252_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_252_MIS.pdf,0,41.468
-253,dd3ae1220e46,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_253_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_253_KColor.pdf,0,39.226
-254,70baef42ee25,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_254_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_254_Factor.pdf,0,8.631
-255,853d23aad64d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_255_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_255_MaxCut.pdf,0,14.181
-256,a1697ce0008b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_256_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_256_MaxCut.pdf,0,14.396
-257,ae9ba6244ce0,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_257.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_257.pdf,1,240.455
-258,1f3a8c0ef7da,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_258_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_258_Clique.pdf,0,17.351
-259,d5ac7b11f10b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_259_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_259_KColor.pdf,0,38.778
-260,9f52a7a3d70c,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_260_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_260_Factor.pdf,0,8.72
-261,281cf133956b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_261_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_261_MaxCut.pdf,0,12.436
-262,828d4809a1b7,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_262_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_262_MIS.pdf,0,30.814
-263,15b2e0b1e479,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_263.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_263.pdf,1,240.423
-264,dd0de0719fd2,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_264_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_264_Clique.pdf,0,16.517
-265,3230fdd459a8,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_265_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_265_Factor.pdf,0,7.443
-266,2de130c73c7b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_266_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_266_MaxCut.pdf,0,14.399
-267,0bffdf58690d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_267_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_267_MIS.pdf,0,30.837
-268,192a616c550b,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_268_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_268_ADD.pdf,0,8.189
-269,337d0b0333d4,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_269_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_269_SUB.pdf,0,9.646
-270,81656bedf621,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_270_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_270_MUL.pdf,0,7.019
-271,13a4e519b0cd,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_271_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_271_ADD.pdf,0,7.35
-272,4f4c1dfaac15,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_272_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_272_SUB.pdf,0,6.975
-273,8e718a6d5f2a,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_273_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_273_MUL.pdf,0,6.837
-274,b8b2ed094892,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_274_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_274_ADD.pdf,0,7.969
-275,b3d468a334ab,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_275_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_275_SUB.pdf,0,6.885
-276,d509516fd418,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_276_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_276_MUL.pdf,0,7.167
-277,a8acc842d5bf,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_277_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_277_ADD.pdf,0,8.001
-278,3e53f9ba45ab,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_278_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_278_SUB.pdf,0,6.921
-279,5fa0bfb0cff6,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_279_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_279_MUL.pdf,0,6.08
-280,750ec8a01468,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_280_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_280_ADD.pdf,0,7.386
-281,83d5fb06599c,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_281_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_281_SUB.pdf,0,6.325
-282,b8ccdcb5fd52,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_282_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_282_MUL.pdf,0,6.637
-283,fee01f7d83ad,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_283_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_283_ADD.pdf,0,32.659
-284,77b3c49ea36f,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_284_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_284_SUB.pdf,0,6.967
-285,7b43a436955d,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_285_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_285_MUL.pdf,0,6.931
-286,a011fd8730cc,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_286_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_286_ADD.pdf,0,6.822
-287,565f4aea29c3,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_287_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_287_SUB.pdf,0,6.335
-288,8c14ef9714b8,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_288_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_288_MUL.pdf,0,6.023
-289,f4658a7bb130,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_289_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_289_ADD.pdf,0,10.164
-290,46a5dd4f2f35,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_290_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_290_SUB.pdf,0,6.735
-291,b6ca87bcb0b9,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_291_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_291_MUL.pdf,0,6.316
-292,4d58b40fb91c,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_292.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_292.pdf,1,240.567
-293,01f4fc3468b8,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_293_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_293_SUB.pdf,0,8.341
-294,6e9ba1591ed8,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_294_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_294_MUL.pdf,0,6.723
-295,891ac90a8ae5,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_295.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_295.pdf,1,240.547
-296,2a3b648b5266,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_296_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_296_SUB.pdf,0,8.186
-297,b0ac3cace913,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_297_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_297_MUL.pdf,0,6.212
-298,02bd16061c32,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_298.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_298.pdf,1,240.539
-299,573891a7b62f,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_299.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_299.pdf,1,240.523
-300,90eb3242b8b2,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_300_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_300_MUL.pdf,0,9.695
-301,5c32209f08f5,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_301_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_301_ADD.pdf,0,9.983
-302,f5de7cb963af,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_302_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_302_SUB.pdf,0,41.471
-303,808f68958fdc,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_303_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_303_ADD.pdf,0,7.801
-304,25d0695707f6,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_304_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_304_ADD.pdf,0,6.493
-305,884bb6a41a82,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_305_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_305_ADD.pdf,0,7.003
-306,e5ebd05f8a80,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_306_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_306_ADD.pdf,0,6.132
-307,15e6292093b5,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_307_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_307_SUB.pdf,0,6.236
-308,b805ec15b204,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_308_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_308_SUB.pdf,0,6.501
-309,c5f4fd6d02a3,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_309_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_309_SUB.pdf,0,6.121
-310,9b37d4b3eaa3,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_310_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_310_SUB.pdf,0,5.966
-311,3d98a5550f21,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_311_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_311_MUL.pdf,0,5.801
-312,c4d8d3e2d21c,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_312_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_312_MUL.pdf,0,6.094
-313,29b585150f08,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_313_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_313_MUL.pdf,0,6.132
-314,5884f2e08ed4,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_314_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_314_MUL.pdf,0,5.86
-315,91d18c57de69,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_315_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_315_MaxCut.pdf,0,12.07
-316,65f44097f913,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_316_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_316_MaxCut.pdf,0,11.774
-317,43fb55dc5bd1,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_317_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_317_MIS.pdf,0,25.138
-318,b22483f1db20,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_318_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_318_MIS.pdf,0,30.491
-319,3e729f0e5b90,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_319_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_319_TSP.pdf,0,25.89
-320,be128e268652,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_320_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_320_TSP.pdf,0,26.62
-321,c3c09fb7b553,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_321_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_321_Clique.pdf,0,14.095
-322,3f2dd7e95a30,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_322_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_322_Clique.pdf,0,13.891
-323,a80a514445ab,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_323_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_323_KColor.pdf,0,31.934
-324,1c0e111a93c5,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_324_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_324_KColor.pdf,0,34.072
-325,3f30ccbb5828,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_325_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_325_ADD.pdf,0,7.889
-326,95127c92f468,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_326_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_326_ADD.pdf,0,6.886
-327,35ce5fef845e,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_327_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_327_ADD.pdf,0,7.062
-328,a3a1c2e9cfcd,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_328_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_328_ADD.pdf,0,6.649
-329,d5b9290d46da,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_329_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_329_SUB.pdf,0,6.471
-330,ba27f8a2f684,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_330_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_330_SUB.pdf,0,6.085
-331,1d2f3bb1a52b,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_331_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_331_SUB.pdf,0,6.526
-332,07eacf6b521e,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_332_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_332_SUB.pdf,0,5.976
-333,0a165f056b80,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_333_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_333_MUL.pdf,0,5.894
-334,a385737b5b8f,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_334_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_334_MUL.pdf,0,5.807
-335,9b081542f7b3,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_335_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_335_MUL.pdf,0,5.832
-336,4c6bf21fd059,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_336_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_336_MUL.pdf,0,6.447
-337,0411533ea60d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_337_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_337_MaxCut.pdf,0,12.237
-338,39d39f689de4,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_338_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_338_MaxCut.pdf,0,12.308
-339,f87f73937093,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_339_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_339_MIS.pdf,0,29.263
-340,35a70bf79f46,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_340_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_340_MIS.pdf,0,27.959
-341,ab6e743fc711,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_341_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_341_TSP.pdf,0,26.636
-342,86ee5a00e910,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_342_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_342_TSP.pdf,0,26.93
-343,0dfc849bbfaa,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_343_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_343_Clique.pdf,0,14.07
-344,d9c8796c3d39,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_344_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_344_Clique.pdf,0,13.905
-345,3c8648316a5b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_345_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_345_KColor.pdf,0,34.28
-346,f98bf68b430b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_346_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_346_KColor.pdf,0,32.383
-347,7c3e54fd70b4,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_347_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_347_ADD.pdf,0,7.45
-348,84ae60f30e5c,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_348_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_348_ADD.pdf,0,7.525
-349,583fb51175c2,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_349_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_349_ADD.pdf,0,7.248
-350,26538c247e55,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_350_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_350_ADD.pdf,0,9.536
-351,b968e3ac4054,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_351_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_351_SUB.pdf,0,6.834
-352,8c2e84c945f6,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_352_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_352_SUB.pdf,0,6.64
-353,69acd6f9660d,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_353_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_353_SUB.pdf,0,39.984
-354,c0faf0b311e0,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_354_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_354_SUB.pdf,0,7.271
-355,a04608f05788,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_355_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_355_MUL.pdf,0,5.936
-356,3d38826f028b,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_356_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_356_MUL.pdf,0,5.92
-357,3e9e6ca8be35,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_357_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_357_MUL.pdf,0,6.039
-358,f325254821c2,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_358_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_358_MUL.pdf,0,41.166
-359,1faa59d66ca3,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_359_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_359_MaxCut.pdf,0,13.17
-360,f49271e64e0d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_360_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_360_MIS.pdf,0,28.93
-361,b85f1da274a4,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_361_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_361_Clique.pdf,0,13.486
-362,4beec297553a,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_362_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_362_TSP.pdf,0,25.934
-363,392c2048889d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_363_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_363_KColor.pdf,0,34.162
-364,02cd98a7299a,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_364_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_364_KColor.pdf,0,34.333
-365,ace999cf16c1,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_365_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_365_MIS.pdf,0,31.164
-366,a6e23393af68,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_366_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_366_MaxCut.pdf,0,11.996
-367,09a3dd55ce66,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_367_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_367_KColor.pdf,0,30.929
-368,c18c92f0f84b,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_368_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_368_ADD.pdf,0,7.426
-369,a7fc10107128,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_369_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_369_ADD.pdf,0,6.463
-370,0b8877443331,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_370_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_370_ADD.pdf,0,6.4
-371,068ade7524ba,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_371_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_371_ADD.pdf,0,6.474
-372,17f7a2292853,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_372_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_372_SUB.pdf,0,5.81
-373,24566abad9a9,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_373_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_373_SUB.pdf,0,5.94
-374,fdc5e35f2dc1,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_374_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_374_SUB.pdf,0,6.505
-375,78a0b4ea9447,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_375_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_375_SUB.pdf,0,5.845
-376,483a7f1b8405,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_376_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_376_MUL.pdf,0,6.289
-377,8ca76fee455b,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_377_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_377_MUL.pdf,0,5.759
-378,d5eb49618c66,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_378_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_378_MUL.pdf,0,5.881
-379,86d09dac4292,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_379_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_379_MUL.pdf,0,6.018
-380,7060dafebeb0,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_380_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_380_MaxCut.pdf,0,12.26
-381,393ba71524e8,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_381_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_381_MIS.pdf,0,29.076
-382,9dd01d52e244,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_382_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_382_MIS.pdf,0,30.342
-383,a63a7dc91b15,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_383_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_383_TSP.pdf,0,25.488
-384,85322819f8b2,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_384_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_384_TSP.pdf,0,22.505
-385,86da93be8831,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_385_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_385_TSP.pdf,0,24.426
-386,40b9af29348c,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_386_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_386_MaxCut.pdf,0,12.756
-387,bd6dfb71a05f,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_387_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_387_MaxCut.pdf,0,12.551
-388,230a000b8a62,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_388_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_388_MaxCut.pdf,0,12.653
-389,cc0d774b1fb7,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_389_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_389_Clique.pdf,0,13.948
-390,7c945b30ce49,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_390_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_390_VC.pdf,0,13.798
-391,ec643371e20a,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_391_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_391_VC.pdf,0,11.86
-392,4b41b28d2c19,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_392_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_392_VC.pdf,0,13.196
-393,571e9e9e708c,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_393_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_393_VC.pdf,0,12.075
-394,ea4a242a0013,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_394_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_394_VC.pdf,0,13.561
-395,b77d1e8db1df,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_395_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_395_VC.pdf,0,13.382
-396,53408df0a318,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_396_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_396_VC.pdf,0,12.342
-397,e34d005992b1,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_397_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_397_VC.pdf,0,13.476
-398,c11215a323ae,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_398_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_398_VC.pdf,0,11.861
-399,4346fec9c2f3,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_399_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_399_VC.pdf,0,13.777
-400,67ce4243e155,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_400_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_400_VC.pdf,0,12.055
-401,c4d617ec3f43,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_401_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_401_VC.pdf,0,13.648
-402,c5b05136105b,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_402_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_402_VC.pdf,0,13.905
-403,b67294456cbf,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_403_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_403_VC.pdf,0,12.698
-404,239451f963d5,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_404_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_404_VC.pdf,0,13.107
-405,68d93f8d3ea0,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_405_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_405_VC.pdf,0,13.059
-406,c980125f7080,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_406_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_406_VC.pdf,0,12.97
-407,d39b467731a8,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_407_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_407_VC.pdf,0,11.024
-408,2e99492d244e,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_408_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_408_VC.pdf,0,12.792
-409,84618ba8e3fc,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_409_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_409_VC.pdf,0,13.173
-410,8b2269746b49,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_410_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_410_VC.pdf,0,12.102
-411,44642f0ef387,UNKNOWN,error,IndexError: index 5 is out of bounds for axis 0 with size 4,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_411_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_411_UNKNOWN.pdf,1,5.131
-412,fc707e9b8d21,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_412_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_412_VC.pdf,0,12.395
-413,aa371a4bde0d,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_413_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_413_VC.pdf,0,12.871
-414,4430883d7458,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_414_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_414_VC.pdf,0,13.109
-415,53d74ff7329c,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_415_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_415_VC.pdf,0,12.04
-416,023f4a0f1d66,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_416_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_416_VC.pdf,0,12.672
-417,901595e002fa,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_417_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_417_VC.pdf,0,13.018
-418,97f9c9b54fbb,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_418_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_418_VC.pdf,0,14.806
-419,04ecc1b57fca,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_419_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_419_VC.pdf,0,12.224
-420,ac2a28c6ea26,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_420_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_420_VC.pdf,0,12.137
-421,3c47385cf346,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_421_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_421_VC.pdf,0,13.088
-422,f2d6e4f34df0,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_422_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_422_VC.pdf,0,12.127
-423,4aa798a7b420,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_423_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_423_VC.pdf,0,11.819
-424,ec8adce2fbad,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_424_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_424_VC.pdf,0,12.638
-425,40e6b6da40ad,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_425_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_425_VC.pdf,0,12.721
-426,76b0e13e4967,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_426_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_426_VC.pdf,0,11.168
-427,ca141344b1cf,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_427_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_427_VC.pdf,0,12.363
-428,a12f577e1318,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_428_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_428_VC.pdf,0,11.289
-429,097bb8a66310,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_429_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_429_VC.pdf,0,13.209
-430,ebe930c7a568,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_430_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_430_VC.pdf,0,12.274
-431,32d25c809fd9,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_431_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_431_VC.pdf,0,13.201
-432,30da8bc58336,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_432_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_432_VC.pdf,0,11.936
-433,b210cbceb561,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_433_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_433_VC.pdf,0,12.342
-434,56196848e8f9,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_434_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_434_VC.pdf,0,13.695
-435,bd63cdec7183,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_435_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_435_VC.pdf,0,12.829
+1,0512e437cbab,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_1_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_1_SUB.pdf,0,18.742
+2,d4b22571f12d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_2_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_2_MaxCut.pdf,0,33.178
+3,d4b22571f12d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_3_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_3_MaxCut.pdf,0,35.405
+4,e59fb24fb2fa,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_4_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_4_MaxCut.pdf,0,16.953
+5,53337a8d05bb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_5_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_5_MaxCut.pdf,0,14.561
+6,f9ad51ef4fd6,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_6_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_6_MaxCut.pdf,0,48.643
+7,7842a83111f1,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_7_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_7_MaxCut.pdf,0,16.652
+8,c634f6132a5e,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_8_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_8_MaxCut.pdf,0,28.643
+9,bbda6d95c365,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_9_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_9_MaxCut.pdf,0,48.875
+10,eb1067487b24,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_10_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_10_MaxCut.pdf,0,32.974
+11,6d9a8a0f2647,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_11_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_11_MaxCut.pdf,0,29.958
+12,e5577268fa65,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_12_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_12_MaxCut.pdf,0,17.828
+13,6d9a8a0f2647,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_13_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_13_MaxCut.pdf,0,25.804
+14,15d5fd558e9d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_14_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_14_MIS.pdf,0,32.703
+15,7bc014a35252,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_15_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_15_MIS.pdf,0,68.371
+16,981307f5fddb,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_16_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_16_MIS.pdf,0,42.813
+17,9841b58ced38,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_17_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_17_MIS.pdf,0,84.552
+18,e8f7e9f3e088,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_18_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_18_MIS.pdf,0,101.596
+19,36f9ee79685d,UNKNOWN,error,No result from worker,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_19_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_19_UNKNOWN.pdf,1,23.4
+20,233c72c23bb6,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_20_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_20_MIS.pdf,0,75.226
+21,a68a031e6637,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_21_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_21_MIS.pdf,0,41.328
+22,32bc714b1adb,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_22_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_22_MIS.pdf,0,38.969
+23,ec04f121c513,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_23_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_23_MIS.pdf,0,38.791
+24,2b8d6ac903ba,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_24_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_24_MIS.pdf,0,72.039
+25,5b0b123d451d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_25_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_25_MIS.pdf,0,81.035
+26,d5e43ac853b8,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_26_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_26_MaxCut.pdf,0,35.341
+27,0751db13127f,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_27_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_27_MaxCut.pdf,0,25.743
+28,76823b3bb459,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_28_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_28_MaxCut.pdf,0,62.723
+29,5ef602514fc5,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_29_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_29_MaxCut.pdf,0,61.098
+30,b6b0638c87e1,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_30_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_30_MaxCut.pdf,0,38.714
+31,c057268fb476,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_31_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_31_MIS.pdf,0,57.768
+32,9b18f2b4b6e4,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_32_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_32_MIS.pdf,0,55.825
+33,bb064c28b196,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_33_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_33_MIS.pdf,0,36.867
+34,d0a3ddf5f16c,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_34_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_34_MaxCut.pdf,0,55.792
+35,61b482644759,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_35_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_35_MaxCut.pdf,0,32.828
+36,e07a06a3ca9d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_36_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_36_MIS.pdf,0,48.821
+37,7051148616e2,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_37_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_37_MIS.pdf,0,35.519
+38,ab8b5b53f968,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_38_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_38_UNKNOWN.pdf,1,7.328
+39,e5cff6418b82,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_39_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_39_UNKNOWN.pdf,1,5.758
+40,972fa49ae1a4,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_40.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_40.pdf,1,240.441
+41,4bcf10002b48,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_41_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_41_MaxCut.pdf,0,13.859
+42,7b71ff05293a,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_42_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_42_MaxCut.pdf,0,14.202
+43,a16ac8789a32,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_43_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_43_MIS.pdf,0,26.806
+44,8fa3016f706e,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_44_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_44_MIS.pdf,0,28.943
+45,269b1c1db2f7,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_45.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_45.pdf,1,240.443
+46,c8481d73d864,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_46_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_46_MaxCut.pdf,0,15.328
+47,ac4c92fdd3c7,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_47_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_47_MaxCut.pdf,0,24.76
+48,1d26e719092c,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_48_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_48_MIS.pdf,0,26.054
+49,b30b8a6e19aa,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_49_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_49_MIS.pdf,0,26.192
+50,8a1ae0c83c8b,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_50.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_50.pdf,1,240.437
+51,27a4ec9089e4,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_51.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_51.pdf,1,240.433
+52,6d76a6a35815,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_52.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_52.pdf,1,2069.921
+53,81e42ce032cc,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_53_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_53_MaxCut.pdf,0,10.859
+54,55d51cd275ef,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_54_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_54_MaxCut.pdf,0,12.849
+55,9344fb9c1a1b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_55_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_55_MIS.pdf,0,26.871
+56,e3f232afca62,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_56_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_56_MIS.pdf,0,27.881
+57,092e80c29401,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_57_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_57_TSP.pdf,0,33.192
+58,0ec1e34b7058,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_58_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_58_TSP.pdf,0,35.731
+59,e1d8c74c19b0,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_59_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_59_MaxCut.pdf,0,15.464
+60,4e830024c8f8,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_60_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_60_MaxCut.pdf,0,20.547
+61,4e8bc88d9a5d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_61_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_61_MaxCut.pdf,0,12.444
+62,6b6290f13417,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_62_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_62_MaxCut.pdf,0,24.469
+63,3a7977d5c81b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_63_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_63_MaxCut.pdf,0,34.295
+64,e3f232afca62,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_64_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_64_MIS.pdf,0,62.667
+65,8a151201b198,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_65_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_65_MIS.pdf,0,71.605
+66,29ad0f03d04b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_66_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_66_MIS.pdf,0,20.443
+67,9a7f2d9120ee,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_67_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_67_MIS.pdf,0,31.808
+68,7f074b3fb59d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_68_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_68_MIS.pdf,0,26.474
+69,cba92c006332,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_69_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_69_TSP.pdf,0,18.651
+70,0bf31b6e145b,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_70_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_70_TSP.pdf,0,38.573
+71,500b6d503c75,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_71_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_71_TSP.pdf,0,25.569
+72,fa9c5a1c3932,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_72_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_72_TSP.pdf,0,22.932
+73,092e80c29401,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_73_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_73_TSP.pdf,0,22.979
+74,677fcb30c4f2,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_74_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_74_MaxCut.pdf,0,24.293
+75,2e44dcef0063,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_75_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_75_MaxCut.pdf,0,26.914
+76,2b60be0c65cb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_76_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_76_MaxCut.pdf,0,39.677
+77,00b6e9bb532e,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_77_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_77_MaxCut.pdf,0,24.907
+78,834cf59a2761,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_78_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_78_MaxCut.pdf,0,31.107
+79,eae7e10d30df,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_79_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_79_MIS.pdf,0,49.718
+80,9183267e960e,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_80_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_80_MIS.pdf,0,48.858
+81,3327e28454c8,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_81_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_81_MIS.pdf,0,65.428
+82,0dabae348d92,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_82_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_82_MIS.pdf,0,99.072
+83,816f4699e534,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_83_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_83_MIS.pdf,0,92.202
+84,a06089dfe502,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_84.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_84.pdf,1,240.651
+85,8860a8b12572,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_85.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_85.pdf,1,240.611
+86,b42f216a6bd9,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_86.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_86.pdf,1,240.659
+87,1cd020e80f53,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_87.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_87.pdf,1,240.664
+88,b2079f55f5e8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_88_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_88_Clique.pdf,0,19.189
+89,4cf425173bc6,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_89_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_89_Clique.pdf,0,25.005
+90,77f6133fd5b0,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_90_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_90_Clique.pdf,0,68.925
+91,e8e8e3136ac4,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_91_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_91_Clique.pdf,0,23.944
+92,df106fbe15e7,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_92_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_92_Clique.pdf,0,14.887
+93,7cc327d17f18,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_93_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_93_Clique.pdf,0,17.848
+94,e7c116646ec4,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_94_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_94_Clique.pdf,0,17.61
+95,228b0c15b92f,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_95_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_95_Clique.pdf,0,14.738
+96,8abf32b2aabf,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_96_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_96_Clique.pdf,0,19.711
+97,889a792e47eb,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_97_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_97_Clique.pdf,0,20.141
+98,9595de512ecf,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_98_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_98_KColor.pdf,0,58.634
+99,67bb63f92b54,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_99_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_99_KColor.pdf,0,61.324
+100,ca6cd577c9b8,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_100_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_100_KColor.pdf,0,64.385
+101,9baf74fa1a1f,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_101_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_101_KColor.pdf,0,68.22
+102,a74fa5d41298,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_102_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_102_KColor.pdf,0,61.451
+103,d0274414dc6b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_103_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_103_KColor.pdf,0,70.369
+104,832fbaee0d15,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_104_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_104_KColor.pdf,0,53.656
+105,61b96b71e5e1,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_105_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_105_KColor.pdf,0,71.009
+106,e08ced5cf66d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_106_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_106_KColor.pdf,0,66.805
+107,fd4ec1e18167,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_107_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_107_KColor.pdf,0,73.306
+108,b450652c1c59,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_108_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_108_KColor.pdf,0,70.048
+109,0306b19aeb84,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_109_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_109_KColor.pdf,0,63.02
+110,974e15e10b78,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_110_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_110_KColor.pdf,0,72.864
+111,529e1690aac3,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_111_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_111_KColor.pdf,0,63.439
+112,72b4e2cfa468,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_112_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_112_KColor.pdf,0,71.573
+113,05ac834ddc76,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_113_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_113_KColor.pdf,0,67.771
+114,75d23d2897b2,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_114_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_114_KColor.pdf,0,69.889
+115,fa71e119f209,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_115_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_115_KColor.pdf,0,76.546
+116,5bbe707859bb,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_116_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_116_KColor.pdf,0,70.459
+117,d7693bae7879,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_117_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_117_KColor.pdf,0,63.388
+118,f0311edb28d5,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_118_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_118_KColor.pdf,0,76.031
+119,6de43adf9faa,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_119_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_119_MaxCut.pdf,0,42.767
+120,7278e253ff48,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_120_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_120_MaxCut.pdf,0,19.482
+121,22fec4e90f2b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_121_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_121_MIS.pdf,0,119.185
+122,ea68b3e5a442,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_122_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_122_MIS.pdf,0,108.752
+123,d784f94a6d06,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_123.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_123.pdf,1,240.74
+124,d293aa2188a4,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_124.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_124.pdf,1,240.646
+125,5e32ebce2c26,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_125_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_125_Clique.pdf,0,27.121
+126,a1440877666f,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_126_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_126_Clique.pdf,0,26.507
+127,b6bdeb87ae16,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_127_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_127_KColor.pdf,0,59.793
+128,04f76e990ea9,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_128_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_128_KColor.pdf,0,72.067
+129,52686f74ef7b,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_129_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_129_Factor.pdf,0,30.026
+130,3e40fa4e4db7,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_130_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_130_Factor.pdf,0,26.732
+131,6fcfd15407c4,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_131_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_131_Factor.pdf,0,28.884
+132,af3989e2fd29,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_132_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_132_Factor.pdf,0,28.685
+133,2146632b51a2,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_133_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_133_Factor.pdf,0,26.773
+134,a63e13dcd2af,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_134_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_134_Factor.pdf,0,27.296
+135,30eb89568587,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_135_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_135_Factor.pdf,0,16.586
+136,609340da957a,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_136_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_136_Factor.pdf,0,9.583
+137,fddd723e7b55,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_137_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_137_Factor.pdf,0,6.549
+138,e325228d743d,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_138_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_138_Factor.pdf,0,9.295
+139,8d58c36ba4bf,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_139_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_139_Factor.pdf,0,16.388
+140,bad6e75411bb,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_140_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_140_Factor.pdf,0,7.508
+141,94b57175437f,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_141_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_141_UNKNOWN.pdf,1,5.461
+142,7a3e80e5582c,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_142_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_142_UNKNOWN.pdf,1,5.199
+143,5982818d1402,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_143_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_143_UNKNOWN.pdf,1,8.252
+144,28b8cd3ada20,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_144_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_144_UNKNOWN.pdf,1,22.32
+145,381475eca5bb,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_145_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_145_UNKNOWN.pdf,1,13.093
+146,8420327719e8,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_146_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_146_UNKNOWN.pdf,1,9.111
+147,8420327719e8,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_147_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_147_UNKNOWN.pdf,1,9.057
+148,b49cba018712,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_148_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_148_UNKNOWN.pdf,1,10.506
+149,1dccb78dc13b,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_149_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_149_UNKNOWN.pdf,1,9.381
+150,182c258a3bea,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_150_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_150_UNKNOWN.pdf,1,9.122
+151,2dfffcc15bdb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_151_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_151_MaxCut.pdf,0,16.34
+152,cc32b1cf00bb,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_152_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_152_MaxCut.pdf,0,30.168
+153,e6e69a32cf35,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_153_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_153_MIS.pdf,0,36.505
+154,26d9e3023803,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_154_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_154_MaxCut.pdf,0,17.807
+155,46401b137af1,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_155_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_155_MIS.pdf,0,76.596
+156,9875ad122993,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_156_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_156_MaxCut.pdf,0,24.911
+157,efe692fca580,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_157_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_157_MaxCut.pdf,0,23.866
+158,4b89a100562a,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_158_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_158_MIS.pdf,0,192.203
+159,4d4328edfdfb,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_159_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_159_MIS.pdf,0,135.118
+160,f99e6f46d130,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_160_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_160_UNKNOWN.pdf,1,15.718
+161,55bc7b7cc900,UNKNOWN,error,Unregistered problem type: Unknown,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_161_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_161_UNKNOWN.pdf,1,8.347
+162,1ae718c1f69b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_162_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_162_MaxCut.pdf,0,27.039
+163,b11eca846f88,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_163_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_163_MIS.pdf,0,118.964
+164,856e7f766134,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_164.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_164.pdf,1,240.646
+165,81e42ce032cc,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_165_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_165_MaxCut.pdf,0,20.099
+166,9344fb9c1a1b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_166_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_166_MIS.pdf,0,60.19
+167,092e80c29401,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_167_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_167_TSP.pdf,0,55.355
+168,677fcb30c4f2,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_168_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_168_MaxCut.pdf,0,38.919
+169,93f3aa5069ec,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_169_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_169_MaxCut.pdf,0,56.144
+170,eae7e10d30df,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_170_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_170_MIS.pdf,0,111.154
+171,3327e28454c8,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_171_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_171_MIS.pdf,0,147.648
+172,a06089dfe502,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_172.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_172.pdf,1,240.698
+173,8860a8b12572,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_173.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_173.pdf,1,240.777
+174,1cd020e80f53,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_174.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_174.pdf,1,240.723
+175,816f4699e534,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_175_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_175_MIS.pdf,0,115.748
+176,b2079f55f5e8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_176_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_176_Clique.pdf,0,21.534
+177,7cc327d17f18,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_177_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_177_Clique.pdf,0,24.65
+178,0015e8b60cb5,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_178_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_178_Clique.pdf,0,25.069
+179,e930fd4bb628,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_179_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_179_Clique.pdf,0,26.203
+180,13000cce5714,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_180_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_180_Clique.pdf,0,27.995
+181,f7160f42c43f,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_181_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_181_Clique.pdf,0,27.192
+182,e94410617707,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_182_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_182_Clique.pdf,0,28.513
+183,697731e061ba,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_183_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_183_Clique.pdf,0,25.723
+184,88e1390d6d2e,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_184_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_184_Clique.pdf,0,24.158
+185,e024ad9eb4f8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_185_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_185_Clique.pdf,0,24.3
+186,a03f0621ac62,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_186_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_186_KColor.pdf,0,75.678
+187,cb9a0627190c,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_187_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_187_KColor.pdf,0,62.385
+188,7c4476cc37dd,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_188_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_188_KColor.pdf,0,77.907
+189,e518d80c33aa,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_189_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_189_KColor.pdf,0,79.803
+190,eff47eba5b76,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_190_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_190_KColor.pdf,0,61.867
+191,b814ff441e87,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_191_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_191_KColor.pdf,0,73.112
+192,e3dd3ea7d401,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_192_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_192_KColor.pdf,0,72.904
+193,d70927b70bb3,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_193_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_193_KColor.pdf,0,70.157
+194,64e676a1a73d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_194_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_194_KColor.pdf,0,73.189
+195,9b333241cc30,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_195_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_195_KColor.pdf,0,100.139
+196,3fbce54a4c54,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_196_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_196_KColor.pdf,0,97.478
+197,04f76e990ea9,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_197_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_197_KColor.pdf,0,49.119
+198,5980aabef13e,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_198_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_198_KColor.pdf,0,58.893
+199,58b83163c33a,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_199_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_199_KColor.pdf,0,67.028
+200,7954f70b45aa,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_200_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_200_KColor.pdf,0,68.069
+201,f23ec654532e,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_201_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_201_KColor.pdf,0,72.988
+202,93900ad7a100,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_202_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_202_KColor.pdf,0,72.06
+203,289579c55267,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_203_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_203_KColor.pdf,0,71.799
+204,46766d8b08a5,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_204_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_204_KColor.pdf,0,69.419
+205,f75e5ef5e62b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_205_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_205_KColor.pdf,0,72.423
+206,e6e918df2b2b,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_206_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_206_Factor.pdf,0,12.705
+207,553476db7b01,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_207_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_207_Factor.pdf,0,9.607
+208,745111992706,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_208_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_208_Factor.pdf,0,9.187
+209,83be6b41f6ff,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_209_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_209_Factor.pdf,0,10.825
+210,cc87e8d934c3,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_210_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_210_Factor.pdf,0,9.879
+211,435965602543,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_211_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_211_Factor.pdf,0,9.606
+212,5ca4f786eea4,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_212_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_212_Factor.pdf,0,10.832
+213,72fbbada04c6,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_213_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_213_Factor.pdf,0,20.669
+214,11e6bd81ad02,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_214_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_214_Factor.pdf,0,10.082
+215,150a24f01193,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_215_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_215_MaxCut.pdf,0,27.628
+216,22fec4e90f2b,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_216_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_216_MIS.pdf,0,99.009
+217,d784f94a6d06,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_217.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_217.pdf,1,240.672
+218,f0b40d99cf6e,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_218_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_218_Clique.pdf,0,28.903
+219,b6bdeb87ae16,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_219_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_219_KColor.pdf,0,60.99
+220,064557dd044d,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_220_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_220_Factor.pdf,0,12.871
+221,7c262a6717a1,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_221_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_221_MaxCut.pdf,0,21.743
+222,ea68b3e5a442,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_222_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_222_MIS.pdf,0,120.926
+223,dcd254891ebb,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_223.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_223.pdf,1,240.69
+224,8f6a4ffc450e,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_224_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_224_Clique.pdf,0,27.728
+225,3fbce54a4c54,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_225_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_225_KColor.pdf,0,77.129
+226,5ae4ecede012,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_226_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_226_MaxCut.pdf,0,28.532
+227,4126fa2aa9b0,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_227_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_227_MIS.pdf,0,120.889
+228,babc12028d95,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_228.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_228.pdf,1,240.704
+229,47b458cf14e8,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_229_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_229_Clique.pdf,0,32.721
+230,bf7277f09a1d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_230_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_230_KColor.pdf,0,70.501
+231,1c97cbfde0e0,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_231_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_231_Factor.pdf,0,11.852
+232,01e192a36125,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_232_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_232_MaxCut.pdf,0,25.775
+233,a0a90d877dcf,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_233_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_233_MIS.pdf,0,118.029
+234,b45a973555da,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_234.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_234.pdf,1,240.713
+235,991190394caf,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_235_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_235_Clique.pdf,0,22.755
+236,ce28aa5dcb75,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_236_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_236_KColor.pdf,0,70.344
+237,7e765e8a4d39,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_237_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_237_Factor.pdf,0,15.844
+238,97f7d2fdff05,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_238_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_238_Factor.pdf,0,12.759
+239,9c867e289643,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_239_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_239_MaxCut.pdf,0,21.742
+240,2449a9b5bce8,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_240.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_240.pdf,1,1143.369
+241,352a5fb962d2,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_241_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_241_MIS.pdf,0,50.712
+242,83857875e9a7,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_242_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_242_KColor.pdf,0,44.666
+243,97f7d2fdff05,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_243_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_243_Factor.pdf,0,11.604
+244,0c3608e8e073,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_244_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_244_MaxCut.pdf,0,29.226
+245,a5b7267d3a37,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_245.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_245.pdf,1,240.623
+246,e510ad2f8413,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_246_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_246_MIS.pdf,0,122.037
+247,dd3ae1220e46,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_247_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_247_KColor.pdf,0,71.498
+248,70baef42ee25,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_248_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_248_Factor.pdf,0,16.065
+249,97f7d2fdff05,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_249_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_249_Factor.pdf,0,14.001
+250,0c3608e8e073,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_250_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_250_MaxCut.pdf,0,33.35
+251,a5b7267d3a37,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_251.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_251.pdf,1,240.631
+252,e510ad2f8413,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_252_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_252_MIS.pdf,0,124.164
+253,dd3ae1220e46,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_253_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_253_KColor.pdf,0,65.366
+254,70baef42ee25,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_254_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_254_Factor.pdf,0,20.522
+255,853d23aad64d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_255_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_255_MaxCut.pdf,0,21.668
+256,a1697ce0008b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_256_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_256_MaxCut.pdf,0,31.604
+257,ae9ba6244ce0,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_257.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_257.pdf,1,240.776
+258,1f3a8c0ef7da,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_258_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_258_Clique.pdf,0,31.131
+259,d5ac7b11f10b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_259_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_259_KColor.pdf,0,76.456
+260,9f52a7a3d70c,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_260_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_260_Factor.pdf,0,11.577
+261,281cf133956b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_261_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_261_MaxCut.pdf,0,18.853
+262,828d4809a1b7,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_262_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_262_MIS.pdf,0,117.267
+263,15b2e0b1e479,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_263.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_263.pdf,1,240.688
+264,dd0de0719fd2,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_264_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_264_Clique.pdf,0,29.066
+265,3230fdd459a8,Factor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_265_Factor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_265_Factor.pdf,0,17.874
+266,2de130c73c7b,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_266_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_266_MaxCut.pdf,0,19.045
+267,0bffdf58690d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_267_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_267_MIS.pdf,0,116.405
+268,192a616c550b,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_268_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_268_ADD.pdf,0,7.666
+269,337d0b0333d4,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_269_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_269_SUB.pdf,0,17.062
+270,81656bedf621,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_270_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_270_MUL.pdf,0,6.666
+271,13a4e519b0cd,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_271_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_271_ADD.pdf,0,11.507
+272,4f4c1dfaac15,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_272_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_272_SUB.pdf,0,8.912
+273,8e718a6d5f2a,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_273_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_273_MUL.pdf,0,6.902
+274,b8b2ed094892,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_274_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_274_ADD.pdf,0,10.925
+275,b3d468a334ab,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_275_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_275_SUB.pdf,0,9.886
+276,d509516fd418,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_276_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_276_MUL.pdf,0,12.004
+277,a8acc842d5bf,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_277_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_277_ADD.pdf,0,9.22
+278,3e53f9ba45ab,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_278_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_278_SUB.pdf,0,14.28
+279,5fa0bfb0cff6,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_279_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_279_MUL.pdf,0,7.979
+280,750ec8a01468,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_280_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_280_ADD.pdf,0,12.242
+281,83d5fb06599c,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_281_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_281_SUB.pdf,0,12.853
+282,b8ccdcb5fd52,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_282_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_282_MUL.pdf,0,21.877
+283,fee01f7d83ad,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_283_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_283_ADD.pdf,0,63.899
+284,77b3c49ea36f,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_284_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_284_SUB.pdf,0,14.182
+285,7b43a436955d,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_285_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_285_MUL.pdf,0,12.385
+286,a011fd8730cc,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_286_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_286_ADD.pdf,0,22.8
+287,565f4aea29c3,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_287_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_287_SUB.pdf,0,6.611
+288,8c14ef9714b8,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_288_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_288_MUL.pdf,0,9.993
+289,f4658a7bb130,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_289_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_289_ADD.pdf,0,23.699
+290,46a5dd4f2f35,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_290_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_290_SUB.pdf,0,11.455
+291,b6ca87bcb0b9,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_291_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_291_MUL.pdf,0,13.978
+292,4d58b40fb91c,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_292.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_292.pdf,1,240.846
+293,01f4fc3468b8,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_293_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_293_SUB.pdf,0,12.707
+294,6e9ba1591ed8,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_294_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_294_MUL.pdf,0,24.608
+295,891ac90a8ae5,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_295.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_295.pdf,1,240.841
+296,2a3b648b5266,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_296_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_296_SUB.pdf,0,11.869
+297,b0ac3cace913,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_297_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_297_MUL.pdf,0,8.78
+298,02bd16061c32,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_298.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_298.pdf,1,240.924
+299,573891a7b62f,UNKNOWN,timeout,Exceeded 240s,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_299.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/TIMEOUT_299.pdf,1,240.874
+300,90eb3242b8b2,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_300_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_300_MUL.pdf,0,23.91
+301,5c32209f08f5,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_301_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_301_ADD.pdf,0,20.758
+302,f5de7cb963af,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_302_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_302_SUB.pdf,0,90.099
+303,808f68958fdc,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_303_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_303_ADD.pdf,0,16.433
+304,25d0695707f6,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_304_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_304_ADD.pdf,0,12.518
+305,884bb6a41a82,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_305_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_305_ADD.pdf,0,10.34
+306,e5ebd05f8a80,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_306_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_306_ADD.pdf,0,16.909
+307,15e6292093b5,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_307_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_307_SUB.pdf,0,7.828
+308,b805ec15b204,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_308_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_308_SUB.pdf,0,22.091
+309,c5f4fd6d02a3,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_309_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_309_SUB.pdf,0,25.69
+310,9b37d4b3eaa3,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_310_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_310_SUB.pdf,0,17.144
+311,3d98a5550f21,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_311_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_311_MUL.pdf,0,17.783
+312,c4d8d3e2d21c,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_312_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_312_MUL.pdf,0,20.411
+313,29b585150f08,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_313_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_313_MUL.pdf,0,14.655
+314,5884f2e08ed4,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_314_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_314_MUL.pdf,0,10.079
+315,91d18c57de69,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_315_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_315_MaxCut.pdf,0,35.491
+316,65f44097f913,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_316_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_316_MaxCut.pdf,0,25.802
+317,43fb55dc5bd1,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_317_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_317_MIS.pdf,0,69.151
+318,b22483f1db20,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_318_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_318_MIS.pdf,0,88.455
+319,3e729f0e5b90,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_319_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_319_TSP.pdf,0,50.181
+320,be128e268652,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_320_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_320_TSP.pdf,0,57.699
+321,c3c09fb7b553,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_321_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_321_Clique.pdf,0,30.16
+322,3f2dd7e95a30,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_322_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_322_Clique.pdf,0,31.363
+323,a80a514445ab,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_323_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_323_KColor.pdf,0,74.411
+324,1c0e111a93c5,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_324_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_324_KColor.pdf,0,80.04
+325,3f30ccbb5828,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_325_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_325_ADD.pdf,0,21.684
+326,95127c92f468,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_326_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_326_ADD.pdf,0,13.294
+327,35ce5fef845e,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_327_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_327_ADD.pdf,0,13.753
+328,a3a1c2e9cfcd,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_328_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_328_ADD.pdf,0,17.492
+329,d5b9290d46da,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_329_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_329_SUB.pdf,0,10.204
+330,ba27f8a2f684,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_330_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_330_SUB.pdf,0,14.914
+331,1d2f3bb1a52b,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_331_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_331_SUB.pdf,0,10.903
+332,07eacf6b521e,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_332_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_332_SUB.pdf,0,18.587
+333,0a165f056b80,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_333_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_333_MUL.pdf,0,8.328
+334,a385737b5b8f,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_334_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_334_MUL.pdf,0,9.365
+335,9b081542f7b3,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_335_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_335_MUL.pdf,0,16.217
+336,4c6bf21fd059,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_336_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_336_MUL.pdf,0,11.947
+337,0411533ea60d,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_337_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_337_MaxCut.pdf,0,25.054
+338,39d39f689de4,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_338_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_338_MaxCut.pdf,0,23.107
+339,f87f73937093,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_339_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_339_MIS.pdf,0,101.971
+340,35a70bf79f46,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_340_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_340_MIS.pdf,0,85.162
+341,ab6e743fc711,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_341_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_341_TSP.pdf,0,51.951
+342,86ee5a00e910,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_342_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_342_TSP.pdf,0,60.018
+343,0dfc849bbfaa,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_343_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_343_Clique.pdf,0,38.211
+344,d9c8796c3d39,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_344_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_344_Clique.pdf,0,30.676
+345,3c8648316a5b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_345_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_345_KColor.pdf,0,64.821
+346,f98bf68b430b,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_346_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_346_KColor.pdf,0,72.972
+347,7c3e54fd70b4,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_347_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_347_ADD.pdf,0,12.149
+348,84ae60f30e5c,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_348_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_348_ADD.pdf,0,24.692
+349,583fb51175c2,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_349_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_349_ADD.pdf,0,9.506
+350,26538c247e55,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_350_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_350_ADD.pdf,0,16.799
+351,b968e3ac4054,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_351_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_351_SUB.pdf,0,18.023
+352,8c2e84c945f6,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_352_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_352_SUB.pdf,0,11.02
+353,69acd6f9660d,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_353_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_353_SUB.pdf,0,93.807
+354,c0faf0b311e0,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_354_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_354_SUB.pdf,0,11.191
+355,a04608f05788,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_355_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_355_MUL.pdf,0,9.788
+356,3d38826f028b,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_356_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_356_MUL.pdf,0,12.207
+357,3e9e6ca8be35,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_357_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_357_MUL.pdf,0,16.872
+358,f325254821c2,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_358_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_358_MUL.pdf,0,1173.358
+359,1faa59d66ca3,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_359_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_359_MaxCut.pdf,0,18.863
+360,f49271e64e0d,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_360_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_360_MIS.pdf,0,33.531
+361,b85f1da274a4,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_361_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_361_Clique.pdf,0,24.851
+362,4beec297553a,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_362_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_362_TSP.pdf,0,30.346
+363,392c2048889d,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_363_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_363_KColor.pdf,0,38.261
+364,02cd98a7299a,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_364_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_364_KColor.pdf,0,46.994
+365,ace999cf16c1,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_365_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_365_MIS.pdf,0,29.479
+366,a6e23393af68,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_366_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_366_MaxCut.pdf,0,18.659
+367,09a3dd55ce66,KColor,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_367_KColor.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_367_KColor.pdf,0,41.674
+368,c18c92f0f84b,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_368_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_368_ADD.pdf,0,14.954
+369,a7fc10107128,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_369_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_369_ADD.pdf,0,6.773
+370,0b8877443331,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_370_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_370_ADD.pdf,0,10.302
+371,068ade7524ba,ADD,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_371_ADD.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_371_ADD.pdf,0,17.323
+372,17f7a2292853,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_372_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_372_SUB.pdf,0,5.888
+373,24566abad9a9,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_373_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_373_SUB.pdf,0,6.803
+374,fdc5e35f2dc1,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_374_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_374_SUB.pdf,0,10.812
+375,78a0b4ea9447,SUB,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_375_SUB.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_375_SUB.pdf,0,13.682
+376,483a7f1b8405,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_376_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_376_MUL.pdf,0,10.688
+377,8ca76fee455b,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_377_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_377_MUL.pdf,0,11.764
+378,d5eb49618c66,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_378_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_378_MUL.pdf,0,5.769
+379,86d09dac4292,MUL,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_379_MUL.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_379_MUL.pdf,0,10.898
+380,7060dafebeb0,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_380_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_380_MaxCut.pdf,0,27.739
+381,393ba71524e8,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_381_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_381_MIS.pdf,0,33.407
+382,9dd01d52e244,MIS,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_382_MIS.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_382_MIS.pdf,0,28.875
+383,a63a7dc91b15,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_383_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_383_TSP.pdf,0,27.853
+384,85322819f8b2,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_384_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_384_TSP.pdf,0,29.745
+385,86da93be8831,TSP,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_385_TSP.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_385_TSP.pdf,0,44.008
+386,40b9af29348c,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_386_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_386_MaxCut.pdf,0,16.767
+387,bd6dfb71a05f,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_387_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_387_MaxCut.pdf,0,22.666
+388,230a000b8a62,MaxCut,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_388_MaxCut.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_388_MaxCut.pdf,0,29.647
+389,cc0d774b1fb7,Clique,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_389_Clique.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_389_Clique.pdf,0,32.574
+390,7c945b30ce49,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_390_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_390_VC.pdf,0,39.143
+391,ec643371e20a,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_391_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_391_VC.pdf,0,17.904
+392,4b41b28d2c19,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_392_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_392_VC.pdf,0,23.336
+393,571e9e9e708c,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_393_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_393_VC.pdf,0,20.304
+394,ea4a242a0013,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_394_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_394_VC.pdf,0,25.511
+395,b77d1e8db1df,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_395_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_395_VC.pdf,0,33.61
+396,53408df0a318,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_396_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_396_VC.pdf,0,16.275
+397,e34d005992b1,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_397_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_397_VC.pdf,0,17.046
+398,c11215a323ae,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_398_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_398_VC.pdf,0,18.088
+399,4346fec9c2f3,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_399_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_399_VC.pdf,0,28.083
+400,67ce4243e155,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_400_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_400_VC.pdf,0,35.825
+401,c4d617ec3f43,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_401_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_401_VC.pdf,0,47.132
+402,c5b05136105b,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_402_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_402_VC.pdf,0,47.766
+403,b67294456cbf,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_403_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_403_VC.pdf,0,53.246
+404,239451f963d5,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_404_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_404_VC.pdf,0,54.432
+405,68d93f8d3ea0,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_405_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_405_VC.pdf,0,49.116
+406,c980125f7080,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_406_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_406_VC.pdf,0,38.011
+407,d39b467731a8,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_407_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_407_VC.pdf,0,38.011
+408,2e99492d244e,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_408_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_408_VC.pdf,0,22.232
+409,84618ba8e3fc,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_409_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_409_VC.pdf,0,21.114
+410,8b2269746b49,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_410_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_410_VC.pdf,0,18.073
+411,44642f0ef387,UNKNOWN,error,IndexError: index 5 is out of bounds for axis 0 with size 4,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_411_UNKNOWN.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/ERROR_411_UNKNOWN.pdf,1,5.636
+412,fc707e9b8d21,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_412_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_412_VC.pdf,0,15.05
+413,aa371a4bde0d,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_413_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_413_VC.pdf,0,28.382
+414,4430883d7458,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_414_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_414_VC.pdf,0,26.215
+415,53d74ff7329c,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_415_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_415_VC.pdf,0,21.159
+416,023f4a0f1d66,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_416_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_416_VC.pdf,0,14.822
+417,901595e002fa,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_417_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_417_VC.pdf,0,22.831
+418,97f9c9b54fbb,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_418_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_418_VC.pdf,0,19.885
+419,04ecc1b57fca,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_419_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_419_VC.pdf,0,17.626
+420,ac2a28c6ea26,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_420_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_420_VC.pdf,0,34.436
+421,3c47385cf346,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_421_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_421_VC.pdf,0,22.368
+422,f2d6e4f34df0,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_422_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_422_VC.pdf,0,23.965
+423,4aa798a7b420,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_423_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_423_VC.pdf,0,16.184
+424,ec8adce2fbad,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_424_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_424_VC.pdf,0,27.473
+425,40e6b6da40ad,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_425_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_425_VC.pdf,0,29.127
+426,76b0e13e4967,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_426_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_426_VC.pdf,0,33.786
+427,ca141344b1cf,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_427_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_427_VC.pdf,0,32.854
+428,a12f577e1318,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_428_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_428_VC.pdf,0,30.78
+429,097bb8a66310,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_429_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_429_VC.pdf,0,27.081
+430,ebe930c7a568,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_430_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_430_VC.pdf,0,29.754
+431,32d25c809fd9,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_431_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_431_VC.pdf,0,37.581
+432,30da8bc58336,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_432_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_432_VC.pdf,0,36.401
+433,b210cbceb561,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_433_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_433_VC.pdf,0,22.112
+434,56196848e8f9,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_434_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_434_VC.pdf,0,29.26
+435,bd63cdec7183,VC,ok,,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_435_VC.tex,/Users/mac/Documents/GitHub/C2Q/src/c2q-dataset/reports/pdf/CASE_435_VC.pdf,0,27.164

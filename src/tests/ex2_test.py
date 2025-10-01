@@ -23,17 +23,17 @@ Usage examples:
 # WIDE format (files with rows=qubits, columns=devices; a 'qubits' column present):
 python recommender_from_csv.py \
   --format wide \
-  --errors ex2_intermediate.csv/errors_wide.csv \
-  --times  ex2_intermediate.csv/times_wide.csv \
-  --prices ex2_intermediate.csv/prices_wide.csv \
+  --errors ex2_recommender.csv/errors_wide.csv \
+  --times  ex2_recommender.csv/times_wide.csv \
+  --prices ex2_recommender.csv/prices_wide.csv \
   --out winner
 
 # LONG format (qubits,device,value):
 python recommender_from_csv.py \
   --format long \
-  --errors ex2_intermediate.csv/errors_long.csv \
-  --times  ex2_intermediate.csv/times_long.csv \
-  --prices ex2_intermediate.csv/prices_long.csv \
+  --errors ex2_recommender.csv/errors_long.csv \
+  --times  ex2_recommender.csv/times_long.csv \
+  --prices ex2_recommender.csv/prices_long.csv \
   --out out_long \
   --exclude "Rigetti Ankaa-2"
 """
