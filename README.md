@@ -1,4 +1,4 @@
-# C2|Q>: Classical-to-Quantum Programming Framework
+# C2|Q>: Classical-to-Quantum Software Development Framework
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -8,11 +8,11 @@
 
 ## Overview
 
-**C2|Q>** is a modular quantum software engineering framework that automates the full pipeline from classical problem specifications to quantum circuit generation and execution.
+**C2|Q>** is a modular quantum software development framework that automates the full pipeline from classical problem specifications to quantum circuit generation and execution.
 
 This repository accompanies the article:
 
-> **"C2|Q>: Bridging Classical Code and Quantum Execution via Automated Translation, Algorithm Selection, and Device Recommendation"**
+> **"C2|Q>: A Robust Framework for Bridging Classical and Quantum Software Development"**
 > Submitted to *ACM Transactions on Software Engineering and Methodology (TOSEM), 2025.*
 
 ---
@@ -28,7 +28,7 @@ This repository accompanies the article:
 
 ## Features
 - Submit **standard Python code** describing a problem.
-- Automatically **parse**, **reduce**, and **translate** the problem into **Quantum-Compatible Formats (QCFs)**.
+- Automatically **parse**, the problem into **Quantum-Compatible Formats (QCFs)**.
 - **Select suitable quantum algorithms** (e.g., QAOA, VQE, Grover).
 - **Recommend appropriate quantum devices** across platforms (e.g., IBM, IonQ, Rigetti).
 - **Transpile and execute** on hardware or simulators.

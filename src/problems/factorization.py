@@ -2,7 +2,7 @@ import os
 from collections import Counter
 
 from matplotlib import pyplot as plt
-from pylatex import Figure
+from pylatex import Figure, NewLine
 from qiskit_aer import AerSimulator
 
 from src.algorithms.grover import grover
@@ -73,6 +73,7 @@ class Factor(Problem):
 
         with doc.create(Section(f'{problems_name} Problem Report', numbering=False)):
             doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))} \n")
+            doc.append(NewLine())
             doc.append(f'factorization problem: {self.number}')
             with doc.create(Subsection("Grover's Circuit Visualization")):
                 try:

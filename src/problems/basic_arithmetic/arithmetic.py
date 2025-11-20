@@ -2,7 +2,7 @@ import os
 from collections import Counter
 
 from matplotlib import pyplot as plt
-from pylatex import Figure
+from pylatex import Figure, NewLine
 from qiskit import transpile
 from qiskit_aer import AerSimulator
 
@@ -68,7 +68,8 @@ class Arithmetic:
 
         with doc.create(Section(f'{problems_name} Problem Report', numbering=False)):
             doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
-            doc.append(f'addition problem: {self.left} {tags.get(problems_name)} {self.right}')
+            doc.append(NewLine())  # Inserts a proper LaTeX line break
+            doc.append(f'problem: {self.left} {tags.get(problems_name)} {self.right}')
             with doc.create(Subsection("Quantum Circuit Visualization")):
                 # try:
                 #     self._qc_latex(doc, directory)

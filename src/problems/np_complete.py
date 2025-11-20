@@ -358,7 +358,7 @@ class NPC(Base):
                 image_paths.append(fig_path)
 
         with doc.create(Subsection("Device Recommendation Summary", numbering=False)):
-            doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
+            # doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
             doc.append(string)
 
         return image_paths
