@@ -134,7 +134,7 @@ def sample_results(grover_circuit: QuantumCircuit):
     backend = AerSimulator()
     transpiled_circuit = transpile(grover_circuit, backend=backend)
     counts = backend.run(transpiled_circuit, shots=500000).result().get_counts()
-    print(counts)
+    # print(counts)
     most_probable_grover_result = max(counts, key=counts.get)
     most_probable_grover_result = np.fromstring(most_probable_grover_result, np.int8) - 48
     # Flip the bitstring to fix the order

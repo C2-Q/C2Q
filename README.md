@@ -61,6 +61,77 @@ Run the unit tests with `pytest` after installing the dependencies:
 ```bash
 PYTHONPATH=. pytest -q
 ```
+---
+## Using JSON DSL Input
+
+In addition to Python code snippets, **C2|Q>** supports a lightweight **JSON-based Domain-Specific Language (DSL)** that allows developers to describe quantum problem instances without writing any quantum code.
+
+### 📄 Example Format
+
+Each JSON file must contain two fields:
+
+- `"type"`: the problem class (e.g., `"maxcut"`, `"add"`, `"factor"`)
+- `"data"`: problem-specific parameters
+
+Example — MaxCut on a 4-node graph:
+
+```json
+{
+  "type": "maxcut",
+  "data": {
+    "nodes": 4,
+    "edges": [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]]
+  }
+}
+```
+
+Supported problem types:
+- `maxcut`
+- `mis` (Maximum Independent Set)
+- `tsp`
+- `clique`
+- `kcolor`
+- `vc` (Minimum Vertex Cover)
+- `factor` (Integer Factorization)
+- `add` (Integer Addition)
+- `mul` (Integer Multiplication)
+- `sub` (Integer Subtraction)
+
+Sample files are available in: `src/tests/json_examples/`
+
+---
+
+### 🚀 Running JSON Inputs via CLI
+
+To execute a JSON-defined problem instance using the full C2|Q> workflow, run:
+
+```bash
+python -m src.json_engine --input src/tests/json_examples/MIS_05.json
+```
+
+This command:
+- Parses and validates the input
+- Classifies the problem and extracts relevant data
+- Generates a quantum circuit using the correct algorithm
+- Selects the best-fit backend (simulator or hardware)
+- Transpiles, executes, and generates reports
+
+---
+
+### 📁 Output
+
+A detailed PDF report will be saved in:
+
+```
+./MIS_report.pdf
+```
+
+Each report includes:
+- Problem summary and visualization
+- Quantum circuit diagram
+- Device recommendation and parameters
+- Execution results (e.g., bitstring outcomes, optimal solution)
+- Runtime, fidelity, and cost breakdown
 
 ---
 
