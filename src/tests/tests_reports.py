@@ -111,7 +111,10 @@ def _render_one_case_worker(item, out_dir_str, case_idx, q):
     Worker that runs in a separate process. It parses the snippet, builds the report,
     and (optionally) compiles it. Results are returned via a Queue.
     """
+    # problem_type = "UNKNOWN"
+    global problem_type
     try:
+        problem_type = "UNKNOWN"
         # Reduce threading in native backends (Aer, BLAS, etc.) for stability:
         os.environ["QISKIT_PARALLEL"] = "FALSE"
         os.environ["OMP_NUM_THREADS"] = "1"
@@ -174,7 +177,7 @@ def _render_one_case_worker(item, out_dir_str, case_idx, q):
         # Any exception → placeholder in parent; here we just return error info
         q.put({
             "ok": False,
-            "problem_type": "UNKNOWN",
+            "problem_type": problem_type, # UNKNOWN->problem_type
             "reason": f"{type(e).__name__}: {e}",
             "tex_path": "",
             "pdf_path": "",
@@ -188,6 +191,32 @@ class MyTestCase(unittest.TestCase):
         # Parser in parent for the small smoke test (not used in worker)
         self.parser = Parser(model_path="../parser/saved_models")
 
+    def test1(self):
+        """
+        Batch-generate LaTeX/PDF reports from ../parser/data.csv (first column),
+        using a **separate process per case** with a strict wall-clock timeout.
+        Produces MANIFEST.csv and checksums.txt.
+        """
+        input_csv = '../parser/data2.csv'
+
+        # Read inputs
+        rows = []
+        with open(input_csv, 'r', encoding='utf-8') as f:
+            r = csv.reader(f)
+            for row in r:
+                if row:
+                    rows.append(row[0])
+
+        # Manifest setup
+
+        for case_idx, item in enumerate(rows, start=1):
+            try:
+                clean_code = ast.literal_eval(item)
+            except Exception:
+                clean_code = item.encode().decode('unicode_escape')
+
+            tag, data = self.parser.parse(clean_code)
+            print(tag, data)
     def test2(self):
         """
         Batch-generate LaTeX/PDF reports from ../parser/data.csv (first column),
@@ -342,6 +371,35 @@ class MyTestCase(unittest.TestCase):
         print(tag, data)
         mis = PROBLEMS[tag](data.G)
         mis.report_latex()
+
+    def test_mul(self):
+        mul_snippet = "def mul_accumulate_pairs(pairs):\n    results = []\n    for x, y in pairs:\n        prod = x * y\n        results.append(prod)\n    return results\n\npairs = [(15, 7), (31, 9), (64, 3)]\nprint(mul_accumulate_pairs(pairs))"
+        tag, data = self.parser.parse(mul_snippet)
+        print(tag, data)
+        mis = PROBLEMS[tag](data)
+        mis.report_latex()
+
+    def test_mis2(self):
+        is_snippet_new = "def mis_backtracking(n, edges):\n    # Backtracking MIS over adjacency set\n    best=[]\n    E=set(edges)\n    def backtrack(i, current, banned):\n        nonlocal best\n        if i==n:\n            if len(current) > len(best):\n                best = list(current)\n            return\n        if i in banned:\n            backtrack(i+1, current, banned)\n            return\n        # Option 1: skip i\n        backtrack(i+1, current, banned)\n        # Option 2: include i if no conflict\n        for v in current:\n            if (v, i) in E or (i, v) in E:\n                break\n        else:\n            new_banned = set(banned)\n            new_banned.add(i)\n            for v in range(n):\n                if (v, i) in E or (i, v) in E:\n                    new_banned.add(v)\n            current.append(i)\n            backtrack(i+1, current, new_banned)\n            current.pop()\n    backtrack(0, [], set())\n    return best\n\nedges=[(0,1),(1,2),(2,3),(3,4),(0,4)]\nprint(mis_backtracking(5, edges))"
+        is_snippet_old = "def greedy_mis(adj):\n    remain=set(adj.keys())\n    indep=[]\n    while remain:\n        v=min(remain)\n        indep.append(v)\n        rem=[v]+adj[v]\n        for x in rem:\n            if x in remain: remain.remove(x)\n    return indep\n\nadj={0:[1,2],1:[0,3],2:[0,3],3:[1,2,4],4:[3]}\nprint(greedy_mis(adj))"
+        maxcut_snippet_new = "def partition(n,mask):\n    l=[]; r=[]; i=0\n    while i<n:\n        if (mask>>i)&1: l.append(i)\n        else: r.append(i)\n        i+=1\n    return l,r\n\ndef bruteforce_edge_maxcut(n,edges):\n    best=-1; part=None; m=1\n    while m<(1<<n):\n        left,right=partition(n,m)\n        val=0\n        for u,v,w in edges:\n            if (u in left and v in right) or (u in right and v in left): val+=w\n        if val>best:\n            best=val\n            part=(left,right)\n        m+=1\n    return best,part\n\nedges=[(0,1,1),(1,3,1),(3,2,2),(2,0,1)]\nprint(bruteforce_edge_maxcut(4,edges))"
+        maxcut_snippet_old = "def maximum_cut_randomized(edges, n):\n    import random\n    set_A, set_B = set(), set()\n    for i in range(n):\n        if random.random() > 0.5:\n            set_A.add(i)\n        else:\n            set_B.add(i)\n    return sum(1 for u, v in edges if (u in set_A and v in set_B) or (u in set_B and v in set_A)), set_A, set_B\n\nedges = [(0, 1), (1, 2), (2, 3), (3, 0)]\nmaximum_cut_randomized(edges, 4)"
+        # add_code = "class AddOp:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def compute_addition(self):\n        return self.x + self.y\n\n# Input data\nop = AddOp(12, -5)\nresult = op.compute_addition()\nprint(result)"
+        # add_code = "def helper(values):\n    s = 0\n    for v in values:\n        s += v\n    return s\n\ndef compute_addition(a, b):\n    if a == b:\n        return a + b\n    return helper([a, b])\n\n# Input data\na, b = 9, 4\nresult = compute_addition(a, b)\nprint(result)"
+        # sub_code = "def compute_subtraction(a, b):\n    r = a\n    y = b\n    while y > 0:\n        r -= 1\n        y -= 1\n    return r\n\n# Input data\na, b = 15, 6\nresult = compute_subtraction(a, b)\nprint(result)"
+        # sub_code = "def dir_flag(x, y):\n    return 1 if x >= y else -1\n\ndef compute_subtraction(a, b):\n    direction = dir_flag(a, b)\n    raw = a - b\n    if direction < 0:\n        temp = -raw\n        return a - temp\n    return raw\n\n# Input data\na, b = -3, 9\nresult = compute_subtraction(a, b)\nprint(result)"
+        # sub_code = "def compute_subtraction(a, b):\n    if b == 0:\n        return a\n    if b > 0:\n        return compute_subtraction(a - 1, b - 1)\n    return compute_subtraction(a + 1, b + 1)\n\n# Input data\na, b = 20, -3\nresult = compute_subtraction(a, b)\nprint(result)"
+        # sub_code = "def compute_multiplication(a, b):\n    if a == 0 or b == 0:\n        return 0\n    neg = (a < 0) ^ (b < 0)\n    x, y = abs(a), abs(b)\n    r = 0\n    i = 0\n    while i < y:\n        r += x\n        i += 1\n    return -r if neg else r\n\n# Input data\na, b = -4, 7\nresult = compute_multiplication(a, b)\nprint(result)"
+        # sub_code = "def compute_multiplication(a, b):\n    neg = (a < 0) ^ (b < 0)\n    x, y = abs(a), abs(b)\n    r = 0\n    while y > 0:\n        if y & 1:\n            r += x\n        x <<= 1\n        y >>= 1\n    return -r if neg else r\n\n# Input data\na, b = 13, -5\nresult = compute_multiplication(a, b)\nprint(result)"
+        # mis_code = "import itertools\n\ndef compute_tsp_distance(dist_matrix):\n    n = len(dist_matrix)\n    dp = {}\n    for k in range(1, n):\n        dp[(1 << k, k)] = dist_matrix[0][k]\n    for subset_size in range(2, n):\n        for subset in itertools.combinations(range(1, n), subset_size):\n            mask = 0\n            for v in subset:\n                mask |= 1 << v\n            for j in subset:\n                prev_mask = mask & ~(1 << j)\n                best = None\n                for k in subset:\n                    if k == j:\n                        continue\n                    cost = dp[(prev_mask, k)] + dist_matrix[k][j]\n                    if best is None or cost < best:\n                        best = cost\n                dp[(mask, j)] = best\n    full_mask = (1 << n) - 2\n    best = None\n    for j in range(1, n):\n        cost = dp[(full_mask, j)] + dist_matrix[j][0]\n        if best is None or cost < best:\n            best = cost\n    return best\n\n# Input data\ndist_matrix = [\n    [0, 10, 15, 20],\n    [10, 0, 35, 25],\n    [15, 35, 0, 30],\n    [20, 25, 30, 0],\n]\nresult = compute_tsp_distance(dist_matrix)\nprint(result)"
+        kcolor_code = "def kcolor_with_explicit_stack(adj_list, k):\n    # manual stack-based DFS for coloring\n    vertices = list(adj_list.keys())\n    colors = {v: -1 for v in vertices}\n    stack = [(vertices[0], 0)]\n\n    while len(stack) > 0:\n        v, start_color = stack.pop()\n        if colors[v] != -1:\n            continue\n        c = start_color\n        chosen = None\n        while c < k:\n            ok = True\n            ns = adj_list[v]\n            i = 0\n            while i < len(ns):\n                u = ns[i]\n                if colors[u] == c:\n                    ok = False\n                    break\n                i += 1\n            if ok:\n                chosen = c\n                break\n            c += 1\n        if chosen is None:\n            raise ValueError('Stack-based coloring failed')\n        colors[v] = chosen\n        ns2 = adj_list[v]\n        j = 0\n        while j < len(ns2):\n            u = ns2[j]\n            if colors[u] == -1:\n                stack.append((u, 0))\n            j += 1\n    return colors\n\nadj = {\n    0: [1,2],\n    1: [0,3],\n    2: [0,3],\n    3: [1,2,4],\n    4: [3]\n}\nprint(kcolor_with_explicit_stack(adj, 3))"
+        tag, data = self.parser.parse(kcolor_code)
+
+        print(tag, data.G)
+        # mis = PROBLEMS[tag](data.G)
+        # mis.report_latex()
+
+
 if __name__ == '__main__':
     # On macOS, using 'spawn' avoids forking the parent (safer with native libs).
     try:

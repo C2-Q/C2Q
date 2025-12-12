@@ -160,6 +160,10 @@ class MyTestCase(unittest.TestCase):
         add = Add([500, 84])
         add.report_latex()
 
+    def test_add2(self):
+        add = Add([-4, 84])
+        add.report_latex()
+
 
 if __name__ == '__main__':
     unittest.main()
