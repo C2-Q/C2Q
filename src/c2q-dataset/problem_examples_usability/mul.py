@@ -1,18 +1,104 @@
-"""Simple 2-bit multiplication using controlled additions."""
-from qiskit import QuantumCircuit, Aer, execute
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+import matplotlib.pyplot as plt
 
-qc = QuantumCircuit(8, 4)
+# -------------------------------------------------
+# 2-bit Quantum Multiplier: a (2 bits) × b (2 bits)
+# -------------------------------------------------
+# a = a1 a0
+# b = b1 b0
+# Output: p3 p2 p1 p0 (4 bits)
+# -------------------------------------------------
 
-# Inputs a1 a0 and b1 b0
-qc.x(1)  # a0=1
-qc.x(3)  # b0=1
+def multiplier_2bit(a_bits: str, b_bits: str):
+    """
+    Quantum circuit for multiplying two 2-bit numbers.
+    Example: '11' × '10' = 6 → '0110'
+    """
 
-qc.ccx(1, 3, 4)
-qc.ccx(1, 2, 5)
-qc.ccx(0, 3, 6)
-qc.ccx(0, 2, 7)
+    qc = QuantumCircuit(10, 4)
 
-qc.measure([4, 5, 6, 7], [0, 1, 2, 3])
-backend = Aer.get_backend('aer_simulator')
-result = execute(qc, backend, shots=1).result()
-print(result.get_counts())
+    # Qubit layout
+    # 0,1 : a0,a1
+    # 2,3 : b0,b1
+    # 4   : p0
+    # 5   : p1
+    # 6   : p2
+    # 7   : t1 = a1 & b0
+    # 8   : t2 = a0 & b1
+    # 9   : t3 = a1 & b1
+
+    # --------------------------------
+    # Initialize inputs
+    # --------------------------------
+    if a_bits[1] == '1':
+        qc.x(0)
+    if a_bits[0] == '1':
+        qc.x(1)
+
+    if b_bits[1] == '1':
+        qc.x(2)
+    if b_bits[0] == '1':
+        qc.x(3)
+
+    qc.barrier()
+
+    # --------------------------------
+    # Partial products
+    # --------------------------------
+
+    # p0 = a0 & b0
+    qc.ccx(0, 2, 4)
+
+    # p1 base = a0 & b1
+    qc.ccx(0, 3, 5)
+
+    # t1 = a1 & b0
+    qc.ccx(1, 2, 7)
+
+    # p1 = (a0 & b1) XOR (a1 & b0)
+    qc.cx(7, 5)
+
+    # carry1 = (a0 & b1) AND (a1 & b0)
+    qc.ccx(7, 5, 8)
+
+    # t3 = a1 & b1
+    qc.ccx(1, 3, 9)
+
+    # p2 = t3 XOR carry1
+    qc.cx(9, 6)
+    qc.cx(8, 6)
+
+    # p3 = t3 & carry1
+    qc.ccx(9, 8, 7)
+
+    qc.barrier()
+
+    # --------------------------------
+    # Measurement
+    # --------------------------------
+    qc.measure(4, 0)  # p0 (LSB)
+    qc.measure(5, 1)  # p1
+    qc.measure(6, 2)  # p2
+    qc.measure(7, 3)  # p3 (MSB)
+
+    return qc
+
+
+# ----------------------------
+# Run the circuit
+# ----------------------------
+
+qc = multiplier_2bit('11', '10')  # 3 × 2 = 6
+backend = AerSimulator()
+
+qc_t = transpile(qc, backend)
+result = backend.run(qc_t, shots=1024).result()
+counts = result.get_counts()
+
+print("Measurement results:")
+print(counts)
+
+plot_histogram(counts)
+plt.show()

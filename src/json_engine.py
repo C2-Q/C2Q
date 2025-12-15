@@ -44,8 +44,11 @@
 import json
 import argparse
 import glob
+import random
 import traceback
 from typing import Any, Dict, Tuple, Optional, List
+
+import networkx as nx
 
 from src.parser.parser import *  # expected to define Graph, GRAPH_TAGS, ARITHMETIC_TAGS (if available)
 
@@ -134,7 +137,7 @@ _FALLBACK_ARITHMETIC_FAMILIES = {"ADD", "MUL", "SUB", "Factor"}
 
 
 def save_generated_examples(
-        out_dir: str = "src/tests/json_examples",
+        out_dir: str = "src/tests/json_examples_1",
         n_per_family: int = 10
 ):
     """
@@ -142,7 +145,7 @@ def save_generated_examples(
     and save them into a directory.
 
     Directory structure:
-        src/tests/json_examples/
+        src/tests/json_examples_1/
             MaxCut_00.json
             MaxCut_01.json
             ...
@@ -451,6 +454,12 @@ def normalise_task(task: Dict[str, Any]) -> Tuple[str, Dict[str, Any], Dict[str,
 # -------------------------------------------------------------------
 # 6. Example JSON DSL generation (10 per family)
 # -------------------------------------------------------------------
+def _make_random_edge_list(num_nodes: int, edge_prob: float = 0.4) -> List[List[int]]:
+    G = nx.erdos_renyi_graph(n=num_nodes, p=edge_prob)
+    while not nx.is_connected(G):
+        G = nx.erdos_renyi_graph(n=num_nodes, p=edge_prob)
+    return [list(e) for e in G.edges()]
+
 
 def _make_edge_list(num_nodes: int, pattern: int) -> List[List[int]]:
     """
@@ -543,9 +552,11 @@ def generate_example_for_family(family: str, idx: int) -> Dict[str, Any]:
 
     # Graph families: MaxCut, MIS, TSP, Clique, KColor, VC
     if family in {"MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"}:
-        num_nodes = 4 + (idx % 4)  # 4–7 nodes
-        pattern = idx % 3
-        edges = _make_edge_list(num_nodes, pattern)
+        if family == "TSP":
+            num_nodes = 3  # fixed for TSP
+        else:
+            num_nodes = random.randint(4, 6)
+
 
         if family == "MaxCut":
             goal = "maximize cut value between two partitions of the graph"
@@ -559,6 +570,8 @@ def generate_example_for_family(family: str, idx: int) -> Dict[str, Any]:
             goal = "color the graph with as few conflicts as possible"
         else:  # VC
             goal = "find a minimum vertex cover of the graph"
+
+        edges = _make_random_edge_list(num_nodes, edge_prob=0.3 + 0.1 * random.random())
 
         return {
             "family": family,
@@ -594,7 +607,7 @@ def generate_all_examples(n_per_family: int = 10) -> Dict[str, List[Dict[str, An
     return examples
 
 
-def self_test_examples(root: str = "src/tests/json_examples") -> None:
+def self_test_examples(root: str = "src/tests/json_examples_1") -> None:
     """
     Run a stronger JSON-DSL self-test using *real* Graph / arithmetic classes.
 
@@ -676,6 +689,73 @@ def self_test_examples(root: str = "src/tests/json_examples") -> None:
 
     print(f"\nSelf-test finished: {passed}/{total} examples passed front-half checks.")
 
+import tempfile
+from pathlib import Path
+
+def batch_generate_reports(root: str = "src/tests/json_examples_1") -> None:
+    paths = sorted(glob.glob(f"{root}/*.json"))
+    if not paths:
+        print(f"⚠️  No JSON examples found under {root}")
+        return
+
+    output_dir = Path("./json_reports")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    print(f"📂 All LaTeX reports will be saved to: {output_dir.resolve()}\n")
+
+    total = len(paths)
+    passed = 0
+    failed = 0
+
+    for path in paths:
+        try:
+            fname = Path(path).stem
+            output_pdf = output_dir / f"{fname}.pdf"
+
+            print(f"➡️  Generating report for {path} → {output_pdf.name}")
+
+            task = load_input(path)
+            family, instance, params, goal_text = normalise_task(task)
+
+            if family == "UNKNOWN":
+                raise ValueError("Family is UNKNOWN")
+
+            problem_class = recognize_problem_class(family)
+
+            if problem_class == "GRAPH":
+                graphs = extract_graphs_from_instance(instance)
+                last_graph = None
+                for _, payload in graphs.items():
+                    last_graph = Graph(payload)
+                problem = PROBLEMS[family](last_graph.G)
+
+            elif problem_class == "ARITHMETIC":
+                norm = normalise_arithmetic_instance(family, instance)
+                if family in {"ADD", "MUL", "SUB"}:
+                    left, right = extract_binary_operands(norm)
+                    problem = PROBLEMS[family]([left, right])
+                elif family == "Factor":
+                    n = extract_factor_number(norm)
+                    problem = PROBLEMS[family](n)
+                else:
+                    raise ValueError(f"Unknown arithmetic family {family}")
+
+            else:
+                raise ValueError(f"Unsupported problem class {problem_class}")
+
+            problem.report_latex(output_path=str(output_pdf))
+            print(f"✅ SUCCESS: {output_pdf.name}\n")
+            passed += 1
+
+        except Exception as e:
+            failed += 1
+            print(f"❌ FAILED: {path}")
+            print(f"   Reason: {e}\n")
+
+    print("📊 Batch LaTeX report summary:")
+    print(f"   ✅ Passed: {passed}")
+    print(f"   ❌ Failed: {failed}")
+    print(f"   📄 Total : {total}")
+    print(f"\n📁 All outputs saved in: {output_dir.resolve()}")
 
 # -------------------------------------------------------------------
 # 7. Main entry point
@@ -694,12 +774,17 @@ def main():
     parser.add_argument(
         "--self_test_examples",
         action="store_true",
-        help="Run JSON-DSL self-test over src/tests/json_examples (no report_latex).",
+        help="Run JSON-DSL self-test over src/tests/json_examples_1 (no report_latex).",
     )
     parser.add_argument(
         "--generate_examples",
         action="store_true",
-        help="Generate JSON DSL examples for all families into src/tests/json_examples.",
+        help="Generate JSON DSL examples for all families into src/tests/json_examples_1.",
+    )
+    parser.add_argument(
+        "--batch_report",
+        action="store_true",
+        help="Generate LaTeX reports for all JSON files under src/tests/json_examples_1."
     )
 
     args = parser.parse_args()
@@ -717,7 +802,12 @@ def main():
     if args.self_test_examples:
         self_test_examples()
         return
-
+    # -----------------------
+    # Handle: report all mode
+    # -----------------------
+    if args.batch_report:
+        batch_generate_reports()
+        return
     # ----------------- Normal pipeline mode -----------------
     if not args.input:
         parser.error("Either --input, --self_test_examples, or --generate_examples must be provided.")

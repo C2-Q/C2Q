@@ -1,90 +1,116 @@
-from qiskit import QuantumCircuit, Aer, transpile, execute
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
 from qiskit.circuit import ParameterVector
-from qiskit.opflow import PauliSumOp, StateFn, AerPauliExpectation, CircuitSampler
-from qiskit.quantum_info import Pauli
-from scipy.optimize import minimize
+from qiskit.quantum_info import SparsePauliOp
+from qiskit_ibm_runtime import EstimatorV2 as Estimator
+
 import numpy as np
+from scipy.optimize import minimize
 
-# -----------------------------
-# Problem setup
-# -----------------------------
-num_qubits = 4
-edges = [(0, 1), (1, 2), (2, 3), (3, 0)]
-backend = Aer.get_backend("aer_simulator_statevector")
 
-# -----------------------------
-# MaxCut Hamiltonian construction
-# -----------------------------
-def get_maxcut_hamiltonian(n, edge_list):
-    terms = []
-    for (i, j) in edge_list:
-        z = ['I'] * n
-        z[i] = 'Z'
-        z[j] = 'Z'
-        pauli_str = ''.join(z)
-        terms.append((pauli_str, 0.5))
-    return PauliSumOp.from_list([(s, w) for s, w in terms])
+def get_maxcut_qubo(n, edges):
+    Q = np.zeros((n, n))
+    for i, j in edges:
+        Q[i, i] -= 1
+        Q[j, j] -= 1
+        Q[i, j] += 2
+    return Q
 
-cost_ham = get_maxcut_hamiltonian(num_qubits, edges)
 
-# -----------------------------
-# Ansatz construction
-# -----------------------------
-def create_ansatz(params, num_qubits):
-    qc = QuantumCircuit(num_qubits)
-    # Initial layer of Ry
-    for i in range(num_qubits):
-        qc.ry(params[i], i)
-    # Entangling layer with CZs
-    for (i, j) in edges:
-        qc.cz(i, j)
-    # Second Ry layer
-    for i in range(num_qubits):
-        qc.ry(params[num_qubits + i], i)
+def convert_qubo_to_ising(qubo):
+    n = len(qubo)
+    offset = 0
+    pauli_list = []
+
+    for i in range(n):
+        for j in range(i, n):
+            if i == j:
+                coeff = -(1 / 2) * qubo[i][i] - (1 / 4) * np.sum(qubo[i][i+1:]) - (1 / 4) * np.sum(qubo[:, i][:i])
+                offset += (1 / 2) * qubo[i][i]
+                pauli = ['I'] * n
+                pauli[i] = 'Z'
+            else:
+                coeff = (1 / 4) * qubo[i][j]
+                offset += coeff
+                pauli = ['I'] * n
+                pauli[i] = 'Z'
+                pauli[j] = 'Z'
+            if coeff != 0:
+                pauli_list.append((''.join(pauli), coeff))
+
+    return SparsePauliOp.from_list(pauli_list), offset
+
+
+def build_vqe_ansatz(n, layers, parameters):
+    qc = QuantumCircuit(n)
+
+    # Initial layer of Ry rotations
+    for i in range(n):
+        qc.ry(parameters[i], i)
+
+    # Entangling CZ layers
+    for l in range(layers):
+        for i in range(0, n - 1, 2):
+            qc.cz(i, i + 1)
+        for i in range(1, n - 1, 2):
+            qc.cz(i, i + 1)
+        # Add parameterized Ry rotations after each layer
+        for i in range(n):
+            idx = (l + 1) * n + i
+            qc.ry(parameters[idx], i)
+
+    qc.measure_all()
     return qc
 
-# -----------------------------
-# Energy evaluation function
-# -----------------------------
-expectation = AerPauliExpectation()
-sampler = CircuitSampler(backend)
 
-def energy_eval(theta):
-    qc = create_ansatz(theta, num_qubits)
-    qc = transpile(qc, backend)
-    observable = StateFn(cost_ham, is_measurement=True) @ StateFn(qc)
-    value = sampler.convert(expectation.convert(observable)).eval()
-    return np.real(value)
+def cost_function(theta, qc_template, parameters, ising, backend, estimator, eval_log):
+    qc_bound = qc_template.assign_parameters(dict(zip(parameters, theta)))
+    transpiled = transpile(qc_bound, backend=backend, seed_transpiler=42)
+    hamiltonian = ising.apply_layout(transpiled.layout)
+    job = estimator.run([(transpiled, hamiltonian)])
+    result = job.result()[0].data.evs
+    eval_log.append(result)
+    return result
 
-# -----------------------------
-# Run optimization
-# -----------------------------
-np.random.seed(42)
-init_params = np.random.uniform(0, 2*np.pi, 2 * num_qubits)
-result = minimize(energy_eval, init_params, method='COBYLA')
-optimal_theta = result.x
 
-# -----------------------------
-# Execute final circuit
-# -----------------------------
-qc_final = create_ansatz(optimal_theta, num_qubits)
-qc_final.measure_all()
-qc_exec = transpile(qc_final, backend=Aer.get_backend("qasm_simulator"))
-job = execute(qc_exec, backend=Aer.get_backend("qasm_simulator"), shots=1024)
-counts = job.result().get_counts()
+def run_vqe_maxcut():
+    # 4-node cycle graph
+    edges = [(0, 1), (1, 2), (2, 3), (3, 0)]
+    n = 4
+    layers = 2
+    backend = AerSimulator()
+    estimator = Estimator(backend)
+    estimator.options.default_shots = 1000
 
-# -----------------------------
-# Interpretation
-# -----------------------------
-def bitstring_to_cut(bitstr, edge_list):
-    count = 0
-    for (i, j) in edge_list:
-        if bitstr[i] != bitstr[j]:
-            count += 1
-    return count
+    qubo = get_maxcut_qubo(n, edges)
+    ising, offset = convert_qubo_to_ising(qubo)
 
-best = max(counts.items(), key=lambda x: x[1])[0][::-1]  # reverse due to endian
-cut_value = bitstring_to_cut(best, edges)
+    # Total parameters = (layers + 1) * n
+    parameters = ParameterVector('θ', (layers + 1) * n)
+    init_theta = np.random.uniform(0, 2 * np.pi, len(parameters))
 
-print(f"Best cut bitstring: {best}")
-print(f"Cut value: {cut_value}")
+    # Build ansatz
+    qc_template = build_vqe_ansatz(n, layers, parameters)
+
+    # Optimization
+    evals = []
+    result = minimize(cost_function, init_theta, args=(qc_template, parameters, ising, backend, estimator, evals),
+                      method='Powell', options={'maxiter': 300})
+    theta_opt = result.x
+
+    # Final execution
+    qc_final = build_vqe_ansatz(n, layers, parameters)
+    qc_bound = qc_final.assign_parameters(dict(zip(parameters, theta_opt)))
+    transpiled = transpile(qc_bound, backend=backend)
+    job = backend.run(transpiled, shots=1024)
+    counts = job.result().get_counts()
+
+    best_bitstring = max(counts, key=counts.get)
+    cut_value = sum(1 for (i, j) in edges if best_bitstring[i] != best_bitstring[j])
+
+    print(f"Best bitstring: {best_bitstring}, Cut size: {cut_value}")
+    return counts, best_bitstring
+
+
+if __name__ == "__main__":
+    run_vqe_maxcut()
