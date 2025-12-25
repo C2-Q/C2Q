@@ -9,6 +9,7 @@ from scipy.optimize import minimize
 
 import numpy as np
 
+
 def convert_qubo_to_ising(qubo):
     # Number of qubits
     n = len(qubo)
@@ -27,7 +28,8 @@ def convert_qubo_to_ising(qubo):
             if j >= i:
                 if i == j:
                     pauli_operator[i] = "Z"
-                    ising_value = -(1/2)*qubo[i][i] - (1/4)*np.sum(qubo[i][(i+1):]) - (1/4)*np.sum(qubo[:,i][:i])
+                    ising_value = -(1 / 2) * qubo[i][i] - (1 / 4) * np.sum(qubo[i][(i + 1):]) - (1 / 4) * np.sum(
+                        qubo[:, i][:i])
                     offset += (1 / 2) * qubo[i][i]
                 else:
                     pauli_operator[i] = "Z"
@@ -43,6 +45,7 @@ def convert_qubo_to_ising(qubo):
 
     return operators, offset
 
+
 def initialize_qaoa(n):
     qc = QuantumCircuit(n)
     qc.h(range(n))
@@ -50,16 +53,19 @@ def initialize_qaoa(n):
 
     return qc
 
+
 # Add a cost layer based on the Ising Hamiltonian
 def add_cost_layer(qc, ising, gamma, n):
     cost_layer = PauliEvolutionGate(ising, gamma)
     qc.append(cost_layer, range(n))
     qc.barrier()
 
+
 # Add a QAOA mixer layer
 def add_mixer_layer(qc, beta, n):
     qc.rx(2 * beta, range(n))
     #qc.barrier()
+
 
 def add_qaoa_layer(qc, ising, parameters, layers, n):
     i = 0
@@ -73,6 +79,7 @@ def add_qaoa_layer(qc, ising, parameters, layers, n):
         # Move to next QAOA layer
         i += 2
 
+
 def initialize_parameters(layers):
     theta = []
 
@@ -84,6 +91,19 @@ def initialize_parameters(layers):
     theta.extend(initial_param_list)
 
     return theta
+
+
+def initialize_parameters_zhou(layers, seed=None):
+    rng = np.random.default_rng(seed)
+
+    theta = []
+    for _ in range(layers):
+        gamma = rng.uniform(-np.pi / 2, np.pi / 2)  # Zhou et al.
+        beta = rng.uniform(-np.pi / 4, np.pi / 4)
+        theta.extend([gamma, beta])
+
+    return np.array(theta)
+
 
 def cost_estimator(theta, qc_transpiled, ising, estimator, exp_value_list):
     # Calculate the expectation value
@@ -98,13 +118,15 @@ def cost_estimator(theta, qc_transpiled, ising, estimator, exp_value_list):
 
     return cost
 
+
 def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
     # Here we can change the optimization method etc.
     # SPSA by default, but here we use powell optimizer for testing...
-    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell", options={'maxiter':500, 'maxfev':500},
+    min_minimized_optimization = minimize(cost_estimator, theta, method="Powell",
+                                          options={'maxiter': 500, 'maxfev': 500},
                                           args=(qc_transpiled, ising, estimator, exp_value_list))
 
     # Save the objective value the optimization finally gives us
@@ -112,6 +134,7 @@ def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
     min_exp_value_list = exp_value_list
 
     return min_minimized_optimization.x, minimum_objective_value, min_exp_value_list
+
 
 def qaoa_no_optimization(qubo, layers):
     """
@@ -155,6 +178,7 @@ def qaoa_no_optimization(qubo, layers):
     # Return QAOA circuit, parameter list and initial values for the parameters
     return qaoa_dict
 
+
 def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     """
     Implements QAOA with given QUBO.
@@ -196,7 +220,8 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
 
     # Optimize the parameters
     #theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
-    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc_transpiled, ising, parameters, theta, estimator)
+    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc_transpiled, ising, parameters, theta,
+                                                                         estimator)
 
     qaoa_dict = {
         "qc": qc,
@@ -210,11 +235,12 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     # Return QAOA circuit, parameter list, optimized values for the parameters, minimum objective value at the end of the optimization and expectation values (objective values) in every QAOA layer
     return qaoa_dict
 
+
 def sample_results(qc, parameters, theta, backend=AerSimulator()):
     qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
 
     sampler = Sampler(mode=backend)
-    sampler.options.default_shots = 1000
+    sampler.options.default_shots = 1024
 
     if backend.name == 'aer_simulator':
         qc_transpiled_parameters = qc_transpiled.decompose(reps=1).assign_parameters({parameters: theta})
@@ -226,7 +252,7 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
     result = job.result()[0]
 
     counts = result.data.meas.get_counts()
-
+    print(counts)
     highest_possible_solution = 0
     max_count = 0
     for key, count in counts.items():

@@ -106,7 +106,7 @@ Sample files are available in: `src/tests/json_examples/`
 To execute a JSON-defined problem instance using the full C2|Q> workflow, run:
 
 ```bash
-python -m src.json_engine --input src/tests/json_examples_1/MIS_05.json
+python -m src.json_engine --input src/tests/json/MIS_05.json
 ```
 
 This command:

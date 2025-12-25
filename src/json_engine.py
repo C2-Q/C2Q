@@ -137,7 +137,7 @@ _FALLBACK_ARITHMETIC_FAMILIES = {"ADD", "MUL", "SUB", "Factor"}
 
 
 def save_generated_examples(
-        out_dir: str = "src/tests/json_examples_1",
+        out_dir: str = "src/tests/json",
         n_per_family: int = 10
 ):
     """
@@ -145,7 +145,7 @@ def save_generated_examples(
     and save them into a directory.
 
     Directory structure:
-        src/tests/json_examples_1/
+        src/tests/json/
             MaxCut_00.json
             MaxCut_01.json
             ...
@@ -427,7 +427,7 @@ def normalise_task(task: Dict[str, Any]) -> Tuple[str, Dict[str, Any], Dict[str,
         params   : optional configuration (solver choices, depth, etc.)
         goal     : optional free-text objective / description
     """
-    raw_family = task.get("family") or task.get("problem_type")
+    raw_family = task.get("family") or task.get("problem_type") or task.get("goal")
     family = canonicalise_family(raw_family) if raw_family is not None else None
 
     goal_parts = []
@@ -607,7 +607,7 @@ def generate_all_examples(n_per_family: int = 10) -> Dict[str, List[Dict[str, An
     return examples
 
 
-def self_test_examples(root: str = "src/tests/json_examples_1") -> None:
+def self_test_examples(root: str = "src/tests/json") -> None:
     """
     Run a stronger JSON-DSL self-test using *real* Graph / arithmetic classes.
 
@@ -684,7 +684,7 @@ def self_test_examples(root: str = "src/tests/json_examples_1") -> None:
 
         except Exception as e:
             print(f"❌ {path}  FAILED: {e}")
-            # Uncomment if you want full traces while debugging:
+            # Uncomment if want full traces while debugging:
             # traceback.print_exc()
 
     print(f"\nSelf-test finished: {passed}/{total} examples passed front-half checks.")
@@ -692,7 +692,7 @@ def self_test_examples(root: str = "src/tests/json_examples_1") -> None:
 import tempfile
 from pathlib import Path
 
-def batch_generate_reports(root: str = "src/tests/json_examples_1") -> None:
+def batch_generate_reports(root: str = "src/tests/json") -> None:
     paths = sorted(glob.glob(f"{root}/*.json"))
     if not paths:
         print(f"⚠️  No JSON examples found under {root}")
@@ -774,17 +774,17 @@ def main():
     parser.add_argument(
         "--self_test_examples",
         action="store_true",
-        help="Run JSON-DSL self-test over src/tests/json_examples_1 (no report_latex).",
+        help="Run JSON-DSL self-test over src/tests/json (no report_latex).",
     )
     parser.add_argument(
         "--generate_examples",
         action="store_true",
-        help="Generate JSON DSL examples for all families into src/tests/json_examples_1.",
+        help="Generate JSON DSL examples for all families into src/tests/json.",
     )
     parser.add_argument(
         "--batch_report",
         action="store_true",
-        help="Generate LaTeX reports for all JSON files under src/tests/json_examples_1."
+        help="Generate LaTeX reports for all JSON files under src/tests/json."
     )
 
     args = parser.parse_args()

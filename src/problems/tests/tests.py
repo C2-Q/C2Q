@@ -131,6 +131,13 @@ class MyTestCase(unittest.TestCase):
         print(result_list)
         kc.draw_result(result[0])
 
+    def test_mis(self):
+        graph = networkx.Graph()
+        graph.add_nodes_from([1, 2, 3, 4])
+        graph.add_edges_from(([(1, 2), (1, 3), (2, 3), (2, 4)]))
+        mis = MIS(graph)
+        mis.report_latex()
+
     def test_mul(self):
         mul = Mul(1, 1)
         self.assertEqual(True, True)

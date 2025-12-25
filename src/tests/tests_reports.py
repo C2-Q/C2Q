@@ -223,8 +223,9 @@ class MyTestCase(unittest.TestCase):
         using a **separate process per case** with a strict wall-clock timeout.
         Produces MANIFEST.csv and checksums.txt.
         """
-        input_csv = '../parser/data.csv'
-        out_dir = Path("../c2q-dataset/reports/pdf")
+        input_csv = '../parser/data3.csv'
+        # out_dir = Path("../c2q-dataset/reports/pdf")
+        out_dir = Path("../tmp_434_data3/reports/pdf")
         out_dir.mkdir(parents=True, exist_ok=True)
 
         # Read inputs
@@ -246,7 +247,7 @@ class MyTestCase(unittest.TestCase):
         writer.writeheader(); mf.flush()
 
         # Time budget
-        TIME_LIMIT_SECS = 4 * 60  # 4 minutes per item
+        TIME_LIMIT_SECS = 5 * 60  # 4 minutes per item
 
         unknown_count = 0
 
@@ -274,8 +275,9 @@ class MyTestCase(unittest.TestCase):
                 p.join()
                 status = "timeout"
                 reason = f"Exceeded {TIME_LIMIT_SECS}s"
-                base_stem = out_dir / f"TIMEOUT_{case_idx}"
-                write_placeholder_pdf(base_stem, reason="Generation exceeded the 4-minute limit")
+                problem_type = res.get("problem_type", "UNKNOWN")
+                base_stem = out_dir / f"TIMEOUT_{case_idx}_{problem_type}"
+                write_placeholder_pdf(base_stem, reason=f"Generation exceeded the 4-minute limit: {problem_type}")
                 tex_path = str(base_stem.with_suffix(".tex").resolve())
                 pdf_path = str(base_stem.with_suffix(".pdf").resolve())
                 compiled_pdf = int(Path(pdf_path).exists())
@@ -338,7 +340,7 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(clean_code)
         if problem_type in PROBLEMS:
             problem = PROBLEMS[problem_type](data)
-            out_dir = Path("../c2q-dataset/reports/pdf")
+            out_dir = Path("../c2q-dataset/reports/reports/pdf")
             out_dir.mkdir(parents=True, exist_ok=True)
             tex_stem = out_dir / "SINGLE_TEST"
             problem.report_latex(output_path=str(tex_stem))
@@ -356,7 +358,7 @@ class MyTestCase(unittest.TestCase):
         problem_type, data = self.parser.parse(clean_code)
         if problem_type in PROBLEMS:
             problem = PROBLEMS[problem_type](data)
-            out_dir = Path("../c2q-dataset/reports/pdf")
+            out_dir = Path("../c2q-dataset/reports/reports/pdf")
             out_dir.mkdir(parents=True, exist_ok=True)
             tex_stem = out_dir / "SINGLE_TEST"
             problem.report_latex(output_path=str(tex_stem))
@@ -366,7 +368,31 @@ class MyTestCase(unittest.TestCase):
 
     def test_mis(self):
         is_snippet = "def independent_nodes(n, edges):\n    independent_set = set()\n    for node in range(n):\n        if all(neighbor not in independent_set for u, v in edges if u == node for neighbor in [v]):\n            independent_set.add(node)\n    return independent_set\n\n# Input json\nedges = [(0, 1), (0, 2), (1, 2), (1, 3)]\nindependent_set = independent_nodes(2, edges)\nprint(independent_set)"
+        is_snippet_main = """
+            from itertools import combinations
 
+def solve_graph_problem(n, edges):
+    nodes = list(range(n))
+
+    def is_independent(subset):
+        return all(
+            (u, v) not in edges and (v, u) not in edges
+            for u, v in combinations(subset, 2)
+        )
+
+    best = set()
+    for r in range(1, n + 1):
+        for subset in combinations(nodes, r):
+            if is_independent(subset):
+                best = set(subset)
+    return best
+
+
+# Maximum Independent Set problem specification
+edges = [(0, 1), (0, 2), (1, 2), (1, 3)]
+result = solve_graph_problem(4, edges)
+print(result)  # {2, 3}
+        """
         tag, data = self.parser.parse(is_snippet)
         print(tag, data)
         mis = PROBLEMS[tag](data.G)

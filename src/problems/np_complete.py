@@ -8,6 +8,7 @@ from src.problems.base import *
 from src.recommender.recommender_engine import recommender
 
 
+debug = True
 class NPC(Base):
 
     def __init__(self):
@@ -203,6 +204,11 @@ class NPC(Base):
         qaoa_qc = qaoa_dict["qc"]
         parameters = qaoa_dict.get("parameters")
         theta = qaoa_dict.get("theta")
+
+        if debug:
+            latex_code = qaoa_qc.draw(output="latex_source")
+            print(latex_code)
+
         from src.algorithms.QAOA.QAOA import sample_results
         if parameters is not None and theta is not None:
             qaoa_solution = sample_results(qaoa_qc, parameters, theta)
@@ -220,15 +226,17 @@ class NPC(Base):
         plt.savefig(self.qaoa_result_image_path)
         plt.close()
         with doc.create(Figure(position='h!')) as qaoa_res_fig:
-            qaoa_res_fig.add_image(self.qaoa_result_image_path, width="180px")
+            qaoa_res_fig.add_image(self.qaoa_result_image_path, width=NoEscape(r"0.9\linewidth"))
             qaoa_res_fig.add_caption("QAOA Result")
 
         self.qaoa_circuit_image_path = os.path.join(directory, "quantum_circuit_qaoa.png")
         qaoa_qc.decompose().draw(style="mpl")
-        plt.savefig(self.qaoa_circuit_image_path)
+        plt.gcf().set_size_inches(50, 20)  # set a safe size
+        plt.tight_layout()
+        plt.savefig(self.qaoa_circuit_image_path, dpi=150)
         plt.close()
         with doc.create(Figure(position='h!')) as qaoa_fig:
-            qaoa_fig.add_image(self.qaoa_circuit_image_path, width="180px")
+            qaoa_fig.add_image(self.qaoa_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
             qaoa_fig.add_caption("QAOA Quantum Circuit")
 
         return {
@@ -260,15 +268,17 @@ class NPC(Base):
         plt.savefig(self.vqe_result_image_path)
         plt.close()
         with doc.create(Figure(position='h!')) as vqe_res_fig:
-            vqe_res_fig.add_image(self.vqe_result_image_path, width="180px")
+            vqe_res_fig.add_image(self.vqe_result_image_path, width=NoEscape(r"0.9\linewidth"))
             vqe_res_fig.add_caption("VQE Result")
 
         self.vqe_circuit_image_path = os.path.join(directory, "quantum_circuit_vqe.png")
         vqe_qc.decompose().draw(style="mpl")
-        plt.savefig(self.vqe_circuit_image_path)
+        plt.gcf().set_size_inches(50, 20)  # set a safe size
+        plt.tight_layout()
+        plt.savefig(self.vqe_circuit_image_path, dpi=150)
         plt.close()
         with doc.create(Figure(position='h!')) as vqe_fig:
-            vqe_fig.add_image(self.vqe_circuit_image_path, width="180px")
+            vqe_fig.add_image(self.vqe_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
             vqe_fig.add_caption("VQE Quantum Circuit")
 
         return {
@@ -292,7 +302,7 @@ class NPC(Base):
         plt.savefig(self.grover_result_image_path)
         plt.close()
         with doc.create(Figure(position='h!')) as grover_res_fig:
-            grover_res_fig.add_image(self.grover_result_image_path, width="180px")
+            grover_res_fig.add_image(self.grover_result_image_path, width=NoEscape(r"0.9\linewidth"))
             grover_res_fig.add_caption("Grover's Algorithm Result")
 
         self.grover_circuit_image_path = os.path.join(directory, "quantum_circuit_grover.png")
@@ -300,7 +310,7 @@ class NPC(Base):
         plt.savefig(self.grover_circuit_image_path)
         plt.close()
         with doc.create(Figure(position='h!')) as grover_fig:
-            grover_fig.add_image(self.grover_circuit_image_path, width="180px")
+            grover_fig.add_image(self.grover_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
             grover_fig.add_caption("Grover's Quantum Circuit")
 
     def _graph_latex(self, doc, pos, directory):
@@ -318,7 +328,7 @@ class NPC(Base):
             plt.close()
 
         with doc.create(Figure(position='h!')) as graph_fig:
-            graph_fig.add_image(self.graph_image_path, width="360px")
+            graph_fig.add_image(self.graph_image_path, width=NoEscape(r"0.9\linewidth"))
             graph_fig.add_caption("Graph Visualization")
 
         return self.graph_image_path
@@ -334,8 +344,12 @@ class NPC(Base):
         plt.savefig(self.oracle_circuit_image_path)
         plt.close()
 
+        if debug:
+            latex_code = oracle.draw(output="latex_source")
+            print(latex_code)
+
         with doc.create(Figure(position='h!')) as oracle_fig:
-            oracle_fig.add_image(self.oracle_circuit_image_path, width="300px")
+            oracle_fig.add_image(self.oracle_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
             oracle_fig.add_caption(f'Corresponding Oracle Visualization for the {problem_name} Problem')
 
     def _device_recommendation_latex(self, doc, qaoa_qc, directory):
@@ -353,7 +367,7 @@ class NPC(Base):
             fig_path = os.path.join(directory, plot_name)
             if os.path.exists(fig_path):
                 with doc.create(Figure(position='h!')) as fig:
-                    fig.add_image(fig_path, width="360px")
+                    fig.add_image(fig_path, width=NoEscape(r"0.9\linewidth"))
                     fig.add_caption(caption)
                 image_paths.append(fig_path)
 

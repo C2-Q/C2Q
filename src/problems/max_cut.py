@@ -165,7 +165,7 @@ class MaxCut(NPC):
         pdf.cell(200, 10, "Visualization of Graph:", ln=True, align='L')
         pdf.image(image_path, x=10, y=pdf.get_y(), w=190)
 
-        # Perform QUBO optimization and sampling using QAOA
+        # Perform QUBO optimization and sampling using QAOA (1 layer for fast simulation)
         qubo = self.to_qubo().Q
         qaoa_dict = qaoa_optimize(qubo, layers=1)
         qc = qaoa_dict["qc"]
@@ -217,7 +217,7 @@ class MaxCut(NPC):
         #pdf.output(pdf_output_path)
 
         # start here for vqe algorithm
-        # Perform QUBO optimization and sampling using QAOA
+        # Perform QUBO optimization and sampling using vqe (1 layer for fast simulation)
         qubo = self.to_qubo().Q
         vqe_dict = vqe_optimization(qubo, layers=1)
         qc = vqe_dict["qc"]
@@ -234,7 +234,7 @@ class MaxCut(NPC):
         pdf.cell(200, 10, "VQE Optimization, generated quantum circuit", ln=True, align='C')
         pdf.ln(10)
 
-        # Plot and save the quantum circuit for qaoa !!
+        # Plot and save the quantum circuit for vqe !!
         vqe_circuit_image_path = "vqe_quantum_circuit_qaoa.png"
         qc.draw(style="mpl")
         plt.savefig(vqe_circuit_image_path)

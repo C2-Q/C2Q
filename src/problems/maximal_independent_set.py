@@ -256,7 +256,7 @@ class MIS(NPC):
         # start here for vqe algorithm
         # Perform QUBO optimization and sampling using VQE
         qubo = self.to_qubo().Q
-        vqe_dict = vqe_optimization(qubo, layers=1)
+        vqe_dict = vqe_optimization(qubo, layers=3)
         qc = vqe_dict["qc"]
         parameters = vqe_dict["parameters"]
         theta = vqe_dict["theta"]
