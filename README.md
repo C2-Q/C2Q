@@ -70,14 +70,14 @@ In addition to Python code snippets, **C2|Q>** supports a lightweight **JSON-bas
 
 Each JSON file must contain two fields:
 
-- `"type"`: the problem class (e.g., `"maxcut"`, `"add"`, `"factor"`)
+- `"problem_type"`: the problem class (e.g., `"maxcut"`, `"add"`, `"factor"`)
 - `"data"`: problem-specific parameters
 
 Example — MaxCut on a 4-node graph:
 
 ```json
 {
-  "type": "maxcut",
+  "problem_type": "maxcut",
   "data": {
     "nodes": 4,
     "edges": [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]]
