@@ -261,7 +261,7 @@ def analyse_code_structure(code_str):
 # ---------------------------------------------------------
 
 def main(
-    csv_path: str = "data3.csv",
+    csv_path: str = "python_programs.csv",
     out_snippet_metrics: str = "snippet_metrics.csv",
     out_family_summary: str = "family_summary.csv",
 ):
