@@ -136,4 +136,4 @@ def generate_cases_for_all(out_root: Path, count_per_type: int = 10):
 
 if __name__ == "__main__":
     # Creates 10 folders under json/, each with 10 JSON files.
-    generate_cases_for_all(Path("json"), count_per_type=10)
+    generate_cases_for_all(Path("json_tests/json"), count_per_type=10)

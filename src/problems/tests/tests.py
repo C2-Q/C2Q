@@ -161,7 +161,7 @@ class MyTestCase(unittest.TestCase):
         plt.show()
 
     def test_factor_grover(self):
-        factor = Factor(18)
+        factor = Factor(512)
         print(factor.execute())
     def test_add1(self):
         add = Add([500, 84])

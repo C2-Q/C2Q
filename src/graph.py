@@ -36,25 +36,38 @@ class Graph:
             )
 
     @staticmethod
-    def random_graph(num_nodes=3, edge_prob=0.5, weighted=True, max_weight=10):
+    def random_graph(num_nodes=3, weighted=True, max_weight=10):
         """Generate and return a ``Graph`` instance with random edges."""
         import numpy as np
         import networkx as nx
 
-        num_nodes = max(1, num_nodes)
+        # Ensure we can sample at least 2 nodes
+        num_nodes = max(2, int(num_nodes))
+
+        r = np.random.rand()
+        if r < 0.7:
+            edge_prob = np.random.uniform(0.25, 0.75)
+        elif r < 0.85:
+            edge_prob = np.random.uniform(0.10, 0.25)
+        else:
+            edge_prob = np.random.uniform(0.75, 0.90)
+
+        # Sample actual size in [2, num_nodes]
+        n = np.random.randint(2, num_nodes + 1)
 
         tmp_graph = nx.Graph()
-        tmp_graph.add_nodes_from(range(num_nodes))
+        tmp_graph.add_nodes_from(range(n))
 
-        for i in range(num_nodes):
-            for j in range(i + 1, num_nodes):
+        for i in range(n):
+            for j in range(i + 1, n):
                 if np.random.rand() < edge_prob:
-                    weight = np.random.randint(1, max_weight) if weighted else 1
+                    weight = np.random.randint(1, max_weight + 1) if weighted else 1
                     tmp_graph.add_edge(i, j, weight=weight)
 
-        if tmp_graph.number_of_edges() == 0 and num_nodes > 1:
-            u, v = np.random.choice(num_nodes, 2, replace=False)
-            weight = np.random.randint(1, max_weight) if weighted else 1
+        # Guarantee at least one edge
+        if tmp_graph.number_of_edges() == 0:
+            u, v = np.random.choice(n, 2, replace=False)
+            weight = np.random.randint(1, max_weight + 1) if weighted else 1
             tmp_graph.add_edge(u, v, weight=weight)
 
         edges_with_weights = [

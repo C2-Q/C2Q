@@ -3,6 +3,9 @@ author boshuai ye
 """
 
 import ast
+import random
+
+import numpy as np
 import torch
 from transformers import RobertaTokenizer, AutoModelForSequenceClassification
 from src.graph import Graph
@@ -157,8 +160,8 @@ class Parser:
                     continue
 
         # If no graph could be created, return a randomly generated graph
-        print("no data extracted, generating a random graph")
-        return Graph.random_graph()
+        # print("no data extracted, generating a random graph")
+        return Graph.random_graph(num_nodes=5)
 
     def _process_arithmetic_data(self, variables, function_calls):
         """
@@ -217,7 +220,7 @@ class Parser:
             if v < 2:
                 return None
             if v > 512:  # too big, fallback rule
-                return 35
+                return random.randint(4, 64)
             return v
 
         # ---- 1) Try variables: prioritize common names ----
@@ -263,7 +266,7 @@ class Parser:
                             return n
 
         # ---- 3) Fallback ----
-        return 35
+        return random.randint(4, 64)
 
 
 class CodeVisitor(ast.NodeVisitor):

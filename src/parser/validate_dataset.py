@@ -306,6 +306,13 @@ def main(
         axis=1,
     )
 
+    # --- DEBUG: dump syntax-failing rows for manual inspection ---
+    bad = merged[~merged["syntax_ok"]].copy()
+    bad_out = csv_path.with_name("syntax_failures.csv")
+    bad[["labels", "family", "code_snippet", "code_clean"]].to_csv(bad_out, index=False)
+    print(f"[debug] syntax_ok=False rows: {len(bad)}")
+    print(f"[debug] dumped to: {bad_out}")
+
     # Save per-snippet metrics
     merged.to_csv(out_snippet_metrics, index=False)
 

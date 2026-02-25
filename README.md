@@ -42,7 +42,22 @@ This repository accompanies the article:
 Refer to [`src/assets/workflow_editted-1.png`](src/assets/classiq_flow.pdf) for detailed component diagrams and workflow explanations.
 
 ---
+## Modular Reuse
 
+For modular reuse, individual components of **C2|Q>** can be accessed independently:
+
+- **Encoder Module**
+  - Parser (`parser.py`)
+  - QCF translation logic embedded within problem functions (in the `problems/` directory)
+  - Circuit generator (`generator.py`)
+  - Transpilation layer built on existing SDK interfaces
+
+- **Deployment Module**
+  - Hardware recommender (`recommender_engine.py`)
+  - Execution interfaces provided by external quantum vendors
+
+- **Decoder Module**
+  - Result interpretation logic embedded within each problem-specific function (in the `problems/` directory)
 ## Getting Started
 
 ### Prerequisites

@@ -350,7 +350,7 @@ class MyTestCase(unittest.TestCase):
 
 
     def test_factor(self):
-        code = "def factorization_recursive(n):\n    def recursive_division(n, divisor=2):\n        if n == 1:\n            return []\n        if n % divisor == 0:\n            return [divisor] + recursive_division(n // divisor, divisor)\n        return recursive_division(n, divisor + 1)\n    return recursive_division(n)\n\n# Input data\nn = 98\nfactors = factorization_recursive(n)\nprint(factors)"
+        code = "def factorization_recursive(n):\n    def recursive_division(n, divisor=2):\n        if n == 1:\n            return []\n        if n % divisor == 0:\n            return [divisor] + recursive_division(n // divisor, divisor)\n        return recursive_division(n, divisor + 1)\n    return recursive_division(n)\n\n# Input data\nn = 512\nfactors = factorization_recursive(n)\nprint(factors)"
         try:
             clean_code = ast.literal_eval(code)
         except Exception:
