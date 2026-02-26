@@ -1,0 +1,11 @@
+tag,count,n_families,entropy,top_family,top_family_ratio
+ADD,28,2,0.3712,direct-arithmetic,0.9286
+Clique,33,5,1.8269,iterative/greedy-ish,0.5455
+Factor,31,3,1.4617,trial-division/nested-loops,0.4839
+KColor,58,5,1.8969,iterative/greedy-ish,0.5
+MIS,70,4,1.3512,library-based(networkx),0.4714
+MUL,27,3,0.7254,direct-arithmetic,0.8519
+MaxCut,68,5,1.6226,iterative/greedy-ish,0.4559
+SUB,28,2,0.2223,direct-arithmetic,0.9643
+TSP,44,3,0.7829,dynamic-programming/memoization,0.8182
+VC,47,7,1.3051,2-approx(edge-picking),0.766

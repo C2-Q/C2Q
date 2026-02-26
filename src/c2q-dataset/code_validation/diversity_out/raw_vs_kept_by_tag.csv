@@ -1,0 +1,11 @@
+tag,raw_count,kept_count,kept_ratio
+ADD,28,28,1.0
+Clique,33,33,1.0
+Factor,31,31,1.0
+KColor,58,58,1.0
+MIS,70,70,1.0
+MUL,27,27,1.0
+MaxCut,68,68,1.0
+SUB,28,28,1.0
+TSP,44,44,1.0
+VC,47,47,1.0

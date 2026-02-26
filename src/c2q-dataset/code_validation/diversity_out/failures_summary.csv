@@ -1,0 +1,4 @@
+failure_type,count
+data_incompatible_with_label,5
+label_tag_mismatch,23
+other_exception,1
