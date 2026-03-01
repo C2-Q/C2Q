@@ -197,7 +197,7 @@ class MyTestCase(unittest.TestCase):
         using a **separate process per case** with a strict wall-clock timeout.
         Produces MANIFEST.csv and checksums.txt.
         """
-        input_csv = '../parser/data2.csv'
+        input_csv = '../parser/python_programs.csv'
 
         # Read inputs
         rows = []

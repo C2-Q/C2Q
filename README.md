@@ -20,6 +20,7 @@ This repository accompanies the article:
 ## Table of Contents
 - [Features](#features)
 - [Architecture](#architecture)
+- [Modular Reuse](#modular-reuse)
 - [Getting Started](#getting-started)
 - [Running Tests](#running-tests)
 - [Contributing](#contributing)
@@ -74,7 +75,7 @@ pip install -r requirements.txt
 ### Running Tests
 Run the unit tests with `pytest` after installing the dependencies:
 ```bash
-PYTHONPATH=. pytest -q
+PYTHONPATH=. pytest -p no:warnings
 ```
 ---
 ## Using JSON DSL Input

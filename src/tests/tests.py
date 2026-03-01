@@ -11,7 +11,6 @@ from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_histogram, plot_state_city
 from qiskit_aer import AerSimulator, Aer
 from qiskit_braket_provider import BraketProvider
-from azure.quantum import Workspace
 from qiskit_ibm_runtime import QiskitRuntimeService
 
 

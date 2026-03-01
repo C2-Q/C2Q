@@ -56,7 +56,6 @@ DEFAULT_CAPS = {
     "IonQ Aria (Amazon)": 25,
     "IonQ Aria (Azure)": 25,
     "IQM Garnet": 20,
-    # Common IBM names used in your data / plots:
     "ibm_brisbane": 127,
     "ibm_sherbrooke": 127,
     "ibm_kyiv": 127,
@@ -115,7 +114,6 @@ def load_long(errors_csv: Path, times_csv: Path, prices_csv: Path):
 def feasible(n: int, device: str, error_pct: float, caps: dict, tau: float) -> bool:
     """Capacity and fidelity (1 - error) >= tau."""
     if device not in caps:
-        # Unknown device: treat as not feasible unless you want to assume huge cap
         return False
     if n > int(caps[device]):
         return False

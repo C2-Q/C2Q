@@ -8,7 +8,7 @@ from src.problems.base import *
 from src.recommender.recommender_engine import recommender
 
 
-debug = True
+debug = False
 class NPC(Base):
 
     def __init__(self):
@@ -353,7 +353,7 @@ class NPC(Base):
             oracle_fig.add_caption(f'Corresponding Oracle Visualization for the {problem_name} Problem')
 
     def _device_recommendation_latex(self, doc, qaoa_qc, directory):
-        string, _ = recommender(qaoa_qc, save_figures=True)
+        string, _ = recommender(qaoa_qc, save_figures=False)
         image_paths = []
         for plot_name, caption in zip([
             "recommender_errors_devices.png",
@@ -374,6 +374,13 @@ class NPC(Base):
         with doc.create(Subsection("Device Recommendation Summary", numbering=False)):
             # doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
             doc.append(string)
+
+        # delete the generated figures after embedding them into the LaTeX doc
+        for p in image_paths:
+            try:
+                os.remove(p)
+            except FileNotFoundError:
+                pass
 
         return image_paths
 

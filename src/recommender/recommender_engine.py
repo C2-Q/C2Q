@@ -807,7 +807,7 @@ def fetch_available_devices(azure_workspace, braket_provider, ibm_service):
     return available_devices
 
 
-def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
+def recommender(qc, save_figures=True, figures_dir: str | None = None, ibm_service=None, available_devices=[]):
     """
     Main function of the quantum recommender. Outputs three options for quantum devices: lowest error, lowest time and lowest price.
 
@@ -971,7 +971,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
                     "time": time_to_execute,
                     "price": price_total
                 }
-                print(device_data)
+                # print(device_data)
                 recommender_devices.append(device_data)
 
         # print("--------------------------------------------\n")
@@ -982,6 +982,9 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
     device_prices = []
 
     if save_figures:
+        from pathlib import Path
+        out_dir = Path(figures_dir) if figures_dir else Path(".")
+        out_dir.mkdir(parents=True, exist_ok=True)
         for device in recommender_devices:
             device_names.append(device["name"])
             device_errors.append(device["error"])
@@ -994,7 +997,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.ylabel("Error (%)")
         plt.title("Estimated total error with each quantum computer")
         plt.tight_layout()
-        plt.savefig("recommender_errors_devices.pdf")
+        plt.savefig(out_dir / "recommender_errors_devices.pdf")
 
         # Plot times
         fig = plt.figure(figsize=(22, 5))
@@ -1003,7 +1006,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.title("Estimated total time with each quantum computer (50 iterations, 1000 shots per iteration)")
         plt.yscale("log")
         plt.tight_layout()
-        plt.savefig("recommender_times_devices.pdf")
+        plt.savefig(out_dir / "recommender_times_devices.pdf")
 
         # Plot prices
         fig = plt.figure(figsize=(22, 5))
@@ -1012,7 +1015,7 @@ def recommender(qc, save_figures=True, ibm_service=None, available_devices=[]):
         plt.title("Estimated price with each quantum computer (50 iterations, 1000 shots per iteration)")
         plt.yscale("log")
         plt.tight_layout()
-        plt.savefig("recommender_prices_devices.pdf")
+        plt.savefig(out_dir / "recommender_prices_devices.pdf")
 
     recommender_output = f" - Lowest error: {min_error_device[0]} from {min_error_device[1]} with a calculated error of {round(min_error_device[2] * 100, 2)}%, time to execute: {round(min_error_device[3], 6)} seconds and a price of ${round(min_error_device[4], 2)}. \n - Lowest time: {min_time_device[0]} from {min_time_device[1]} with a calculated error of {round(min_time_device[2] * 100, 2)}%, time to execute: {round(min_time_device[3], 6)} seconds and a price of ${round(min_time_device[4], 2)}. \n - Lowest price: {min_price_device[0]} from {min_price_device[1]} with a calculated error of {round(min_price_device[2] * 100, 2)}%, time to execute: {round(min_price_device[3], 6)} seconds and a price of ${round(min_price_device[4], 2)}."
 
