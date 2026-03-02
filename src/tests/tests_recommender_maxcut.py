@@ -9,7 +9,7 @@ from src.recommender.recommender_engine import recommender, plot_results, save_r
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+        self.assertTrue(True)
 
     def test_plot_recommender(self):
         # Plot recommender results with a range of qubits

@@ -2,6 +2,17 @@ import unittest
 from pathlib import Path
 
 import networkx as nx
+import pytest
+
+pytestmark = pytest.mark.integration
+
+pytest.importorskip("torch")
+pytest.importorskip("transformers")
+pytest.importorskip("qiskit")
+pytest.importorskip("qiskit_aer")
+pytest.importorskip("qiskit_ionq")
+pytest.importorskip("pytket")
+pytest.importorskip("braket")
 
 from src.parser.parser import Parser
 from src.problems.max_cut import MaxCut

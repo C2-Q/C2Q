@@ -73,9 +73,14 @@ pip install -r requirements.txt
 ```
 
 ### Running Tests
-Run the unit tests with `pytest` after installing the dependencies:
+Run fast/default tests:
 ```bash
-PYTHONPATH=. pytest -p no:warnings
+PYTHONPATH=. pytest
+```
+
+Run integration tests (requires full quantum/ML dependencies and local models):
+```bash
+PYTHONPATH=. pytest -m integration
 ```
 ---
 ## Using JSON DSL Input
@@ -113,7 +118,7 @@ Supported problem types:
 - `mul` (Integer Multiplication)
 - `sub` (Integer Subtraction)
 
-Sample files are available in: `src/tests/json_examples/`
+Sample files are available in: `src/tests/json_examples_1/`
 
 ---
 
@@ -123,6 +128,16 @@ To execute a JSON-defined problem instance using the full C2|Q> workflow, run:
 
 ```bash
 python -m src.json_engine --input src/tests/json_examples_1/MIS_05.json
+```
+
+Interactive mode (build input from terminal prompts):
+```bash
+python -m src.json_engine --interactive
+```
+
+List supported families:
+```bash
+python -m src.json_engine --list_families
 ```
 
 This command:

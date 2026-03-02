@@ -45,23 +45,10 @@ import json
 import argparse
 import glob
 import random
-import traceback
 from typing import Any, Dict, Tuple, Optional, List
 
 import networkx as nx
 
-from src.parser.parser import *  # expected to define Graph, GRAPH_TAGS, ARITHMETIC_TAGS (if available)
-
-from src.problems.basic_arithmetic.addition import Add
-from src.problems.basic_arithmetic.multiplication import Mul
-from src.problems.basic_arithmetic.subtraction import Sub
-from src.problems.clique import Clique
-from src.problems.factorization import Factor
-from src.problems.kcolor import KColor
-from src.problems.max_cut import MaxCut
-from src.problems.maximal_independent_set import MIS
-from src.problems.minimum_vertex_cover import MVC
-from src.problems.tsp import TSP
 import os
 from pathlib import Path
 
@@ -69,20 +56,67 @@ from pathlib import Path
 # 1. Family aliases / canonicalisation
 # -------------------------------------------------------------------
 
-PROBLEMS = {
-    "MaxCut": MaxCut,
-    "MIS": MIS,
-    "TSP": TSP,
-    "Clique": Clique,
-    "KColor": KColor,
-    "Factor": Factor,
-    "ADD": Add,
-    "MUL": Mul,
-    "SUB": Sub,
-    "VC": MVC,
-}
+PROBLEM_FAMILIES = (
+    "MaxCut",
+    "MIS",
+    "TSP",
+    "Clique",
+    "KColor",
+    "Factor",
+    "ADD",
+    "MUL",
+    "SUB",
+    "VC",
+)
 
-# Aliases for lowercased family names → canonical keys in PROBLEMS
+GRAPH_TAGS = ["MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"]
+ARITHMETIC_TAGS = ["ADD", "MUL", "SUB", "Factor"]
+
+
+def load_problem_classes():
+    """Lazily import heavy quantum/problem modules when actually needed."""
+    try:
+        from src.problems.basic_arithmetic.addition import Add
+        from src.problems.basic_arithmetic.multiplication import Mul
+        from src.problems.basic_arithmetic.subtraction import Sub
+        from src.problems.clique import Clique
+        from src.problems.factorization import Factor
+        from src.problems.kcolor import KColor
+        from src.problems.max_cut import MaxCut
+        from src.problems.maximal_independent_set import MIS
+        from src.problems.minimum_vertex_cover import MVC
+        from src.problems.tsp import TSP
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "Missing optional runtime dependencies for quantum problems. "
+            "Install requirements with: pip install -r requirements.txt"
+        ) from exc
+
+    return {
+        "MaxCut": MaxCut,
+        "MIS": MIS,
+        "TSP": TSP,
+        "Clique": Clique,
+        "KColor": KColor,
+        "Factor": Factor,
+        "ADD": Add,
+        "MUL": Mul,
+        "SUB": Sub,
+        "VC": MVC,
+    }
+
+
+def load_graph_class():
+    """Lazily import Graph to keep light CLI commands dependency-free."""
+    try:
+        from src.graph import Graph
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "Missing graph/runtime dependencies. Install with: pip install -r requirements.txt"
+        ) from exc
+    return Graph
+
+# Aliases for lowercased family names → canonical keys in supported families
 _FAMILY_ALIASES = {
     # Graph families
     "maxcut": "MaxCut",
@@ -184,17 +218,17 @@ def _normalise_key_for_alias(name: str) -> str:
 
 
 def canonicalise_family(raw: Optional[str]) -> Optional[str]:
-    """Map a raw family / problem_type string to a canonical PROBLEMS key."""
+    """Map a raw family / problem_type string to a canonical family key."""
     if raw is None:
         return None
 
     raw_stripped = raw.strip()
     # If it already matches a canonical key (case-sensitive)
-    if raw_stripped in PROBLEMS:
+    if raw_stripped in PROBLEM_FAMILIES:
         return raw_stripped
 
     # Case-insensitive direct match
-    for key in PROBLEMS.keys():
+    for key in PROBLEM_FAMILIES:
         if raw_stripped.lower() == key.lower():
             return key
 
@@ -585,7 +619,7 @@ def generate_example_for_family(family: str, idx: int) -> Dict[str, Any]:
             }
         }
 
-    # Fallback (should not happen for current PROBLEMS)
+    # Fallback (should not happen for current supported families)
     return {
         "family": family,
         "goal": "auto-generated test instance",
@@ -599,7 +633,7 @@ def generate_all_examples(n_per_family: int = 10) -> Dict[str, List[Dict[str, An
     Generate n_per_family JSON-DSL examples for each canonical family.
     """
     examples: Dict[str, List[Dict[str, Any]]] = {}
-    for fam in PROBLEMS.keys():
+    for fam in PROBLEM_FAMILIES:
         fam_examples = []
         for i in range(n_per_family):
             fam_examples.append(generate_example_for_family(fam, i))
@@ -621,6 +655,9 @@ def self_test_examples(root: str = "src/tests/json") -> None:
     IMPORTANT: we do *not* call report_latex() here to avoid heavy
     quantum back-end work; this is a front-half DSL + data-shape sanity check.
     """
+    problem_classes = load_problem_classes()
+    graph_cls = load_graph_class()
+
     paths = sorted(glob.glob(f"{root}/*.json"))
     if not paths:
         print(f"⚠️  No JSON examples found under {root}")
@@ -638,7 +675,7 @@ def self_test_examples(root: str = "src/tests/json") -> None:
             if family == "UNKNOWN":
                 raise ValueError("family is UNKNOWN after normalisation")
 
-            if family not in PROBLEMS:
+            if family not in problem_classes:
                 raise ValueError(f"Unsupported family after normalisation: {family!r}")
 
             problem_class = recognize_problem_class(family)
@@ -650,7 +687,7 @@ def self_test_examples(root: str = "src/tests/json") -> None:
 
                 # Build real Graph objects to exercise matrix/edge-list handling
                 for name, payload in graphs.items():
-                    g_obj = Graph(payload)
+                    g_obj = graph_cls(payload)
                     _ = g_obj.G.number_of_nodes()
                     _ = g_obj.G.number_of_edges()
 
@@ -663,14 +700,14 @@ def self_test_examples(root: str = "src/tests/json") -> None:
 
                     left, right = extract_binary_operands(norm_inst)
 
-                    _ = PROBLEMS[family]([left, right])
+                    _ = problem_classes[family]([left, right])
 
 
                 elif family == "Factor":
 
                     n = extract_factor_number(norm_inst)
 
-                    _ = PROBLEMS[family](n)
+                    _ = problem_classes[family](n)
 
                 else:
 
@@ -689,10 +726,10 @@ def self_test_examples(root: str = "src/tests/json") -> None:
 
     print(f"\nSelf-test finished: {passed}/{total} examples passed front-half checks.")
 
-import tempfile
-from pathlib import Path
-
 def batch_generate_reports(root: str = "src/tests/json") -> None:
+    problem_classes = load_problem_classes()
+    graph_cls = load_graph_class()
+
     paths = sorted(glob.glob(f"{root}/*.json"))
     if not paths:
         print(f"⚠️  No JSON examples found under {root}")
@@ -725,17 +762,17 @@ def batch_generate_reports(root: str = "src/tests/json") -> None:
                 graphs = extract_graphs_from_instance(instance)
                 last_graph = None
                 for _, payload in graphs.items():
-                    last_graph = Graph(payload)
-                problem = PROBLEMS[family](last_graph.G)
+                    last_graph = graph_cls(payload)
+                problem = problem_classes[family](last_graph.G)
 
             elif problem_class == "ARITHMETIC":
                 norm = normalise_arithmetic_instance(family, instance)
                 if family in {"ADD", "MUL", "SUB"}:
                     left, right = extract_binary_operands(norm)
-                    problem = PROBLEMS[family]([left, right])
+                    problem = problem_classes[family]([left, right])
                 elif family == "Factor":
                     n = extract_factor_number(norm)
-                    problem = PROBLEMS[family](n)
+                    problem = problem_classes[family](n)
                 else:
                     raise ValueError(f"Unknown arithmetic family {family}")
 
@@ -760,6 +797,62 @@ def batch_generate_reports(root: str = "src/tests/json") -> None:
 # -------------------------------------------------------------------
 # 7. Main entry point
 # -------------------------------------------------------------------
+
+def list_families() -> None:
+    print("Supported families:")
+    for fam in PROBLEM_FAMILIES:
+        print(f" - {fam}")
+
+
+def _parse_edge_list(raw: str) -> List[List[int]]:
+    """
+    Parse edges from a compact prompt format:
+    `0-1,1-2,2-3,3-0`
+    """
+    edges = []
+    text = (raw or "").strip()
+    if not text:
+        return edges
+
+    for token in text.split(","):
+        part = token.strip()
+        if not part:
+            continue
+        if "-" not in part:
+            raise ValueError(f"Edge '{part}' must use 'u-v' format.")
+        left, right = part.split("-", 1)
+        edges.append([int(left.strip()), int(right.strip())])
+    return edges
+
+
+def interactive_task() -> Dict[str, Any]:
+    print("Interactive C2|Q JSON builder")
+    list_families()
+    family_raw = input("Choose family [MaxCut]: ").strip() or "MaxCut"
+    family = canonicalise_family(family_raw)
+    if family is None:
+        raise ValueError(f"Unknown family: {family_raw}")
+
+    task: Dict[str, Any] = {"family": family, "instance": {}}
+
+    if family in {"ADD", "MUL", "SUB"}:
+        left = int(input("Left operand [2]: ").strip() or "2")
+        right = int(input("Right operand [3]: ").strip() or "3")
+        task["instance"] = {"operands": [left, right], "bits": 10}
+        task["goal"] = f"{family.lower()} two integers"
+    elif family == "Factor":
+        value = int(input("Number to factor [21]: ").strip() or "21")
+        task["instance"] = {"n": value, "bits": max(4, value.bit_length())}
+        task["goal"] = "factor an integer"
+    else:
+        default_edges = "0-1,1-2,2-3,3-0"
+        raw_edges = input(f"Edge list [{default_edges}]: ").strip() or default_edges
+        edges = _parse_edge_list(raw_edges)
+        task["instance"] = {"graph_rep": "edge_list", "graphs": {"G1": edges}}
+        task["goal"] = f"solve {family} on a graph"
+
+    return task
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -786,8 +879,22 @@ def main():
         action="store_true",
         help="Generate LaTeX reports for all JSON files under src/tests/json."
     )
+    parser.add_argument(
+        "--interactive",
+        action="store_true",
+        help="Build a problem instance interactively from terminal prompts.",
+    )
+    parser.add_argument(
+        "--list_families",
+        action="store_true",
+        help="List all supported family names and exit.",
+    )
 
     args = parser.parse_args()
+
+    if args.list_families:
+        list_families()
+        return
 
     # -----------------------
     # Handle: generate examples only
@@ -809,12 +916,17 @@ def main():
         batch_generate_reports()
         return
     # ----------------- Normal pipeline mode -----------------
-    if not args.input:
-        parser.error("Either --input, --self_test_examples, or --generate_examples must be provided.")
+    if not args.input and not args.interactive:
+        parser.error(
+            "Provide one mode: --input, --interactive, --self_test_examples, --generate_examples, "
+            "--batch_report, or --list_families."
+        )
 
     print("📥 Loading problem from JSON DSL...")
-    raw_task = load_input(args.input)
+    raw_task = interactive_task() if args.interactive else load_input(args.input)
     family, instance, params, goal_text = normalise_task(raw_task)
+    problem_classes = load_problem_classes()
+    graph_cls = load_graph_class()
 
     if family == "UNKNOWN":
         raise ValueError(
@@ -822,7 +934,7 @@ def main():
             "Please provide 'family'/'problem_type' or a clearer 'goal' description."
         )
 
-    if family not in PROBLEMS:
+    if family not in problem_classes:
         raise ValueError(f"Unsupported problem family: {family!r}")
 
     print(f"🔍 Problem family: {family}")
@@ -843,7 +955,7 @@ def main():
         last_graph_obj = None
 
         for name, payload in graphs.items():
-            data = Graph(payload)
+            data = graph_cls(payload)
             last_graph_obj = data
             print(
                 f"📊 Loaded graph '{name}' with "
@@ -854,7 +966,7 @@ def main():
         if last_graph_obj is None:
             raise ValueError("No graph payload could be extracted from JSON instance.")
 
-        problem = PROBLEMS[family](last_graph_obj.G)
+        problem = problem_classes[family](last_graph_obj.G)
 
     # -----------------------------
     # ARITHMETIC / FACTORISATION
@@ -866,13 +978,13 @@ def main():
             # Binary arithmetic → [left, right]
             left, right = extract_binary_operands(norm_instance)
             data = [left, right]
-            problem = PROBLEMS[family](data)
+            problem = problem_classes[family](data)
 
         elif family == "Factor":
             # Factorisation → single integer
             n = extract_factor_number(norm_instance)
             data = n
-            problem = PROBLEMS[family](data)
+            problem = problem_classes[family](data)
 
         else:
             raise ValueError(f"Unknown ARITHMETIC family: {family!r}")
