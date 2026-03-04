@@ -164,7 +164,7 @@ Sample files are available in: `src/c2q-dataset/inputs/json/`
 To execute a JSON-defined problem instance using the full C2|Q> workflow, run:
 
 ```bash
-python -m src.json_engine --input src/c2q-dataset/inputs/json/mis/mis_05.json
+python -m src.json_engine --input src/c2q-dataset/inputs/json/mis/mis_04.json
 ```
 
 This command:
