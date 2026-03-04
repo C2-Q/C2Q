@@ -104,6 +104,7 @@ Input policy:
 - Primary CSV: `src/parser/python_programs.csv`
 - Backup CSV: `src/parser/data.csv`
 - JSON inputs are kept under `src/c2q-dataset/inputs/json/`
+- Dataset archive uploaded to Zenodo: [C2Q data record](https://zenodo.org/records/18780001)
 
 Model requirement:
 - The parser model is not committed to GitHub because of file size.
