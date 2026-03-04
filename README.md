@@ -23,6 +23,7 @@ This repository accompanies the article:
 - [Modular Reuse](#modular-reuse)
 - [Getting Started](#getting-started)
 - [Running Tests](#running-tests)
+- [Reproducibility](#reproducibility)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -77,6 +78,46 @@ Run the unit tests with `pytest` after installing the dependencies:
 ```bash
 PYTHONPATH=. pytest -p no:warnings
 ```
+
+## Reproducibility
+
+Use the reproducibility pipeline to run key experiments and export final artifacts.
+
+Quick smoke run (small scale, around 4 reports):
+```bash
+make reproduce-smoke
+```
+
+Full paper run (up to 434 reports, time-consuming):
+```bash
+make reproduce-paper
+```
+
+What this pipeline does:
+- Creates/updates a local virtual environment and installs dependencies.
+- Runs implementation-level validation (`src/validation/implementation_validation.py`).
+- Runs algorithmic/structural validation (`src/validation/diversity_validation.py`).
+- Generates report artifacts via `src/tests/tests_reports.py`.
+- Exports metadata and artifact index under `artifacts/reproduce/{smoke|paper}`.
+
+Input policy:
+- Primary CSV: `src/parser/python_programs.csv`
+- Backup CSV: `src/parser/data.csv`
+- JSON inputs are kept under `src/c2q-dataset/inputs/json/`
+
+Model requirement:
+- The parser model is not committed to GitHub because of file size.
+- Download the model from Google Drive: [saved_models_2025_12](https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link)
+- Place it at `src/parser/saved_models_2025_12/` (default path), or pass:
+  - `MODEL_PATH=/path/to/saved_models_2025_12` for `make reproduce-*`
+  - `C2Q_MODEL_PATH=/path/to/saved_models_2025_12` for direct `pytest` / script runs
+
+Quick verification commands:
+```bash
+C2Q_MODEL_PATH=src/parser/saved_models_2025_12 PYTHONPATH=. pytest src/tests/test_c2q.py -p no:warnings
+MODEL_PATH=src/parser/saved_models_2025_12 make reproduce-smoke
+```
+
 ---
 ## Using JSON DSL Input
 
@@ -113,7 +154,7 @@ Supported problem types:
 - `mul` (Integer Multiplication)
 - `sub` (Integer Subtraction)
 
-Sample files are available in: `src/tests/json_examples/`
+Sample files are available in: `src/c2q-dataset/inputs/json/`
 
 ---
 
@@ -122,7 +163,7 @@ Sample files are available in: `src/tests/json_examples/`
 To execute a JSON-defined problem instance using the full C2|Q> workflow, run:
 
 ```bash
-python -m src.json_engine --input src/tests/json_examples_1/MIS_05.json
+python -m src.json_engine --input src/c2q-dataset/inputs/json/mis/mis_05.json
 ```
 
 This command:

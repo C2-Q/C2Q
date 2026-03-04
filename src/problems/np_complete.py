@@ -50,7 +50,7 @@ class NPC(Base):
 
     def recommender_engine(self):
         qcs = self._construct_circuits()
-        print(qcs)
+        # print(qcs)
         for qc in qcs.values():
             try:
                 recommender_output, devices = recommender(qc.decompose())

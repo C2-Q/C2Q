@@ -21,6 +21,35 @@ It enables reviewers and researchers to:
 - Verify reproducibility of evaluation runs via the manifest and checksums.  
 - Compare the automated workflow with the independently reviewed manual Qiskit baseline provided in the usability folder.
 
+## Reproducing Artifacts
+From the repository root:
+
+```bash
+make reproduce-smoke
+```
+
+for a fast smoke check (~4 reports), or:
+
+```bash
+make reproduce-paper
+```
+
+for the full paper-scale run (up to 434 reports; this is time-consuming).
+
+By default, reproducibility uses:
+- primary input: `src/parser/python_programs.csv`
+- backup input: `src/parser/data.csv`
+- JSON inputs from `src/c2q-dataset/inputs/json/`
+- parser model from `src/parser/saved_models_2025_12/` (or override with `MODEL_PATH=...`)
+- model download (not pushed to GitHub due size): [Google Drive](https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link)
+
+Artifacts are exported under `artifacts/reproduce/{smoke|paper}`.
+
+Example smoke reproducibility command:
+```bash
+MODEL_PATH=src/parser/saved_models_2025_12 make reproduce-smoke
+```
+
 ## License
 - Data, reports, and baseline code: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).  
 - Software framework: provided separately via GitHub (Apache-2.0).

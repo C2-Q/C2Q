@@ -1,0 +1,11 @@
+{
+  "problem_type": "mul",
+  "data": {
+    "operands": [
+      4,
+      0
+    ],
+    "a_bits": 3,
+    "b_bits": 2
+  }
+}

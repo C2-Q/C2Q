@@ -1,0 +1,10 @@
+{
+  "problem_type": "add",
+  "data": {
+    "operands": [
+      3,
+      4
+    ],
+    "bits": 3
+  }
+}

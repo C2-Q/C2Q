@@ -1,0 +1,10 @@
+{
+  "problem_type": "sub",
+  "data": {
+    "operands": [
+      4,
+      5
+    ],
+    "bits": 3
+  }
+}

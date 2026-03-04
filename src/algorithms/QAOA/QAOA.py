@@ -7,6 +7,7 @@ from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
 
 from scipy.optimize import minimize
 
+import os
 import numpy as np
 
 
@@ -252,7 +253,8 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
     result = job.result()[0]
 
     counts = result.data.meas.get_counts()
-    print(counts)
+    if os.getenv("C2Q_VERBOSE_COUNTS", "0") == "1":
+        print(counts)
     highest_possible_solution = 0
     max_count = 0
     for key, count in counts.items():

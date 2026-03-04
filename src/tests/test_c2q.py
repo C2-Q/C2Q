@@ -1,4 +1,5 @@
 import unittest
+import os
 from pathlib import Path
 
 import networkx as nx
@@ -12,11 +13,31 @@ from src.recommender.recommender_engine import recommender
 
 
 class MyTestCase(unittest.TestCase):
+    @staticmethod
+    def _resolve_model_dir(repo_root: Path) -> Path | None:
+        env_path = os.getenv("C2Q_MODEL_PATH")
+        candidates = []
+        if env_path:
+            candidates.append(Path(env_path).expanduser())
+        candidates.append(repo_root / "src" / "parser" / "saved_models_2025_12")
+        candidates.append(repo_root / "src" / "parser" / "saved_models")
+
+        required_files = {"config.json", "tokenizer_config.json"}
+        for candidate in candidates:
+            if candidate.is_dir() and all((candidate / name).exists() for name in required_files):
+                return candidate
+        return None
+
     def setUp(self):
         # Always resolve paths relative to THIS test file so pytest working-dir doesn't matter.
         # Expected repo layout: <repo>/src/tests/<this_file>.py
         repo_root = Path(__file__).resolve().parents[2]  # .../<repo>
-        model_dir = repo_root / "src" / "parser" / "saved_models"
+        model_dir = self._resolve_model_dir(repo_root)
+        if model_dir is None:
+            self.skipTest(
+                "Parser model not found. Set C2Q_MODEL_PATH or place a model in "
+                "src/parser/saved_models_2025_12 (preferred) or src/parser/saved_models."
+            )
         self.parser = Parser(model_path=str(model_dir))
 
         # Output directory: <repo>/src/tests/tests_output/...
