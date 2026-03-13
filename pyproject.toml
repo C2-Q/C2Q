@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "c2q-framework"
-version = "0.1.0"
+version = "0.1.1"
 description = "C2|Q: Classical-to-Quantum software development framework"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,6 +27,9 @@ include-package-data = true
 where = ["."]
 include = ["src*"]
 namespaces = true
+
+[tool.setuptools.package-data]
+"*" = ["*.pkl", "*.npy", "*.json", "*.csv", "*.txt", "*.png"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
