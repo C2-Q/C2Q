@@ -324,3 +324,5 @@ For research collaboration or substantial contributions, contact the maintainer:
 📧 arif.khan@oulu.fi (Project Principal Investigator (PI))
 
 📧 matti.silveri@oulu.fi (Project Principal Investigator (PI))
+
+📧 liangp@whu.edu.cn (Outside Collaborator, Peng Liang)
