@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "c2q-framework"
+version = "0.1.0"
+description = "C2|Q: Classical-to-Quantum software development framework"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+  {name = "C2Q Team"}
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/C2-Q/C2Q"
+
+[project.scripts]
+c2q-json = "src.json_engine:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+namespaces = true
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

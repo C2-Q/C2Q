@@ -13,7 +13,7 @@
 This repository accompanies the article:
 
 > **"C2|Q>: A Robust Framework for Bridging Classical and Quantum Software Development"**
-> Submitted to *ACM Transactions on Software Engineering and Methodology (TOSEM), 2025.*
+> Accepted at *ACM Transactions on Software Engineering and Methodology (TOSEM)* (in press).
 > Preprint available on arXiv: https://arxiv.org/abs/2510.02854
 ---
 
@@ -71,6 +71,7 @@ For modular reuse, individual components of **C2|Q>** can be accessed independen
 git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
 pip install -r requirements-lock.txt
+pip install -e .
 ```
 
 ### Running Tests
