@@ -23,6 +23,8 @@ import time
 from pathlib import Path
 from typing import Dict, List
 
+from setup_model import _default_checksum_file, verify_model_checksums
+
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
@@ -84,6 +86,16 @@ def validate_model_dir(model_path: Path) -> None:
             f" - {model_path}\n"
             "Missing one of: model.safetensors, pytorch_model.bin\n"
             "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+        )
+    checksum_file = _default_checksum_file()
+    checksum_issues = verify_model_checksums(model_path, checksum_file)
+    if checksum_file.is_file() and checksum_issues:
+        raise RuntimeError(
+            "Model checksum verification failed:\n"
+            f" - manifest: {checksum_file}\n"
+            f" - issues: {', '.join(checksum_issues)}\n"
+            "Re-download model from: "
+            "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
         )
 
 

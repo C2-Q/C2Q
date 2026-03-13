@@ -7,8 +7,11 @@ from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
 
 from scipy.optimize import minimize
 
+import logging
 import os
 import numpy as np
+
+LOGGER = logging.getLogger(__name__)
 
 
 def convert_qubo_to_ising(qubo):
@@ -254,7 +257,7 @@ def sample_results(qc, parameters, theta, backend=AerSimulator()):
 
     counts = result.data.meas.get_counts()
     if os.getenv("C2Q_VERBOSE_COUNTS", "0") == "1":
-        print(counts)
+        LOGGER.info("QAOA sample counts: %s", counts)
     highest_possible_solution = 0
     max_count = 0
     for key, count in counts.items():

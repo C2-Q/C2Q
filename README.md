@@ -70,13 +70,30 @@ For modular reuse, individual components of **C2|Q>** can be accessed independen
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
-pip install -r requirements.txt
+pip install -r requirements-lock.txt
 ```
 
 ### Running Tests
-Run the unit tests with `pytest` after installing the dependencies:
+Test tiers are separated for contributor usability:
+- `unit` (default): fast tests, no model required.
+- `model`: parser model required.
+- `paper`: long-running paper-scale tests.
+
+Default fast tier:
 ```bash
-PYTHONPATH=. pytest -p no:warnings
+PYTHONPATH=. pytest
+```
+
+Model tier (opt-in):
+```bash
+C2Q_MODEL_PATH=src/parser/saved_models_2025_12 PYTHONPATH=. pytest -m model -p no:warnings
+# or use helper target:
+make verify-model
+```
+
+One-command diagnostics before testing/reproduction:
+```bash
+make doctor
 ```
 
 ## Reproducibility
@@ -113,14 +130,17 @@ Model requirement:
   - `MODEL_PATH=/path/to/saved_models_2025_12` for `make reproduce-*`
   - `C2Q_MODEL_PATH=/path/to/saved_models_2025_12` for direct `pytest` / script runs
 - Expected model files: `config.json`, `tokenizer_config.json`, and one weight file (`model.safetensors` or `pytorch_model.bin`).
+- Integrity checks: `tools/model_checksums.json` stores SHA256 checksums for the distributed model files.
 - Collaboration helpers:
   - `make model-check` verifies model files exist and are complete.
   - `make model-download` downloads model archive from Google Drive via `gdown` and installs it (`pip install gdown` if missing).
+  - `make doctor` checks Python/LaTeX/model/checksum readiness in one command.
   - Manual mode: `python tools/setup_model.py --archive /path/to/model_archive.zip`
 
 Quick verification commands:
 ```bash
-C2Q_MODEL_PATH=src/parser/saved_models_2025_12 PYTHONPATH=. pytest src/tests/test_c2q.py -p no:warnings
+PYTHONPATH=. pytest
+C2Q_MODEL_PATH=src/parser/saved_models_2025_12 PYTHONPATH=. pytest -m model -p no:warnings
 MODEL_PATH=src/parser/saved_models_2025_12 make reproduce-smoke
 ```
 
@@ -209,7 +229,9 @@ We welcome contributions from researchers, developers, and practitioners interes
    cd C2Q
    python -m venv venv
    source venv/bin/activate  # On Windows use venv\Scripts\activate
-   pip install -r requirements.txt
+   pip install -r requirements-lock.txt
+   make doctor
+   make verify
    ```
 3. **Create** a feature branch:
    ```bash

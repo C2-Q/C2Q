@@ -11,6 +11,8 @@ Use this helper to:
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import shutil
 import subprocess
 import sys
@@ -29,6 +31,10 @@ REQUIRED_FILES = ("config.json", "tokenizer_config.json")
 WEIGHT_FILES = ("model.safetensors", "pytorch_model.bin")
 
 
+def _default_checksum_file() -> Path:
+    return repo_root() / "tools" / "model_checksums.json"
+
+
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
@@ -38,6 +44,33 @@ def check_model_dir(model_dir: Path) -> list[str]:
     if not any((model_dir / name).is_file() for name in WEIGHT_FILES):
         missing.append("model.safetensors|pytorch_model.bin")
     return missing
+
+
+def sha256sum(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as file_obj:
+        for chunk in iter(lambda: file_obj.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def verify_model_checksums(model_dir: Path, checksum_file: Path) -> list[str]:
+    if not checksum_file.is_file():
+        return []
+
+    payload = json.loads(checksum_file.read_text(encoding="utf-8"))
+    expected_files = payload.get("files", {})
+    issues: list[str] = []
+
+    for rel_name, expected_hash in expected_files.items():
+        file_path = model_dir / rel_name
+        if not file_path.is_file():
+            issues.append(f"missing {rel_name}")
+            continue
+        actual_hash = sha256sum(file_path)
+        if actual_hash.lower() != str(expected_hash).lower():
+            issues.append(f"checksum mismatch {rel_name}")
+    return issues
 
 
 def find_model_dir(search_root: Path) -> Path | None:
@@ -102,15 +135,35 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Path to a pre-downloaded model archive (.zip/.tar*).",
     )
+    parser.add_argument(
+        "--checksum-file",
+        type=Path,
+        default=_default_checksum_file(),
+        help="JSON file with expected SHA256 checksums for model files.",
+    )
+    parser.add_argument(
+        "--skip-checksum",
+        action="store_true",
+        help="Skip SHA256 verification after check/install.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     model_path = args.model_path.expanduser().resolve()
+    checksum_file = args.checksum_file.expanduser().resolve()
 
     missing = check_model_dir(model_path)
     if not missing:
+        if not args.skip_checksum:
+            checksum_issues = verify_model_checksums(model_path, checksum_file)
+            if checksum_issues:
+                issue_text = ", ".join(checksum_issues)
+                raise RuntimeError(
+                    "Model checksum verification failed for existing model: "
+                    f"{issue_text}. Re-download from {args.url}"
+                )
         print(f"[ok] Model is ready: {model_path}")
         return 0
 
@@ -161,6 +214,14 @@ def main() -> int:
             "Model install completed but required files are still missing: "
             + ", ".join(missing_after)
         )
+    if not args.skip_checksum:
+        checksum_issues = verify_model_checksums(model_path, checksum_file)
+        if checksum_issues:
+            issue_text = ", ".join(checksum_issues)
+            raise RuntimeError(
+                "Model install completed, but checksum verification failed: "
+                f"{issue_text}"
+            )
 
     print(f"[ok] Model installed and verified: {model_path}")
     return 0

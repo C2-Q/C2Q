@@ -1,0 +1,13 @@
+{
+  "model_name": "saved_models_2025_12",
+  "source_url": "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link",
+  "algorithm": "sha256",
+  "files": {
+    "config.json": "191beb6223fdfe517e22584ecea105a30ebc97fd2d2e520432d77714fae5adbb",
+    "tokenizer_config.json": "8be1efe88d0815235241e648facaba7826449636b1d311697631ecf7f6479e9a",
+    "model.safetensors": "1334d9600c8af76e1110aed415573cc93a5a74a2d971041abe3dae2a6c174772",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "vocab.json": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+    "special_tokens_map.json": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857"
+  }
+}
