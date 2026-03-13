@@ -1,4 +1,4 @@
-PYTHON ?= python3
+PYTHON ?= $(shell if command -v python3.12 >/dev/null 2>&1; then echo python3.12; else echo python3; fi)
 VENV ?= .venv
 VENV_PY := $(VENV)/bin/python
 VENV_PIP := $(VENV)/bin/pip
@@ -9,8 +9,9 @@ BACKUP_CSV ?= src/parser/data.csv
 MODEL_PATH ?= src/parser/saved_models_2025_12
 OUTPUT_ROOT ?= artifacts/reproduce
 TIME_LIMIT_SECS ?= 300
+MODEL_SETUP_URL ?= https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link
 
-.PHONY: venv reproduce-paper reproduce-smoke clean-reproduce
+.PHONY: venv model-check model-download reproduce-paper reproduce-smoke clean-reproduce
 
 $(VENV_READY): requirements.txt
 	@set -e; \
@@ -26,7 +27,13 @@ $(VENV_READY): requirements.txt
 
 venv: $(VENV_READY)
 
-reproduce-paper: venv
+model-check:
+	$(PYTHON) tools/setup_model.py --model-path $(MODEL_PATH)
+
+model-download:
+	$(PYTHON) tools/setup_model.py --model-path $(MODEL_PATH) --download --url $(MODEL_SETUP_URL)
+
+reproduce-paper: venv model-check
 	$(VENV_PY) tools/reproduce_paper.py \
 		--mode paper \
 		--primary-csv $(PRIMARY_CSV) \
@@ -35,7 +42,7 @@ reproduce-paper: venv
 		--time-limit-secs $(TIME_LIMIT_SECS) \
 		--output-root $(OUTPUT_ROOT)
 
-reproduce-smoke: venv
+reproduce-smoke: venv model-check
 	$(VENV_PY) tools/reproduce_paper.py \
 		--mode smoke \
 		--max-cases 4 \

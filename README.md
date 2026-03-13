@@ -112,6 +112,10 @@ Model requirement:
 - Place it at `src/parser/saved_models_2025_12/` (default path), or pass:
   - `MODEL_PATH=/path/to/saved_models_2025_12` for `make reproduce-*`
   - `C2Q_MODEL_PATH=/path/to/saved_models_2025_12` for direct `pytest` / script runs
+- Collaboration helpers:
+  - `make model-check` verifies model files exist and are complete.
+  - `make model-download` downloads model archive from Google Drive via `gdown` and installs it (`pip install gdown` if missing).
+  - Manual mode: `python tools/setup_model.py --archive /path/to/model_archive.zip`
 
 Quick verification commands:
 ```bash
