@@ -105,7 +105,7 @@ Quick smoke run (small scale, around 4 reports):
 make reproduce-smoke
 ```
 
-Full paper run (up to 434 reports, time-consuming):
+Full paper run (up to 434 reports, time-consuming, roughly 10 hours):
 ```bash
 make reproduce-paper
 ```
