@@ -22,6 +22,8 @@ This repository accompanies the article:
 - [Architecture](#architecture)
 - [Modular Reuse](#modular-reuse)
 - [Getting Started](#getting-started)
+- [PyPI Usage](#pypi-usage)
+- [Programming Interface](#programming-interface)
 - [Running Tests](#running-tests)
 - [Reproducibility](#reproducibility)
 - [Contributing](#contributing)
@@ -73,6 +75,59 @@ cd C2Q
 pip install -r requirements-lock.txt
 pip install -e .
 ```
+
+## PyPI Usage
+
+Install from PyPI:
+```bash
+python -m pip install c2q-framework
+```
+
+Check the installed CLI:
+```bash
+c2q-json -h
+```
+
+Minimal JSON smoke case:
+```json
+{
+  "family": "ADD",
+  "instance": {
+    "operands": [1, 1],
+    "bits": 2
+  }
+}
+```
+
+Run it:
+```bash
+c2q-json --input min_add.json
+```
+
+## Programming Interface
+
+Use JSON DSL helpers from Python:
+```python
+from src.json_engine import load_input, normalise_task
+
+task = load_input("min_add.json")
+family, instance, params, goal = normalise_task(task)
+print(family, instance)
+```
+
+Use parser API for Python-code classification:
+```python
+from src.parser.parser import Parser
+
+# Requires downloaded model files (saved_models_2025_12)
+parser = Parser(model_path="src/parser/saved_models_2025_12")
+family, data = parser.parse("def add(a,b):\n    return a+b\n\nprint(add(1,2))")
+print(family, type(data).__name__)
+```
+
+Parser model note:
+- The parser model is not stored in GitHub/PyPI due to size.
+- Download it from Google Drive and set `C2Q_MODEL_PATH` when needed.
 
 ### Running Tests
 Test tiers are separated for contributor usability:

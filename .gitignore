@@ -1,8 +1,11 @@
 .venv/
+.c2q-release-venv/
 .idea/
 __pycache__/
 .pytest_cache/
 *.egg-info/
+dist/
+build/
 
 artifacts/
 *_report.pdf
