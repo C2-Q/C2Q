@@ -4,6 +4,8 @@ __pycache__/
 .pytest_cache/
 
 artifacts/
+*_report.pdf
+MIS_report.pdf
 
 src/tests/diversity_out/
 src/tests/tests_output/

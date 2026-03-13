@@ -53,8 +53,9 @@ class NP(Problem):
         if directory is None:
             directory = os.getcwd()
         start_time = time.time()
+        problems_name = self.__class__.__name__
         print(
-            "Starting Independent Set problem report generation with "
+            f"Starting {problems_name} report generation with "
             "LaTeX formatting..."
         )
 
@@ -66,7 +67,7 @@ class NP(Problem):
         # Compute layout once
         pos = nx.spring_layout(self.graph)
         with doc.create(
-            Section("Independent Set Problem Report", numbering=False)
+            Section(f"{problems_name} Problem Report", numbering=False)
         ):
             doc.append(f"Report generated on: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
 
@@ -80,7 +81,7 @@ class NP(Problem):
                 plt.figure(figsize=(8, 6))
                 nx.draw(self.graph, pos=pos, with_labels=True, node_color='lightblue', edge_color='gray')
                 graph_image_path = os.path.join(directory, "graph_visualization.png")
-                plt.title("Independent Set Graph")
+                plt.title(f"{problems_name} Graph")
                 plt.savefig(graph_image_path)
                 plt.close()
 
@@ -105,7 +106,7 @@ class NP(Problem):
             # Oracle Visualization
             with doc.create(Subsection("Oracle Visualization")):
                 doc.append(
-                    "The corresponding oracle for the Independent Set problem "
+                    f"The corresponding oracle for the {problems_name} problem "
                     "is shown below:\n"
                 )
                 oracle_circuit_image_path = os.path.join(
@@ -275,9 +276,9 @@ class NP(Problem):
                 doc.append("\\textbf{Here is the device recommendation summary based on error, time, and price:}\\\n")
                 doc.append(string)
 
-        output_path = os.path.join(directory, "independent_set_report_with_latex")
-        # output_path = "independent_set_report_with_latex.pdf"
-        doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
+        output_path = os.path.join(directory, f"{problems_name.lower()}_report_with_latex")
+        latex_compiler = os.getenv("C2Q_PDFLATEX", "pdflatex")
+        doc.generate_pdf(output_path, compiler=latex_compiler, clean_tex=True)
 
         # Cleanup temporary images
         for img_name in [
@@ -299,4 +300,3 @@ class NP(Problem):
     def grover_sat(self, iterations):
         # this is for grover's algorithms
         pass
-

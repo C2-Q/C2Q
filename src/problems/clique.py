@@ -8,7 +8,6 @@ from fpdf import FPDF
 
 from src.algorithms.QAOA.QAOA import qaoa_no_optimization, qaoa_optimize, sample_results
 from src.graph import Graph
-from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 

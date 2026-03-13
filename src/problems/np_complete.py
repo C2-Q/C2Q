@@ -1,14 +1,23 @@
+import logging
 import os
 
+import networkx as nx
 from matplotlib import pyplot as plt
 from pylatex import NoEscape, Figure, Subsection
-from pysat.formula import CNF
 
-from src.problems.base import *
+from src.algorithms.QAOA.QAOA import qaoa_optimize
+from src.algorithms.VQE.VQE import vqe_optimization
+from src.circuits_library import cnf_to_quantum_oracle_optimized
+from src.problems.base import Base
 from src.recommender.recommender_engine import recommender
+from src.reduction import sat_to_3sat
+from src.sat_to_qubo import Chancellor
 
 
 debug = False
+LOGGER = logging.getLogger(__name__)
+
+
 class NPC(Base):
 
     def __init__(self):
@@ -28,9 +37,6 @@ class NPC(Base):
 
         # Obtain the parameters of the QAOA run
         qc = qaoa_dict["qc"]
-        parameters = qaoa_dict["parameters"]
-        theta = qaoa_dict["theta"]
-
         return qc
 
     def vqe(self):
@@ -40,9 +46,6 @@ class NPC(Base):
 
         # Obtain the parameters of the QAOA run
         qc = vqe_dict["qc"]
-        parameters = vqe_dict["parameters"]
-        theta = vqe_dict["theta"]
-
         return qc
 
     def _construct_circuits(self):
@@ -50,14 +53,13 @@ class NPC(Base):
 
     def recommender_engine(self):
         qcs = self._construct_circuits()
-        # print(qcs)
         for qc in qcs.values():
             try:
                 recommender_output, devices = recommender(qc.decompose())
-                print(recommender_output)
-                print(devices)
-            except Exception as e:
-                print(e.__str__())
+                LOGGER.info("%s", recommender_output)
+                LOGGER.info("%s", devices)
+            except Exception as exc:
+                LOGGER.warning("Recommender failed: %s", exc)
 
     def grover(self):
         raise NotImplementedError("should be implemented in subclass")
@@ -81,7 +83,6 @@ class NPC(Base):
     def report_latex(self, directory: str = None, output_path=None):
         import time
         import os
-        import networkx as nx
         from pylatex import Document, Section, Subsection, Figure, NoEscape, Package
 
         if directory is None:

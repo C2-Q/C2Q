@@ -17,7 +17,6 @@ from src.algorithms.grover import grover
 from src.circuits_library import cnf_to_quantum_oracle_optimized
 from src.graph import Graph
 from src.problems.Three_SAT import ThreeSat
-from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 

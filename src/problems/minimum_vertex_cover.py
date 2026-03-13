@@ -4,7 +4,6 @@ import networkx as nx
 from typing import Optional, Union, List, Dict
 
 from src.graph import Graph
-from src.problems.np_problems import NP
 from src.problems.qubo import QUBO
 import matplotlib.pyplot as plt
 from src.problems.np_complete import NPC
