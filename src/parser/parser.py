@@ -3,7 +3,9 @@ author boshuai ye
 """
 
 import ast
+import os
 import random
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -52,6 +54,8 @@ PROBLEMS = {
 }
 # Reverse mapping, e.g., PROBLEM_POOLS[2] = "TSP"
 PROBLEM_POOLS = [k for k, v in PROBLEM_TAGS.items()]
+LOCAL_MODEL_REQUIRED_FILES = ("config.json", "tokenizer_config.json")
+LOCAL_MODEL_WEIGHT_FILES = ("model.safetensors", "pytorch_model.bin")
 
 
 class Parser:
@@ -61,10 +65,53 @@ class Parser:
 
         :param model_path: str - Path to the saved model directory
         """
+        model_path = self._prepare_model_path(model_path)
+        use_local_only = Path(model_path).is_dir()
         self.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
-        self.tokenizer = RobertaTokenizer.from_pretrained(model_path)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_path)
+        self.tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only=use_local_only)
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_path, local_files_only=use_local_only)
         self.model.to(self.device)
+
+    @staticmethod
+    def _prepare_model_path(model_path: str) -> str:
+        model_path = str(model_path)
+        candidate = Path(model_path).expanduser()
+
+        if candidate.is_dir():
+            missing = [name for name in LOCAL_MODEL_REQUIRED_FILES if not (candidate / name).is_file()]
+            has_weights = any((candidate / name).is_file() for name in LOCAL_MODEL_WEIGHT_FILES)
+            if missing or not has_weights:
+                parts = []
+                if missing:
+                    parts.append("missing: " + ", ".join(missing))
+                if not has_weights:
+                    parts.append(
+                        "missing one weight file: " + " or ".join(LOCAL_MODEL_WEIGHT_FILES)
+                    )
+                raise FileNotFoundError(
+                    "Parser model directory is incomplete at "
+                    f"{candidate.resolve()} ({'; '.join(parts)}). "
+                    "Download model from "
+                    "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+                )
+            return str(candidate.resolve())
+
+        # Heuristic: treat path-like strings as local paths and fail fast with clear guidance.
+        is_path_like = (
+            model_path.startswith(("/", ".", "~"))
+            or os.sep in model_path
+            or (os.altsep is not None and os.altsep in model_path)
+        )
+        if is_path_like:
+            raise FileNotFoundError(
+                "Parser model directory does not exist at "
+                f"{candidate.resolve()}. Set C2Q_MODEL_PATH or place the model in "
+                "src/parser/saved_models_2025_12. Download model from "
+                "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            )
+
+        # Otherwise allow Hugging Face model ids (e.g., roberta-base).
+        return model_path
 
     def parse(self, classical_code: str):
         """

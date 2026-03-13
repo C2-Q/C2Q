@@ -329,6 +329,24 @@ def run_batch_report_generation(config: BatchRunConfig) -> Dict[str, Path]:
             f"{config.model_path}. Set C2Q_MODEL_PATH or pass --model-path.\n"
             "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
         )
+    required = ["config.json", "tokenizer_config.json"]
+    missing = [name for name in required if not (config.model_path / name).is_file()]
+    has_weights = (
+        (config.model_path / "model.safetensors").is_file()
+        or (config.model_path / "pytorch_model.bin").is_file()
+    )
+    if missing:
+        raise FileNotFoundError(
+            "Parser model directory is incomplete at "
+            f"{config.model_path}. Missing: {', '.join(missing)}.\n"
+            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+        )
+    if not has_weights:
+        raise FileNotFoundError(
+            "Parser model directory is missing weights at "
+            f"{config.model_path}. Missing one of: model.safetensors, pytorch_model.bin.\n"
+            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+        )
 
     random.seed(0)
     os.environ.setdefault("PYTHONHASHSEED", "0")

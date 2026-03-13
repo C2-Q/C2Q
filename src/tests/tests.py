@@ -92,7 +92,15 @@ class MyTestCase(unittest.TestCase):
 
         model_dir = None
         for candidate in candidates:
-            if candidate.is_dir() and (candidate / "tokenizer_config.json").exists():
+            if (
+                candidate.is_dir()
+                and (candidate / "tokenizer_config.json").is_file()
+                and (candidate / "config.json").is_file()
+                and (
+                    (candidate / "model.safetensors").is_file()
+                    or (candidate / "pytorch_model.bin").is_file()
+                )
+            ):
                 model_dir = candidate
                 break
         if model_dir is None:

@@ -23,8 +23,13 @@ class MyTestCase(unittest.TestCase):
         candidates.append(repo_root / "src" / "parser" / "saved_models")
 
         required_files = {"config.json", "tokenizer_config.json"}
+        weight_files = {"model.safetensors", "pytorch_model.bin"}
         for candidate in candidates:
-            if candidate.is_dir() and all((candidate / name).exists() for name in required_files):
+            if (
+                candidate.is_dir()
+                and all((candidate / name).is_file() for name in required_files)
+                and any((candidate / name).is_file() for name in weight_files)
+            ):
                 return candidate
         return None
 

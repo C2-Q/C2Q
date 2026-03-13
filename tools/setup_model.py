@@ -25,11 +25,8 @@ DEFAULT_MODEL_URL = (
     "11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
 )
 
-REQUIRED_FILES = (
-    "config.json",
-    "tokenizer_config.json",
-    "model.safetensors",
-)
+REQUIRED_FILES = ("config.json", "tokenizer_config.json")
+WEIGHT_FILES = ("model.safetensors", "pytorch_model.bin")
 
 
 def repo_root() -> Path:
@@ -38,6 +35,8 @@ def repo_root() -> Path:
 
 def check_model_dir(model_dir: Path) -> list[str]:
     missing = [name for name in REQUIRED_FILES if not (model_dir / name).is_file()]
+    if not any((model_dir / name).is_file() for name in WEIGHT_FILES):
+        missing.append("model.safetensors|pytorch_model.bin")
     return missing
 
 
@@ -146,7 +145,8 @@ def main() -> int:
         if discovered is None:
             raise RuntimeError(
                 "Could not find a valid model directory inside the extracted archive.\n"
-                f"Required files: {', '.join(REQUIRED_FILES)}"
+                "Required files: "
+                f"{', '.join(REQUIRED_FILES)}, and one of: {', '.join(WEIGHT_FILES)}"
             )
 
         print(f"[step] Installing model into: {model_path}")

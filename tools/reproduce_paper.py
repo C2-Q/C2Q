@@ -66,12 +66,23 @@ def validate_model_dir(model_path: Path) -> None:
 
     required = ["config.json", "tokenizer_config.json"]
     missing = [name for name in required if not (model_path / name).is_file()]
+    has_weights = (
+        (model_path / "model.safetensors").is_file()
+        or (model_path / "pytorch_model.bin").is_file()
+    )
     if missing:
         missing_txt = ", ".join(missing)
         raise RuntimeError(
             "Model directory is missing required files for parser classification:\n"
             f" - {model_path}\n"
             f"Missing: {missing_txt}\n"
+            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+        )
+    if not has_weights:
+        raise RuntimeError(
+            "Model directory is missing model weights for parser classification:\n"
+            f" - {model_path}\n"
+            "Missing one of: model.safetensors, pytorch_model.bin\n"
             "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
         )
 
