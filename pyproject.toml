@@ -8,7 +8,7 @@ version = "0.1.1"
 description = "C2|Q: Classical-to-Quantum software development framework"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {file = "LICENSE"}
+license = "Apache-2.0"
 authors = [
   {name = "C2Q Team"}
 ]
@@ -16,6 +16,9 @@ dynamic = ["dependencies"]
 
 [project.urls]
 Homepage = "https://github.com/C2-Q/C2Q"
+Repository = "https://github.com/C2-Q/C2Q"
+Documentation = "https://github.com/C2-Q/C2Q#readme"
+Issues = "https://github.com/C2-Q/C2Q/issues"
 
 [project.scripts]
 c2q-json = "src.json_engine:main"

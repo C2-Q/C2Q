@@ -129,6 +129,25 @@ Parser model note:
 - The parser model is not stored in GitHub/PyPI due to size.
 - Download it from Google Drive and set `C2Q_MODEL_PATH` when needed.
 
+### Maintainer: Trusted Publishing
+
+PyPI release is configured for GitHub Trusted Publishing via:
+- `.github/workflows/release.yml`
+- `id-token: write` permission
+- `pypa/gh-action-pypi-publish@release/v1`
+
+One-time PyPI setup:
+1. Go to `PyPI -> Your project -> Manage -> Publishing`.
+2. Add a Trusted Publisher for:
+   - Owner: `C2-Q`
+   - Repository: `C2Q`
+   - Workflow: `release.yml`
+
+Release flow:
+1. Keep project metadata in `pyproject.toml` up to date (`project.urls` included).
+2. Create a GitHub Release (published).
+3. GitHub Actions publishes to PyPI automatically.
+
 ### Running Tests
 Test tiers are separated for contributor usability:
 - `unit` (default): fast tests, no model required.
