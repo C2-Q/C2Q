@@ -63,12 +63,13 @@ make model-setup
 ```
 
 For review use, the recommended path is:
-- download the model zip in a browser from Zenodo
-- then run `make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip`
+- run `make model-setup`
+- or download the model zip in a browser and then run `make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip`
 
 Reason:
-- command-line download from Zenodo may return `403 Forbidden` in some environments
-- browser download plus local archive install is the most robust route
+- the default automation target is now the GitHub Release asset and works with scripted download
+- the Zenodo record remains the archival source
+- browser download plus local archive install is still the most robust fallback route
 
 If you already downloaded the archive to a custom location:
 
@@ -82,8 +83,9 @@ Most robust manual route:
 python tools/setup_model.py --archive /path/to/saved_models_2025_12.zip --model-path src/parser/saved_models_2025_12
 ```
 
-Model archive:
-- [saved_models_2025_12.zip](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
+Model archives:
+- [saved_models_2025_12.zip (GitHub Release)](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip)
+- [saved_models_2025_12.zip (Zenodo archival copy)](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 
 4. Verify the environment:
 

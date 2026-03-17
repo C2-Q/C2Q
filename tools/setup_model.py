@@ -23,8 +23,8 @@ from pathlib import Path
 
 
 DEFAULT_MODEL_URL = (
-    "https://zenodo.org/records/19061126/files/"
-    "saved_models_2025_12.zip?download=1"
+    "https://github.com/C2-Q/C2Q/releases/download/"
+    "v1.0-artifact/saved_models_2025_12.zip"
 )
 
 REQUIRED_FILES = ("config.json", "tokenizer_config.json")

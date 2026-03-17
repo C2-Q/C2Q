@@ -112,7 +112,10 @@ This source-checkout path is the recommended path for the main TOSEM RCR reprodu
 
 The parser model is not bundled in the Git repository or in PyPI because of file size.
 
-Current published model archive:
+Preferred scripted model archive:
+- [saved_models_2025_12.zip (GitHub Release)](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip)
+
+Archival model record:
 - [saved_models_2025_12.zip (Zenodo)](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 
 Recommended reviewer setup:
@@ -133,14 +136,18 @@ make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
 - if no local archive is found, it tries the published Zenodo URL as a best-effort fallback
 
 Reviewer note:
-- use the Zenodo link above in a browser to download the zip
-- command-line access to the Zenodo file may return `403 Forbidden` in some environments
-- for TOSEM review, browser download plus `make model-setup MODEL_ARCHIVE=...` is the recommended path
-- if you later publish the same archive as a GitHub Release asset, reviewers can download that zip instead and use the same `make model-setup MODEL_ARCHIVE=...` command
+- the GitHub Release asset above works with scripted download and is the preferred automation target
+- the Zenodo record remains the archival copy
+- if scripted download is blocked in a given environment, browser download plus `make model-setup MODEL_ARCHIVE=...` is still the fallback reviewer path
 
-Most robust installation path:
-1. Download the archive in a browser from the Zenodo link above.
-2. Install it with:
+Recommended installation path:
+1. Run:
+
+```bash
+make model-setup
+```
+
+2. If you want to install from a browser-downloaded zip instead, download either archive above and then run:
 
 ```bash
 make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
@@ -158,6 +165,14 @@ Equivalent manual helper:
 python tools/setup_model.py --archive /path/to/saved_models_2025_12.zip --model-path src/parser/saved_models_2025_12
 ```
 
+Most robust manual installation path:
+1. Download the archive in a browser from the GitHub Release asset above.
+2. Install it with:
+
+```bash
+make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
+```
+
 Optional helper:
 
 ```bash
@@ -165,7 +180,7 @@ make model-setup
 make model-download
 ```
 
-Use `make model-download` only as a convenience path. `make model-setup` without `MODEL_ARCHIVE` is also a convenience path. Browser download plus `MODEL_ARCHIVE=...` remains the most robust route across environments.
+Use `make model-download` only as a convenience path. `make model-setup` is now the preferred command because the default source points to the GitHub Release asset. Browser download plus `MODEL_ARCHIVE=...` remains the most robust route across environments.
 
 Required files inside the model directory:
 - `config.json`
@@ -206,7 +221,7 @@ The file `src/parser/parser_train_results_12_1.ipynb` contains both the parser t
 Main assets:
 - notebook: `src/parser/parser_train_results_12_1.ipynb`
 - intermediate checkpoints: `src/parser/results/`
-- released trained model archive: [Zenodo model zip](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
+- released trained model archive: [GitHub Release zip](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip)
 
 This experiment is notebook-driven rather than make-driven.
 

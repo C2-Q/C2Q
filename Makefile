@@ -11,7 +11,7 @@ MODEL_PATH ?= src/parser/saved_models_2025_12
 MODEL_ARCHIVE ?=
 OUTPUT_ROOT ?= artifacts/reproduce
 TIME_LIMIT_SECS ?= 300
-MODEL_SETUP_URL ?= https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1
+MODEL_SETUP_URL ?= https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip
 RECOMMENDER_OUTPUT_DIR ?= artifacts/recommender_maxcut
 RECOMMENDER_MIN_QUBITS ?= 4
 RECOMMENDER_MAX_QUBITS ?= 58

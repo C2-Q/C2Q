@@ -51,7 +51,8 @@ Python packages are pinned through:
 ## External Data / Models
 
 Required for parser-backed paths:
-- parser model archive: [saved_models_2025_12.zip](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
+- parser model archive (preferred automation source): [saved_models_2025_12.zip (GitHub Release)](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip)
+- archival copy: [saved_models_2025_12.zip (Zenodo)](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 
 Referenced paper evaluation data record:
 - [C2Q data record on Zenodo](https://zenodo.org/records/18780001)
