@@ -73,7 +73,7 @@ def download_archive(url: str, output_file: Path) -> None:
         except subprocess.CalledProcessError as exc:
             raise RuntimeError(
                 "Failed to download model from Google Drive with gdown. "
-                "Use the published Zenodo URL or download the archive manually."
+                "Use the published release URL or download the archive manually."
             ) from exc
 
     request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})

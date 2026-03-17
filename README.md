@@ -133,7 +133,7 @@ What `make model-setup` does:
 make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
 ```
 
-- if no local archive is found, it tries the published Zenodo URL as a best-effort fallback
+- if no local archive is found, it tries the configured release URL as a best-effort fallback
 
 Reviewer note:
 - the GitHub Release asset above works with scripted download and is the preferred automation target
