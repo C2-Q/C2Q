@@ -1,0 +1,3 @@
+-r requirements-core.txt
+-r requirements-parser.txt
+-r requirements-recommender.txt

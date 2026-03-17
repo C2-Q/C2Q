@@ -1,3 +1,12 @@
 include LICENSE
 include README.md
-recursive-include src *.pkl *.npy *.json *.csv *.txt *.png
+include INSTALL.md
+include REQUIREMENTS.md
+include STATUS.md
+recursive-include src/recommender/device_information *.pkl
+recursive-include src/recommender/coupling_maps *.npy
+prune src/tests
+prune src/c2q-dataset
+prune src/parser/results
+prune src/parser/saved_models_2025_12
+prune src/reports

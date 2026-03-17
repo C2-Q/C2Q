@@ -4,15 +4,58 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "c2q-framework"
-version = "0.1.1"
+version = "0.1.2"
 description = "C2|Q: Classical-to-Quantum software development framework"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
 authors = [
   {name = "C2Q Team"}
 ]
-dynamic = ["dependencies"]
+dependencies = [
+  "numpy==1.26.4",
+  "scipy==1.13.1",
+  "networkx==3.3",
+  "matplotlib==3.9.0",
+  "seaborn==0.13.2",
+  "PyLaTeX==1.4.2",
+  "pylatexenc==2.10",
+  "fpdf==1.7.2",
+  "qiskit==1.4.3",
+  "qiskit-aer==0.16.0",
+  "python-sat==1.8.dev13",
+]
+
+[project.optional-dependencies]
+parser = [
+  "torch==2.4.1",
+  "transformers==4.44.2",
+  "safetensors==0.5.3",
+]
+recommender = [
+  "pandas==2.2.2",
+]
+cloud = [
+  "qiskit-ibm-runtime==0.34.0",
+  "qiskit-ionq==0.5.12",
+  "pytket==2.6.0",
+  "pytket-qiskit==0.64.0",
+  "pytket-quantinuum==0.45.0",
+  "amazon-braket-sdk==1.97.0",
+]
+artifact = [
+  "pandas==2.2.2",
+  "torch==2.4.1",
+  "transformers==4.44.2",
+  "safetensors==0.5.3",
+]
+dev = [
+  "pandas==2.2.2",
+  "torch==2.4.1",
+  "transformers==4.44.2",
+  "safetensors==0.5.3",
+  "pytest==8.4.1",
+]
 
 [project.urls]
 Homepage = "https://github.com/C2-Q/C2Q"
@@ -24,15 +67,32 @@ Issues = "https://github.com/C2-Q/C2Q/issues"
 c2q-json = "src.json_engine:main"
 
 [tool.setuptools]
-include-package-data = true
+include-package-data = false
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*"]
+include = [
+  "src",
+  "src.algorithms*",
+  "src.generator*",
+  "src.parser*",
+  "src.problems*",
+  "src.recommender*",
+  "src.validation*",
+]
+exclude = [
+  "src.tests*",
+  "src.reports*",
+  "src.assets*",
+  "src.c2q-dataset*",
+  "src.algorithms.GAS*",
+  "src.problems.tests*",
+  "src.parser.data*",
+  "src.parser.logs*",
+  "src.parser.results*",
+  "src.parser.saved_models_2025_12*",
+]
 namespaces = true
 
 [tool.setuptools.package-data]
-"*" = ["*.pkl", "*.npy", "*.json", "*.csv", "*.txt", "*.png"]
-
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+"src.recommender" = ["device_information/*.pkl", "coupling_maps/*.npy"]

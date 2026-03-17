@@ -3,6 +3,7 @@
 .idea/
 __pycache__/
 .pytest_cache/
+.DS_Store
 *.egg-info/
 dist/
 build/
@@ -17,6 +18,7 @@ src/tests/tests_output/
 src/parser/snippet_metrics.csv
 src/parser/family_summary.csv
 src/parser/syntax_failures.csv
+src/parser/saved_models_2025_12.zip
 src/parser/saved_models/
 src/parser/saved_models_*/
 src/parser/logs/

@@ -1,0 +1,12 @@
+{
+  "family": "MUL",
+  "goal": "multiply two integers",
+  "description": "Auto-generated MUL example #8",
+  "instance": {
+    "operands": [
+      43,
+      57
+    ],
+    "bits": 10
+  }
+}

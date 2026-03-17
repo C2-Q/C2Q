@@ -92,6 +92,17 @@ class NPC(Base):
         problems_name = self.__class__.__name__
         print(f'Starting {problems_name} report generation with LaTeX formatting...')
 
+        # ------------- Normalize output path (STEM only) -------------
+        if output_path is None:
+            stem = os.path.join(directory, f'{problems_name}_report')
+        else:
+            # Drop any .pdf/.tex/etc. so pylatex can add its own extension
+            stem, _ = os.path.splitext(output_path)
+        out_dir = os.path.dirname(stem) or directory
+        os.makedirs(out_dir, exist_ok=True)
+        # Keep all generated figures next to the .tex/.pdf output so LaTeX includes are stable.
+        directory = out_dir
+
         # ---------------- LaTeX doc ----------------
         doc = Document()
         doc.packages.append(Package("amsmath"))
@@ -160,21 +171,14 @@ class NPC(Base):
             if qaoa_qc is not None:
                 self._device_recommendation_latex(doc, qaoa_qc, directory)
 
-        # ------------- Normalize output path (STEM only) -------------
-        if output_path is None:
-            stem = os.path.join(directory, f'{problems_name}_report')
-        else:
-            # Drop any .pdf/.tex/etc. so pylatex can add its own extension
-            stem, _ = os.path.splitext(output_path)
-
-            # If caller passed ".../dir/file.tex" (with extension), ensure output dir exists
-            out_dir = os.path.dirname(stem) or directory
-            os.makedirs(out_dir, exist_ok=True)
-
         # ------------- Generate PDF -------------
         try:
             # Use 'pdflatex' from PATH. If you need the absolute path, set compiler="/Library/TeX/texbin/pdflatex"
-            doc.generate_pdf(stem, compiler="pdflatex", clean_tex=True)
+            # Keep clean_tex=False because some TeX setups already remove .tex during cleanup.
+            doc.generate_pdf(stem, compiler="pdflatex", clean_tex=False)
+            tex_path = f"{stem}.tex"
+            if os.path.exists(tex_path):
+                os.remove(tex_path)
         except Exception as e:
             # surface a clear error; your batch harness can catch and write a placeholder
             raise RuntimeError(f"LaTeX generation failed for {stem}: {e}")
@@ -189,7 +193,7 @@ class NPC(Base):
             img_name = getattr(self, attr, None)
             if not img_name:
                 continue
-            img_path = os.path.join(directory, img_name)
+            img_path = img_name if os.path.isabs(str(img_name)) else os.path.join(directory, img_name)
             if os.path.exists(img_path):
                 try:
                     os.remove(img_path)
@@ -223,18 +227,20 @@ class NPC(Base):
         doc.append(NoEscape(r"\end{itemize}"))
 
         self.draw_result(qaoa_solution, pos=pos)
-        self.qaoa_result_image_path = os.path.join(directory, "qaoa_result.png")
-        plt.savefig(self.qaoa_result_image_path)
+        self.qaoa_result_image_path = "qaoa_result.png"
+        qaoa_result_abs_path = os.path.join(directory, self.qaoa_result_image_path)
+        plt.savefig(qaoa_result_abs_path)
         plt.close()
         with doc.create(Figure(position='h!')) as qaoa_res_fig:
             qaoa_res_fig.add_image(self.qaoa_result_image_path, width=NoEscape(r"0.9\linewidth"))
             qaoa_res_fig.add_caption("QAOA Result")
 
-        self.qaoa_circuit_image_path = os.path.join(directory, "quantum_circuit_qaoa.png")
+        self.qaoa_circuit_image_path = "quantum_circuit_qaoa.png"
+        qaoa_circuit_abs_path = os.path.join(directory, self.qaoa_circuit_image_path)
         qaoa_qc.decompose().draw(style="mpl")
         plt.gcf().set_size_inches(50, 20)  # set a safe size
         plt.tight_layout()
-        plt.savefig(self.qaoa_circuit_image_path, dpi=150)
+        plt.savefig(qaoa_circuit_abs_path, dpi=150)
         plt.close()
         with doc.create(Figure(position='h!')) as qaoa_fig:
             qaoa_fig.add_image(self.qaoa_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
@@ -242,8 +248,8 @@ class NPC(Base):
 
         return {
             "qc": qaoa_qc,
-            "result_path": self.qaoa_result_image_path,
-            "circuit_path": self.qaoa_circuit_image_path,
+            "result_path": qaoa_result_abs_path,
+            "circuit_path": qaoa_circuit_abs_path,
         }
 
     def _vqe_latex(self, doc, pos, directory):
@@ -265,26 +271,28 @@ class NPC(Base):
         doc.append(NoEscape(r"\end{itemize}"))
 
         self.draw_result(vqe_solution, pos=pos)
-        self.vqe_result_image_path = os.path.join(directory, "vqe_result.png")
-        plt.savefig(self.vqe_result_image_path)
+        self.vqe_result_image_path = "vqe_result.png"
+        vqe_result_abs_path = os.path.join(directory, self.vqe_result_image_path)
+        plt.savefig(vqe_result_abs_path)
         plt.close()
         with doc.create(Figure(position='h!')) as vqe_res_fig:
             vqe_res_fig.add_image(self.vqe_result_image_path, width=NoEscape(r"0.9\linewidth"))
             vqe_res_fig.add_caption("VQE Result")
 
-        self.vqe_circuit_image_path = os.path.join(directory, "quantum_circuit_vqe.png")
+        self.vqe_circuit_image_path = "quantum_circuit_vqe.png"
+        vqe_circuit_abs_path = os.path.join(directory, self.vqe_circuit_image_path)
         vqe_qc.decompose().draw(style="mpl")
         plt.gcf().set_size_inches(50, 20)  # set a safe size
         plt.tight_layout()
-        plt.savefig(self.vqe_circuit_image_path, dpi=150)
+        plt.savefig(vqe_circuit_abs_path, dpi=150)
         plt.close()
         with doc.create(Figure(position='h!')) as vqe_fig:
             vqe_fig.add_image(self.vqe_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
             vqe_fig.add_caption("VQE Quantum Circuit")
 
         return {
-            "result_path": self.vqe_result_image_path,
-            "circuit_path": self.vqe_circuit_image_path,
+            "result_path": vqe_result_abs_path,
+            "circuit_path": vqe_circuit_abs_path,
         }
 
     def _grover_latex(self, doc, pos, directory):
@@ -299,16 +307,18 @@ class NPC(Base):
         doc.append(NoEscape(r"\end{itemize}"))
         # print(grover_solution)
         self.draw_result(grover_solution, pos=pos)
-        self.grover_result_image_path = os.path.join(directory, "grover_result.png")
-        plt.savefig(self.grover_result_image_path)
+        self.grover_result_image_path = "grover_result.png"
+        grover_result_abs_path = os.path.join(directory, self.grover_result_image_path)
+        plt.savefig(grover_result_abs_path)
         plt.close()
         with doc.create(Figure(position='h!')) as grover_res_fig:
             grover_res_fig.add_image(self.grover_result_image_path, width=NoEscape(r"0.9\linewidth"))
             grover_res_fig.add_caption("Grover's Algorithm Result")
 
-        self.grover_circuit_image_path = os.path.join(directory, "quantum_circuit_grover.png")
+        self.grover_circuit_image_path = "quantum_circuit_grover.png"
+        grover_circuit_abs_path = os.path.join(directory, self.grover_circuit_image_path)
         grover_qc.draw(style="mpl")
-        plt.savefig(self.grover_circuit_image_path)
+        plt.savefig(grover_circuit_abs_path)
         plt.close()
         with doc.create(Figure(position='h!')) as grover_fig:
             grover_fig.add_image(self.grover_circuit_image_path, width=NoEscape(r"0.9\linewidth"))
@@ -323,9 +333,10 @@ class NPC(Base):
 
             plt.figure(figsize=(8, 6))
             nx.draw(self.graph, pos=pos, with_labels=True, node_color='lightblue', edge_color='gray')
-            self.graph_image_path = os.path.join(directory, "graph_visualization.png")
+            self.graph_image_path = "graph_visualization.png"
+            graph_abs_path = os.path.join(directory, self.graph_image_path)
             plt.title("Independent Set Graph")
-            plt.savefig(self.graph_image_path)
+            plt.savefig(graph_abs_path)
             plt.close()
 
         with doc.create(Figure(position='h!')) as graph_fig:
@@ -337,12 +348,13 @@ class NPC(Base):
     def _oracle_latex(self, doc, directory):
         problem_name = self.__class__.__name__
         doc.append(f'The corresponding oracle for the {problem_name} is shown below:\n')
-        self.oracle_circuit_image_path = os.path.join(directory, "quantum_circuit_oracle.png")
+        self.oracle_circuit_image_path = "quantum_circuit_oracle.png"
+        oracle_circuit_abs_path = os.path.join(directory, self.oracle_circuit_image_path)
         self.to_sat()
         # maximal_independent_set_cnf = maximal_independent_set_to_sat(self.graph)
         oracle = cnf_to_quantum_oracle_optimized(self.sat)
         oracle.draw(style="mpl")
-        plt.savefig(self.oracle_circuit_image_path)
+        plt.savefig(oracle_circuit_abs_path)
         plt.close()
 
         if debug:
@@ -368,7 +380,7 @@ class NPC(Base):
             fig_path = os.path.join(directory, plot_name)
             if os.path.exists(fig_path):
                 with doc.create(Figure(position='h!')) as fig:
-                    fig.add_image(fig_path, width=NoEscape(r"0.9\linewidth"))
+                    fig.add_image(os.path.basename(fig_path), width=NoEscape(r"0.9\linewidth"))
                     fig.add_caption(caption)
                 image_paths.append(fig_path)
 

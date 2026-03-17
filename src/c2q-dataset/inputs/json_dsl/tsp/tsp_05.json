@@ -1,0 +1,36 @@
+{
+  "family": "TSP",
+  "goal": "minimise routing cost for a traveling salesman tour",
+  "description": "Auto-generated TSP example #4",
+  "instance": {
+    "graph_rep": "matrix",
+    "graphs": {
+      "G1": [
+        [
+          0,
+          6,
+          4,
+          2
+        ],
+        [
+          6,
+          0,
+          4,
+          3
+        ],
+        [
+          4,
+          4,
+          0,
+          4
+        ],
+        [
+          2,
+          3,
+          4,
+          0
+        ]
+      ]
+    }
+  }
+}

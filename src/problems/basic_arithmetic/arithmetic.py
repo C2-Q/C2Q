@@ -80,7 +80,8 @@ class Arithmetic:
         if output_path is None:
             output_path = os.path.join(directory, f'{problems_name}_report')
 
-        doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
+        latex_compiler = os.getenv("C2Q_PDFLATEX", "pdflatex")
+        doc.generate_pdf(output_path, compiler=latex_compiler, clean_tex=True)
         for img_name in [
             self.qc_image_path,
         ]:

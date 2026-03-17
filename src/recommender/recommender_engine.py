@@ -5,11 +5,7 @@ from qiskit.providers.fake_provider import GenericBackendV2
 from qiskit_aer.noise import NoiseModel, depolarizing_error
 from qiskit_aer import AerSimulator
 
-from qiskit_ionq import IonQProvider
-from pytket.extensions.quantinuum import QuantinuumBackend
-from pytket.extensions.qiskit import qiskit_to_tk, tk_to_qiskit
 import os
-import pandas as pd
 from collections import defaultdict
 import numpy as np
 
@@ -19,17 +15,129 @@ import math
 import os
 import pickle
 
-from braket.aws import AwsDevice
-
 import warnings
+
+try:
+    from qiskit_ionq import IonQProvider
+except ImportError:  # optional dependency
+    IonQProvider = None
+
+try:
+    from pytket.extensions.quantinuum import QuantinuumBackend
+except ImportError:  # optional dependency
+    QuantinuumBackend = None
+
+try:
+    from pytket.extensions.qiskit import qiskit_to_tk, tk_to_qiskit
+except ImportError:  # optional dependency
+    qiskit_to_tk = None
+    tk_to_qiskit = None
+
+try:
+    from braket.aws import AwsDevice
+except ImportError:  # optional dependency
+    AwsDevice = None
 
 warnings.filterwarnings('ignore', message='Unable to get qubit count for ionq_simulator*')
 
 # Obtain the working directory for importing the coupling maps
 dirname = os.path.dirname(__file__)
+DEVICE_INFO_DIR = os.path.join(dirname, "device_information")
+_IONQ_PROVIDER = None
 
-# To get the native gate set of IonQ
-ionq_provider = IonQProvider()
+
+def _device_info_path(device_name: str) -> str:
+    return os.path.join(DEVICE_INFO_DIR, f"{device_name}.pkl")
+
+
+def _has_saved_device_info(device_name: str) -> bool:
+    return os.path.isfile(_device_info_path(device_name))
+
+
+def _load_saved_device_info(device_name: str):
+    path = _device_info_path(device_name)
+    if not os.path.isfile(path):
+        return None
+    with open(path, 'rb') as f:
+        return pickle.load(f)
+
+
+def _save_saved_device_info(device_name: str, payload: dict) -> None:
+    os.makedirs(DEVICE_INFO_DIR, exist_ok=True)
+    with open(_device_info_path(device_name), 'wb') as f:
+        pickle.dump(payload, f)
+
+
+def _filter_devices_requiring_cached_metadata(device_list, price_list_shots, available_devices):
+    """Keep devices that can be evaluated without crashing in offline/package-light installs."""
+    metadata_backed_devices = {"IQM Garnet", "IonQ Aria (Amazon)", "IonQ Aria (Azure)"}
+    filtered_devices = []
+    filtered_prices = []
+
+    for device, price in zip(device_list, price_list_shots):
+        metadata_name = "IonQ Aria (Amazon)" if device == "IonQ Aria (Azure)" else device
+        requires_metadata = device in metadata_backed_devices
+        if requires_metadata and device not in available_devices and not _has_saved_device_info(metadata_name):
+            warnings.warn(
+                f"Skipping {device}: missing cached calibration metadata at {_device_info_path(metadata_name)}",
+                RuntimeWarning
+            )
+            continue
+        filtered_devices.append(device)
+        filtered_prices.append(price)
+
+    return filtered_devices, filtered_prices
+
+
+def _get_ionq_provider():
+    global _IONQ_PROVIDER
+    if IonQProvider is None:
+        return None
+    if _IONQ_PROVIDER is None:
+        try:
+            _IONQ_PROVIDER = IonQProvider()
+        except Exception as exc:
+            warnings.warn(
+                f"IonQ provider unavailable; falling back to generic backend estimates ({exc})",
+                RuntimeWarning
+            )
+            _IONQ_PROVIDER = False
+    return None if _IONQ_PROVIDER is False else _IONQ_PROVIDER
+
+
+def _make_all_to_all_backend(device_qubits: int, basis_gates: list[str]) -> GenericBackendV2:
+    coupling_map = CouplingMap.from_full(device_qubits) if device_qubits > 1 else CouplingMap([])
+    return GenericBackendV2(device_qubits, basis_gates=basis_gates, coupling_map=coupling_map)
+
+
+def _get_ionq_backend(device_qubits: int):
+    provider = _get_ionq_provider()
+    if provider is not None:
+        return provider.get_backend("simulator", gateset="native")
+    return _make_all_to_all_backend(device_qubits, ['rx', 'ry', 'rxx'])
+
+
+def _get_quantinuum_backend(device_qubits: int):
+    if QuantinuumBackend is not None:
+        try:
+            return QuantinuumBackend("H", machine_debug=True)
+        except Exception as exc:
+            warnings.warn(
+                f"Quantinuum backend unavailable; falling back to generic backend estimates ({exc})",
+                RuntimeWarning
+            )
+    return _make_all_to_all_backend(device_qubits, ['rx', 'rz', 'cx'])
+
+
+def _get_aws_device(device_arn: str, device_name: str):
+    if AwsDevice is None:
+        raise RuntimeError(
+            f"amazon-braket-sdk is required for live metadata fetch of '{device_name}'. "
+            "Use cached metadata or install the Braket optional dependency."
+        )
+    return AwsDevice(device_arn)
+
+
 def _sanitize_errors(errs: dict, dev_name: str) -> dict:
     if dev_name.startswith("ibm_"):
         bounds = {"single_qubit": (0.0, 0.02), "two_qubit": (0.0, 0.05), "measurement": (0.0, 0.05)}
@@ -196,13 +304,24 @@ def select_provider(provider, available_devices):
 
         # https://learn.microsoft.com/en-us/azure/quantum/pricing
         price_list_shots = [[0.000220, 0.000975], [12.5], [13.5], [1.3]]
+        device_list, price_list_shots = _filter_devices_requiring_cached_metadata(
+            device_list, price_list_shots, available_devices
+        )
 
     if provider == "IBM Quantum":
         # Fetch saved devices
         device_list = []
-        device_file_path = os.path.join(dirname, f'device_information/')
-        loaded_ibm_saved_device_list = [filename for filename in os.listdir(device_file_path) if
-                                        filename.startswith("ibm_")]
+        loaded_ibm_saved_device_list = []
+        if os.path.isdir(DEVICE_INFO_DIR):
+            loaded_ibm_saved_device_list = [
+                filename for filename in os.listdir(DEVICE_INFO_DIR) if filename.startswith("ibm_")
+            ]
+        else:
+            warnings.warn(
+                f"Cached IBM calibration directory not found: {DEVICE_INFO_DIR}. "
+                "Only live IBM devices (if provided) will be considered.",
+                RuntimeWarning
+            )
         for loaded_ibm_device in loaded_ibm_saved_device_list:
             device_list.append(loaded_ibm_device.removesuffix('.pkl'))
 
@@ -226,6 +345,9 @@ def select_provider(provider, available_devices):
             0.00145,
             0.0009
         ]
+        device_list, price_list_shots = _filter_devices_requiring_cached_metadata(
+            device_list, price_list_shots, available_devices
+        )
 
     if provider == "IQM Resonance":  # not used
         device_list = [
@@ -372,13 +494,14 @@ def select_device(device, ibm_service, available_devices):
                 },
             }
 
-            device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
-            with open(device_file_path, 'wb') as f:
-                pickle.dump(saved_dict, f)
+            _save_saved_device_info(device, saved_dict)
         else:
-            device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
-            with open(device_file_path, 'rb') as f:
-                saved_dict = pickle.load(f)
+            saved_dict = _load_saved_device_info(device)
+            if saved_dict is None:
+                raise FileNotFoundError(
+                    f"Missing cached IBM calibration metadata for '{device}' at {_device_info_path(device)}. "
+                    "Use an IBM service session or install package data with device metadata."
+                )
 
             if available_devices:
                 device = device + " (unavailable)"
@@ -481,9 +604,11 @@ def select_device(device, ibm_service, available_devices):
 
     if device == "IQM Garnet":
         if device not in available_devices:
-            device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
-            with open(device_file_path, 'rb') as f:
-                saved_dict = pickle.load(f)
+            saved_dict = _load_saved_device_info(device)
+            if saved_dict is None:
+                raise FileNotFoundError(
+                    f"Missing cached calibration metadata for '{device}' at {_device_info_path(device)}."
+                )
 
             if available_devices:
                 device = device + " (unavailable)"
@@ -513,7 +638,7 @@ def select_device(device, ibm_service, available_devices):
             t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
             t2_relaxation_time = saved_dict["relaxation_times"]["t2"]
         else:
-            aws_device = AwsDevice("arn:aws:braket:eu-north-1::device/qpu/iqm/Garnet")
+            aws_device = _get_aws_device("arn:aws:braket:eu-north-1::device/qpu/iqm/Garnet", device)
 
             single_qubit_gate_error = []
             measurement_error = []
@@ -569,9 +694,7 @@ def select_device(device, ibm_service, available_devices):
                 },
             }
 
-            device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
-            with open(device_file_path, 'wb') as f:
-                pickle.dump(saved_dict, f)
+            _save_saved_device_info(device, saved_dict)
 
     if device == "IQM Helmi":
         # IQM Helmi 5-qubit fake backend
@@ -588,14 +711,16 @@ def select_device(device, ibm_service, available_devices):
 
     if device == "IonQ Aria (Amazon)":
         if device not in available_devices:
-            device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
-            with open(device_file_path, 'rb') as f:
-                saved_dict = pickle.load(f)
+            saved_dict = _load_saved_device_info(device)
+            if saved_dict is None:
+                raise FileNotFoundError(
+                    f"Missing cached calibration metadata for '{device}' at {_device_info_path(device)}."
+                )
 
             if available_devices:
                 device = device + " (unavailable)"
 
-            backend = ionq_provider.get_backend("simulator", gateset="native")
+            backend = _get_ionq_backend(device_qubits=25)
 
             single_qubit_gate_error = saved_dict["errors"]["single_qubit"]
             two_qubit_gate_error = saved_dict["errors"]["two_qubit"]
@@ -616,9 +741,9 @@ def select_device(device, ibm_service, available_devices):
             t1_relaxation_time = saved_dict["relaxation_times"]["t1"]
             t2_relaxation_time = saved_dict["relaxation_times"]["t2"]
         else:
-            aws_device = AwsDevice("arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1")
+            aws_device = _get_aws_device("arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1", device)
 
-            backend = ionq_provider.get_backend("simulator", gateset="native")
+            backend = _get_ionq_backend(device_qubits=25)
 
             single_qubit_gate_error = 1 - aws_device.properties.provider.fidelity["1Q"]["mean"]
             two_qubit_gate_error = 1 - aws_device.properties.provider.fidelity["2Q"]["mean"]
@@ -656,23 +781,38 @@ def select_device(device, ibm_service, available_devices):
                 },
             }
 
-            device_file_path = os.path.join(dirname, f'device_information/{device}.pkl')
-            with open(device_file_path, 'wb') as f:
-                pickle.dump(saved_dict, f)
+            _save_saved_device_info(device, saved_dict)
 
         device_qubits = 25
 
     if device == "IonQ Aria (Azure)":
         # Using the calibration json from Amazon Braket for IonQ Aria, since the json is not available from Azure Quantum.
-
-        device_file_path = os.path.join(dirname, f'device_information/IonQ Aria (Amazon).pkl')
-        with open(device_file_path, 'rb') as f:
-            saved_dict = pickle.load(f)
+        saved_dict = _load_saved_device_info("IonQ Aria (Amazon)")
+        if saved_dict is None:
+            warnings.warn(
+                "Missing cached IonQ Aria calibration metadata. Falling back to conservative defaults.",
+                RuntimeWarning
+            )
+            saved_dict = {
+                "errors": {
+                    "single_qubit": 0.0010,
+                    "two_qubit": 0.0200,
+                    "measurement": 0.0050
+                },
+                "gate_timings": {
+                    "single_qubit": 2.0e-5,
+                    "two_qubit": 2.0e-4
+                },
+                "relaxation_times": {
+                    "t1": 10.0,
+                    "t2": 1.0
+                },
+            }
 
         if available_devices and device not in available_devices:
             device = device + " (unavailable)"
 
-        backend = ionq_provider.get_backend("simulator", gateset="native")
+        backend = _get_ionq_backend(device_qubits=25)
 
         single_qubit_gate_error = saved_dict["errors"]["single_qubit"]
         two_qubit_gate_error = saved_dict["errors"]["two_qubit"]
@@ -721,7 +861,7 @@ def select_device(device, ibm_service, available_devices):
         # coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 20
         # backend = GenericBackendV2(device_qubits)
-        backend = QuantinuumBackend("H", machine_debug=True)
+        backend = _get_quantinuum_backend(device_qubits)
 
     if device == "Quantinuum H2":
         if available_devices and device not in available_devices:
@@ -745,7 +885,7 @@ def select_device(device, ibm_service, available_devices):
         # coupling_map = CouplingMap(np.load(coupling_map_path))
         device_qubits = 56
         # backend = GenericBackendV2(device_qubits)
-        backend = QuantinuumBackend("H", machine_debug=True)
+        backend = _get_quantinuum_backend(device_qubits)
 
     device_dict = {
         "name": device,
@@ -841,7 +981,12 @@ def recommender(qc, save_figures=True, figures_dir: str | None = None, ibm_servi
             device_dict = select_device(device, ibm_service, available_devices)
             if device_dict["device_qubits"] >= qc.num_qubits:
                 # Transpile the quantum circuit to the device using a defined seed
-                if "Quantinuum" in device:
+                if (
+                    "Quantinuum" in device
+                    and hasattr(device_dict["backend"], "get_compiled_circuit")
+                    and qiskit_to_tk is not None
+                    and tk_to_qiskit is not None
+                ):
                     qc_tk = qiskit_to_tk(qc)
                     compiled_qc = device_dict["backend"].get_compiled_circuit(qc_tk)
                     qc_transpiled = tk_to_qiskit(compiled_qc)
@@ -981,6 +1126,9 @@ def recommender(qc, save_figures=True, figures_dir: str | None = None, ibm_servi
     device_times = []
     device_prices = []
 
+    if first_device:
+        return "No compatible devices available for recommender evaluation.", recommender_devices
+
     if save_figures:
         from pathlib import Path
         out_dir = Path(figures_dir) if figures_dir else Path(".")
@@ -1022,7 +1170,7 @@ def recommender(qc, save_figures=True, figures_dir: str | None = None, ibm_servi
     return recommender_output, recommender_devices
 
 
-def plot_results(recommender_data_array, qubits_array):
+def plot_results(recommender_data_array, qubits_array, outdir="."):
     """
     Plots error (%), time (s), and price ($) vs problem size (qubits).
 
@@ -1035,8 +1183,11 @@ def plot_results(recommender_data_array, qubits_array):
     """
     import numpy as np
     import matplotlib.pyplot as plt
+    from pathlib import Path
 
     x = list(qubits_array)
+    out_dir = Path(outdir)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     # Devices to exclude (normalized to lowercase)
     EXCLUDE = {"rigetti ankaa-2"}
@@ -1115,7 +1266,7 @@ def plot_results(recommender_data_array, qubits_array):
     ax.legend(**legend_args)
     fig.patch.set_facecolor("white")
     ax.set_facecolor("white")
-    fig.savefig("recommender_output_errors.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
+    fig.savefig(out_dir / "recommender_output_errors.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
     # ---------- PRICE ($) ----------
@@ -1141,7 +1292,7 @@ def plot_results(recommender_data_array, qubits_array):
     ax.legend(**legend_args)
     fig.patch.set_facecolor("white")
     ax.set_facecolor("white")
-    fig.savefig("recommender_output_prices.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
+    fig.savefig(out_dir / "recommender_output_prices.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
     # ---------- TIME (s) ----------
@@ -1167,7 +1318,7 @@ def plot_results(recommender_data_array, qubits_array):
     ax.legend(**legend_args)
     fig.patch.set_facecolor("white")
     ax.set_facecolor("white")
-    fig.savefig("recommender_output_times.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
+    fig.savefig(out_dir / "recommender_output_times.pdf", dpi=300, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
@@ -1186,6 +1337,8 @@ def save_recommender_csvs(recommender_data_array, qubits_array, outdir="ex2_reco
       - If a device is missing at some qubit size, its value is left blank (NaN) in wide CSVs.
       - Device order is stable, based on first appearance across runs.
     """
+    import pandas as pd
+
     os.makedirs(outdir, exist_ok=True)
 
     # Determine a stable device order (first seen wins)

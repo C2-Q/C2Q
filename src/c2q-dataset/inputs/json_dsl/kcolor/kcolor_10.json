@@ -1,0 +1,24 @@
+{
+  "family": "KColor",
+  "goal": "color the graph with as few conflicts as possible",
+  "description": "Auto-generated KColor example #9",
+  "instance": {
+    "graph_rep": "edge_list",
+    "graphs": {
+      "G1": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    }
+  }
+}

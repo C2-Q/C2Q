@@ -43,14 +43,12 @@
 
 import json
 import argparse
-import glob
 import random
+import shutil
 import traceback
 from typing import Any, Dict, Tuple, Optional, List
 
-import networkx as nx
-
-from src.parser.parser import *  # expected to define Graph, GRAPH_TAGS, ARITHMETIC_TAGS (if available)
+from src.graph import Graph
 
 from src.problems.basic_arithmetic.addition import Add
 from src.problems.basic_arithmetic.multiplication import Mul
@@ -81,6 +79,9 @@ PROBLEMS = {
     "SUB": Sub,
     "VC": MVC,
 }
+
+DEFAULT_EXAMPLES_ROOT = "src/c2q-dataset/inputs/json_dsl"
+DEFAULT_REPORTS_ROOT = "artifacts/json_dsl_reports"
 
 # Aliases for lowercased family names → canonical keys in PROBLEMS
 _FAMILY_ALIASES = {
@@ -134,27 +135,40 @@ _FAMILY_ALIASES = {
 
 _FALLBACK_GRAPH_FAMILIES = {"MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"}
 _FALLBACK_ARITHMETIC_FAMILIES = {"ADD", "MUL", "SUB", "Factor"}
+GRAPH_TAGS = tuple(sorted(_FALLBACK_GRAPH_FAMILIES))
+ARITHMETIC_TAGS = tuple(sorted(_FALLBACK_ARITHMETIC_FAMILIES))
+
+
+def _family_dir_name(family: str) -> str:
+    return family.lower()
+
+
+def _iter_json_paths(root: str) -> List[str]:
+    return sorted(str(path) for path in Path(root).rglob("*.json"))
 
 
 def save_generated_examples(
-        out_dir: str = "src/tests/json",
-        n_per_family: int = 10
+        out_dir: str = DEFAULT_EXAMPLES_ROOT,
+        n_per_family: int = 10,
+        clean: bool = False,
 ):
     """
     Generate JSON DSL examples for all families (n_per_family each)
     and save them into a directory.
 
     Directory structure:
-        src/tests/json/
-            MaxCut_00.json
-            MaxCut_01.json
+        src/c2q-dataset/inputs/json_dsl/
+            maxcut/maxcut_01.json
+            mis/mis_01.json
             ...
-            ADD_09.json
+            add/add_10.json
     """
 
     examples = generate_all_examples(n_per_family=n_per_family)
 
     out_path = Path(out_dir)
+    if clean and out_path.exists():
+        shutil.rmtree(out_path)
     out_path.mkdir(parents=True, exist_ok=True)
 
     print(f"📁 Saving {n_per_family} examples per family into {out_path.resolve()}")
@@ -162,10 +176,12 @@ def save_generated_examples(
     count = 0
 
     for fam, fam_examples in examples.items():
-        fam_name = fam.replace(" ", "_")  # safety
+        fam_name = _family_dir_name(fam)
+        fam_dir = out_path / fam_name
+        fam_dir.mkdir(parents=True, exist_ok=True)
         for i, ex in enumerate(fam_examples):
-            fname = f"{fam_name}_{i:02d}.json"
-            fpath = out_path / fname
+            fname = f"{fam_name}_{i + 1:02d}.json"
+            fpath = fam_dir / fname
 
             with open(fpath, "w", encoding="utf-8") as f:
                 json.dump(ex, f, indent=2)
@@ -451,16 +467,6 @@ def normalise_task(task: Dict[str, Any]) -> Tuple[str, Dict[str, Any], Dict[str,
     return family, instance, params, goal_text
 
 
-# -------------------------------------------------------------------
-# 6. Example JSON DSL generation (10 per family)
-# -------------------------------------------------------------------
-def _make_random_edge_list(num_nodes: int, edge_prob: float = 0.4) -> List[List[int]]:
-    G = nx.erdos_renyi_graph(n=num_nodes, p=edge_prob)
-    while not nx.is_connected(G):
-        G = nx.erdos_renyi_graph(n=num_nodes, p=edge_prob)
-    return [list(e) for e in G.edges()]
-
-
 def _make_edge_list(num_nodes: int, pattern: int) -> List[List[int]]:
     """
     Deterministic tiny graphs for examples:
@@ -535,11 +541,8 @@ def generate_example_for_family(family: str, idx: int) -> Dict[str, Any]:
         }
 
     if family == "Factor":
-        # small pseudo semi-prime style numbers, still within 10 bits
-        base = 15 + idx * 2
-        n = base * 3  # not all prime-based, but enough for shape
-        if n > 1023:
-            n = 3 * 17  # 51 as a safe fallback
+        semiprimes = [15, 21, 33, 35, 39, 51, 55, 57, 65, 77]
+        n = semiprimes[idx % len(semiprimes)]
         return {
             "family": "Factor",
             "goal": "factor a 10-bit integer",
@@ -552,10 +555,21 @@ def generate_example_for_family(family: str, idx: int) -> Dict[str, Any]:
 
     # Graph families: MaxCut, MIS, TSP, Clique, KColor, VC
     if family in {"MaxCut", "MIS", "TSP", "Clique", "KColor", "VC"}:
+        rng = random.Random(f"{family}:{idx}")
         if family == "TSP":
-            num_nodes = 3  # fixed for TSP
+            num_nodes = 4 + (idx % 2)
+            graph_payload = _make_weighted_distance_matrix(num_nodes, idx)
+            graph_rep = "matrix"
         else:
-            num_nodes = random.randint(4, 6)
+            num_nodes = 4 + (idx % 3)
+            pattern = idx % 3
+            edges = _make_edge_list(num_nodes, pattern)
+            if num_nodes >= 5 and pattern != 2:
+                extra_edge = sorted((rng.randrange(0, num_nodes), rng.randrange(0, num_nodes)))
+                if extra_edge[0] != extra_edge[1] and extra_edge not in edges:
+                    edges.append(extra_edge)
+            graph_payload = edges
+            graph_rep = "edge_list"
 
 
         if family == "MaxCut":
@@ -571,16 +585,14 @@ def generate_example_for_family(family: str, idx: int) -> Dict[str, Any]:
         else:  # VC
             goal = "find a minimum vertex cover of the graph"
 
-        edges = _make_random_edge_list(num_nodes, edge_prob=0.3 + 0.1 * random.random())
-
         return {
             "family": family,
             "goal": goal,
             "description": f"Auto-generated {family} example #{idx}",
             "instance": {
-                "graph_rep": "edge_list",
+                "graph_rep": graph_rep,
                 "graphs": {
-                    "G1": edges
+                    "G1": graph_payload
                 }
             }
         }
@@ -607,7 +619,16 @@ def generate_all_examples(n_per_family: int = 10) -> Dict[str, List[Dict[str, An
     return examples
 
 
-def self_test_examples(root: str = "src/tests/json") -> None:
+def _make_weighted_distance_matrix(num_nodes: int, idx: int) -> List[List[int]]:
+    matrix = [[0 for _ in range(num_nodes)] for _ in range(num_nodes)]
+    for i in range(num_nodes):
+        for j in range(i + 1, num_nodes):
+            weight = 1 + ((idx + 3) * (i + j + 1) + i * j) % 9
+            matrix[i][j] = matrix[j][i] = weight
+    return matrix
+
+
+def self_test_examples(root: str = DEFAULT_EXAMPLES_ROOT) -> None:
     """
     Run a stronger JSON-DSL self-test using *real* Graph / arithmetic classes.
 
@@ -621,7 +642,7 @@ def self_test_examples(root: str = "src/tests/json") -> None:
     IMPORTANT: we do *not* call report_latex() here to avoid heavy
     quantum back-end work; this is a front-half DSL + data-shape sanity check.
     """
-    paths = sorted(glob.glob(f"{root}/*.json"))
+    paths = _iter_json_paths(root)
     if not paths:
         print(f"⚠️  No JSON examples found under {root}")
         return
@@ -692,15 +713,18 @@ def self_test_examples(root: str = "src/tests/json") -> None:
 import tempfile
 from pathlib import Path
 
-def batch_generate_reports(root: str = "src/tests/json") -> None:
-    paths = sorted(glob.glob(f"{root}/*.json"))
+def batch_generate_reports(
+        root: str = DEFAULT_EXAMPLES_ROOT,
+        output_dir: str = DEFAULT_REPORTS_ROOT,
+) -> None:
+    paths = _iter_json_paths(root)
     if not paths:
         print(f"⚠️  No JSON examples found under {root}")
         return
 
-    output_dir = Path("./json_reports")
-    output_dir.mkdir(parents=True, exist_ok=True)
-    print(f"📂 All LaTeX reports will be saved to: {output_dir.resolve()}\n")
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    print(f"📂 All LaTeX reports will be saved to: {output_path.resolve()}\n")
 
     total = len(paths)
     passed = 0
@@ -709,7 +733,8 @@ def batch_generate_reports(root: str = "src/tests/json") -> None:
     for path in paths:
         try:
             fname = Path(path).stem
-            output_pdf = output_dir / f"{fname}.pdf"
+            output_stem = output_path / fname
+            output_pdf = output_stem.with_suffix(".pdf")
 
             print(f"➡️  Generating report for {path} → {output_pdf.name}")
 
@@ -742,7 +767,7 @@ def batch_generate_reports(root: str = "src/tests/json") -> None:
             else:
                 raise ValueError(f"Unsupported problem class {problem_class}")
 
-            problem.report_latex(output_path=str(output_pdf))
+            problem.report_latex(output_path=str(output_stem))
             print(f"✅ SUCCESS: {output_pdf.name}\n")
             passed += 1
 
@@ -755,7 +780,7 @@ def batch_generate_reports(root: str = "src/tests/json") -> None:
     print(f"   ✅ Passed: {passed}")
     print(f"   ❌ Failed: {failed}")
     print(f"   📄 Total : {total}")
-    print(f"\n📁 All outputs saved in: {output_dir.resolve()}")
+    print(f"\n📁 All outputs saved in: {output_path.resolve()}")
 
 # -------------------------------------------------------------------
 # 7. Main entry point
@@ -774,17 +799,40 @@ def main():
     parser.add_argument(
         "--self_test_examples",
         action="store_true",
-        help="Run JSON-DSL self-test over src/tests/json (no report_latex).",
+        help="Run JSON-DSL self-test over the examples directory (no report_latex).",
     )
     parser.add_argument(
         "--generate_examples",
         action="store_true",
-        help="Generate JSON DSL examples for all families into src/tests/json.",
+        help="Generate JSON DSL examples for all families into the examples directory.",
     )
     parser.add_argument(
         "--batch_report",
         action="store_true",
-        help="Generate LaTeX reports for all JSON files under src/tests/json."
+        help="Generate LaTeX reports for all JSON files under the examples directory."
+    )
+    parser.add_argument(
+        "--examples-root",
+        type=str,
+        default=DEFAULT_EXAMPLES_ROOT,
+        help=f"Directory containing JSON examples (default: {DEFAULT_EXAMPLES_ROOT}).",
+    )
+    parser.add_argument(
+        "--reports-output-dir",
+        type=str,
+        default=DEFAULT_REPORTS_ROOT,
+        help=f"Output directory for batch-generated reports (default: {DEFAULT_REPORTS_ROOT}).",
+    )
+    parser.add_argument(
+        "--n-per-family",
+        type=int,
+        default=10,
+        help="Number of generated examples per family (default: 10).",
+    )
+    parser.add_argument(
+        "--clean-output",
+        action="store_true",
+        help="Delete the examples directory before regenerating examples.",
     )
 
     args = parser.parse_args()
@@ -793,20 +841,27 @@ def main():
     # Handle: generate examples only
     # -----------------------
     if args.generate_examples:
-        save_generated_examples()
+        save_generated_examples(
+            out_dir=args.examples_root,
+            n_per_family=args.n_per_family,
+            clean=args.clean_output,
+        )
         return
 
     # -----------------------
     # Handle: self-test mode
     # -----------------------
     if args.self_test_examples:
-        self_test_examples()
+        self_test_examples(root=args.examples_root)
         return
     # -----------------------
     # Handle: report all mode
     # -----------------------
     if args.batch_report:
-        batch_generate_reports()
+        batch_generate_reports(
+            root=args.examples_root,
+            output_dir=args.reports_output_dir,
+        )
         return
     # ----------------- Normal pipeline mode -----------------
     if not args.input:

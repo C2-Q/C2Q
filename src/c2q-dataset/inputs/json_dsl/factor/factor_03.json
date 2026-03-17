@@ -1,0 +1,9 @@
+{
+  "family": "Factor",
+  "goal": "factor a 10-bit integer",
+  "description": "Auto-generated Factor example #2",
+  "instance": {
+    "n": 33,
+    "bits": 10
+  }
+}

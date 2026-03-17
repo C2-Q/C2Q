@@ -1,0 +1,12 @@
+{
+  "family": "SUB",
+  "goal": "subtract two integers",
+  "description": "Auto-generated SUB example #3",
+  "instance": {
+    "operands": [
+      39,
+      9
+    ],
+    "bits": 10
+  }
+}

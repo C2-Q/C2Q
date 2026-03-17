@@ -1,0 +1,12 @@
+{
+  "family": "ADD",
+  "goal": "add two 10-bit integers",
+  "description": "Auto-generated ADD example #1",
+  "instance": {
+    "operands": [
+      3,
+      5
+    ],
+    "bits": 10
+  }
+}

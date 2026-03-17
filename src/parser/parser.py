@@ -92,7 +92,7 @@ class Parser:
                     "Parser model directory is incomplete at "
                     f"{candidate.resolve()} ({'; '.join(parts)}). "
                     "Download model from "
-                    "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+                    "https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
                 )
             return str(candidate.resolve())
 
@@ -107,7 +107,7 @@ class Parser:
                 "Parser model directory does not exist at "
                 f"{candidate.resolve()}. Set C2Q_MODEL_PATH or place the model in "
                 "src/parser/saved_models_2025_12. Download model from "
-                "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+                "https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
             )
 
         # Otherwise allow Hugging Face model ids (e.g., roberta-base).

@@ -5,38 +5,43 @@ Model setup helper for collaborators.
 This repository does not store parser model weights in GitHub.
 Use this helper to:
 1) verify a local model directory, or
-2) download/extract the model archive from Google Drive.
+2) install from a local model archive, or
+3) download/extract the model archive from a published URL.
 """
 
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
 import shutil
 import subprocess
 import sys
 import tarfile
 import tempfile
+import urllib.request
 import zipfile
 from pathlib import Path
 
 
 DEFAULT_MODEL_URL = (
-    "https://drive.google.com/file/d/"
-    "11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+    "https://zenodo.org/records/19061126/files/"
+    "saved_models_2025_12.zip?download=1"
 )
 
 REQUIRED_FILES = ("config.json", "tokenizer_config.json")
 WEIGHT_FILES = ("model.safetensors", "pytorch_model.bin")
 
 
-def _default_checksum_file() -> Path:
-    return repo_root() / "tools" / "model_checksums.json"
-
-
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
+
+
+def default_archive_candidates() -> list[Path]:
+    return [
+        repo_root() / "src" / "parser" / "saved_models_2025_12.zip",
+        Path.home() / "Downloads" / "saved_models_2025_12.zip",
+        Path.home() / "Downloads" / "files-archive",
+        Path.home() / "Downloads" / "files-archive.zip",
+    ]
 
 
 def check_model_dir(model_dir: Path) -> list[str]:
@@ -44,33 +49,6 @@ def check_model_dir(model_dir: Path) -> list[str]:
     if not any((model_dir / name).is_file() for name in WEIGHT_FILES):
         missing.append("model.safetensors|pytorch_model.bin")
     return missing
-
-
-def sha256sum(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as file_obj:
-        for chunk in iter(lambda: file_obj.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def verify_model_checksums(model_dir: Path, checksum_file: Path) -> list[str]:
-    if not checksum_file.is_file():
-        return []
-
-    payload = json.loads(checksum_file.read_text(encoding="utf-8"))
-    expected_files = payload.get("files", {})
-    issues: list[str] = []
-
-    for rel_name, expected_hash in expected_files.items():
-        file_path = model_dir / rel_name
-        if not file_path.is_file():
-            issues.append(f"missing {rel_name}")
-            continue
-        actual_hash = sha256sum(file_path)
-        if actual_hash.lower() != str(expected_hash).lower():
-            issues.append(f"checksum mismatch {rel_name}")
-    return issues
 
 
 def find_model_dir(search_root: Path) -> Path | None:
@@ -84,14 +62,28 @@ def find_model_dir(search_root: Path) -> Path | None:
     return None
 
 
-def download_with_gdown(url: str, output_file: Path) -> None:
-    cmd = [sys.executable, "-m", "gdown", "--fuzzy", url, "-O", str(output_file)]
+def download_archive(url: str, output_file: Path) -> None:
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    if "drive.google.com" in url:
+        cmd = [sys.executable, "-m", "gdown", "--fuzzy", url, "-O", str(output_file)]
+        try:
+            subprocess.run(cmd, check=True)
+            return
+        except subprocess.CalledProcessError as exc:
+            raise RuntimeError(
+                "Failed to download model from Google Drive with gdown. "
+                "Use the published Zenodo URL or download the archive manually."
+            ) from exc
+
+    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     try:
-        subprocess.run(cmd, check=True)
-    except subprocess.CalledProcessError as exc:
+        with urllib.request.urlopen(request) as response, output_file.open("wb") as handle:
+            shutil.copyfileobj(response, handle)
+    except Exception as exc:  # pragma: no cover - network errors are environment-specific
         raise RuntimeError(
-            "Failed to download model with gdown. "
-            "Install gdown (`pip install gdown`) or download manually."
+            f"Failed to download model archive from URL: {url}\n"
+            "Download the archive manually and rerun with --archive /path/to/archive.zip"
         ) from exc
 
 
@@ -107,7 +99,7 @@ def extract_archive(archive_path: Path, target_dir: Path) -> None:
         return
     raise RuntimeError(
         f"Unsupported archive format: {archive_path}\n"
-        "Provide a .zip/.tar archive or use --download with gdown."
+        "Provide a .zip/.tar archive or use --download with a published archive URL."
     )
 
 
@@ -120,9 +112,17 @@ def parse_args() -> argparse.Namespace:
         help="Target directory for extracted model files.",
     )
     parser.add_argument(
+        "--auto",
+        action="store_true",
+        help=(
+            "Try to install automatically: first from common local archive locations, "
+            "then via best-effort download from the published URL."
+        ),
+    )
+    parser.add_argument(
         "--download",
         action="store_true",
-        help="Download model archive from Google Drive with gdown.",
+        help="Download model archive from the published URL.",
     )
     parser.add_argument(
         "--url",
@@ -135,60 +135,62 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Path to a pre-downloaded model archive (.zip/.tar*).",
     )
-    parser.add_argument(
-        "--checksum-file",
-        type=Path,
-        default=_default_checksum_file(),
-        help="JSON file with expected SHA256 checksums for model files.",
-    )
-    parser.add_argument(
-        "--skip-checksum",
-        action="store_true",
-        help="Skip SHA256 verification after check/install.",
-    )
     return parser.parse_args()
+
+
+def choose_archive(args: argparse.Namespace, tmp_dir: Path) -> Path | None:
+    if args.archive is not None:
+        archive_path = args.archive.expanduser().resolve()
+        if not archive_path.is_file():
+            raise RuntimeError(f"Archive file not found: {archive_path}")
+        return archive_path
+
+    if args.auto:
+        for candidate in default_archive_candidates():
+            candidate = candidate.expanduser().resolve()
+            if candidate.is_file():
+                print(f"[step] Using local archive: {candidate}")
+                return candidate
+
+    if args.download or args.auto:
+        archive_path = tmp_dir / "model_archive"
+        print(f"[step] Downloading model archive from: {args.url}")
+        download_archive(args.url, archive_path)
+        return archive_path
+
+    return None
 
 
 def main() -> int:
     args = parse_args()
     model_path = args.model_path.expanduser().resolve()
-    checksum_file = args.checksum_file.expanduser().resolve()
 
     missing = check_model_dir(model_path)
     if not missing:
-        if not args.skip_checksum:
-            checksum_issues = verify_model_checksums(model_path, checksum_file)
-            if checksum_issues:
-                issue_text = ", ".join(checksum_issues)
-                raise RuntimeError(
-                    "Model checksum verification failed for existing model: "
-                    f"{issue_text}. Re-download from {args.url}"
-                )
         print(f"[ok] Model is ready: {model_path}")
         return 0
 
     print(f"[info] Model missing or incomplete at: {model_path}")
     print(f"[info] Missing files: {', '.join(missing)}")
 
-    if not args.download and args.archive is None:
+    if not args.auto and not args.download and args.archive is None:
         print(
             "[hint] Download model manually:\n"
             f"       {args.url}\n"
-            "       then run: python tools/setup_model.py --archive /path/to/model_archive.zip"
+            "       then run: python tools/setup_model.py --archive /path/to/model_archive.zip\n"
+            "       or use: make model-setup MODEL_ARCHIVE=/path/to/model_archive.zip"
         )
         return 2
 
     with tempfile.TemporaryDirectory(prefix="c2q_model_") as tmp:
         tmp_dir = Path(tmp)
-        archive_path = args.archive
+        archive_path = choose_archive(args, tmp_dir)
         if archive_path is None:
-            archive_path = tmp_dir / "model_archive"
-            print("[step] Downloading model archive via gdown...")
-            download_with_gdown(args.url, archive_path)
-        else:
-            archive_path = archive_path.expanduser().resolve()
-            if not archive_path.is_file():
-                raise RuntimeError(f"Archive file not found: {archive_path}")
+            print(
+                "[hint] No local archive candidate found and download was not requested.\n"
+                "       Use --archive /path/to/model_archive.zip, --auto, or --download."
+            )
+            return 2
 
         extract_dir = tmp_dir / "extracted"
         print(f"[step] Extracting archive: {archive_path}")
@@ -214,16 +216,8 @@ def main() -> int:
             "Model install completed but required files are still missing: "
             + ", ".join(missing_after)
         )
-    if not args.skip_checksum:
-        checksum_issues = verify_model_checksums(model_path, checksum_file)
-        if checksum_issues:
-            issue_text = ", ".join(checksum_issues)
-            raise RuntimeError(
-                "Model install completed, but checksum verification failed: "
-                f"{issue_text}"
-            )
 
-    print(f"[ok] Model installed and verified: {model_path}")
+    print(f"[ok] Model installed and ready: {model_path}")
     return 0
 
 

@@ -5,14 +5,12 @@ Contributor environment diagnostics for C2Q.
 Checks:
 - Python version compatibility
 - LaTeX compiler availability
-- Parser model presence/integrity/checksum
-- Optional gdown availability for model download helper
+- Parser model presence/integrity
 """
 
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import os
 import shutil
 import sys
@@ -24,8 +22,6 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from setup_model import (  # noqa: E402
     check_model_dir,
-    verify_model_checksums,
-    _default_checksum_file,
 )
 
 
@@ -52,21 +48,15 @@ def parse_args() -> argparse.Namespace:
         default=default_model_path(),
         help="Path to parser model directory.",
     )
-    parser.add_argument(
-        "--checksum-file",
-        type=Path,
-        default=_default_checksum_file(),
-        help="Checksum manifest JSON used for model verification.",
-    )
     return parser.parse_args()
 
 
-def _ok(name: str, msg: str) -> tuple[str, bool, str]:
-    return name, True, msg
+def _ok(name: str, msg: str) -> tuple[str, str, str]:
+    return name, "OK", msg
 
 
-def _fail(name: str, msg: str) -> tuple[str, bool, str]:
-    return name, False, msg
+def _fail(name: str, msg: str) -> tuple[str, str, str]:
+    return name, "FAIL", msg
 
 
 def main() -> int:
@@ -74,10 +64,13 @@ def main() -> int:
     checks: list[tuple[str, bool, str]] = []
 
     py = sys.version_info
-    if py < (3, 10):
-        checks.append(_fail("python", f"{py.major}.{py.minor}.{py.micro} (need >=3.10)"))
-    elif py[:2] != (3, 12):
-        checks.append(_ok("python", f"{py.major}.{py.minor}.{py.micro} (supported, recommended 3.12)"))
+    if py[:2] != (3, 12):
+        checks.append(
+            _fail(
+                "python",
+                f"{py.major}.{py.minor}.{py.micro} (need exactly Python 3.12 for the source/reviewer path)",
+            )
+        )
     else:
         checks.append(_ok("python", f"{py.major}.{py.minor}.{py.micro}"))
 
@@ -101,32 +94,13 @@ def main() -> int:
             )
         )
     else:
-        checksum_file = args.checksum_file.expanduser().resolve()
-        checksum_issues = verify_model_checksums(model_path, checksum_file)
-        if checksum_file.is_file() and checksum_issues:
-            checks.append(
-                _fail(
-                    "model-checksum",
-                    f"{checksum_file} mismatch: {', '.join(checksum_issues)}",
-                )
-            )
-        elif checksum_file.is_file():
-            checks.append(_ok("model-checksum", f"verified with {checksum_file.name}"))
-        else:
-            checks.append(_ok("model-checksum", "checksum manifest not found (skipped)"))
         checks.append(_ok("model", str(model_path)))
-
-    if importlib.util.find_spec("gdown") is not None:
-        checks.append(_ok("gdown", "available"))
-    else:
-        checks.append(_ok("gdown", "not installed (optional; needed only for make model-download)"))
 
     failed = 0
     print("C2Q doctor results:")
-    for name, passed, message in checks:
-        status = "OK" if passed else "FAIL"
+    for name, status, message in checks:
         print(f" - [{status}] {name}: {message}")
-        if not passed:
+        if status == "FAIL":
             failed += 1
 
     if failed:

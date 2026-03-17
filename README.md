@@ -1,112 +1,352 @@
 # C2|Q>: Classical-to-Quantum Software Development Framework
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![Status: Research Prototype](https://img.shields.io/badge/status-research--prototype-orange)]()
-
----
 
 ## Overview
 
-**C2|Q>** is a modular quantum software development framework that automates the full pipeline from classical problem specifications to quantum circuit generation and execution.
+**C2|Q>** is a modular framework for moving from classical problem specifications to quantum-ready problem representations, circuit generation, execution, and report generation.
 
 This repository accompanies the article:
 
-> **"C2|Q>: A Robust Framework for Bridging Classical and Quantum Software Development"**
-> Accepted at *ACM Transactions on Software Engineering and Methodology (TOSEM)* (in press).
-> Preprint available on arXiv: https://arxiv.org/abs/2510.02854
----
+> **"C2|Q>: A Robust Framework for Bridging Classical and Quantum Software Development"**  
+> Accepted at *ACM Transactions on Software Engineering and Methodology (TOSEM)* (in press).  
+> Preprint: [arXiv:2510.02854](https://arxiv.org/abs/2510.02854)
 
-## Table of Contents
-- [Features](#features)
-- [Architecture](#architecture)
-- [Modular Reuse](#modular-reuse)
-- [Getting Started](#getting-started)
-- [PyPI Usage](#pypi-usage)
-- [Programming Interface](#programming-interface)
-- [Running Tests](#running-tests)
-- [Reproducibility](#reproducibility)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+Artifact-review companion documents:
+- [INSTALL](/Users/mac/Documents/GitHub/C2Q/INSTALL.md)
+- [REQUIREMENTS](/Users/mac/Documents/GitHub/C2Q/REQUIREMENTS.md)
+- [STATUS](/Users/mac/Documents/GitHub/C2Q/STATUS.md)
+- [Claims Map](/Users/mac/Documents/GitHub/C2Q/docs/CLAIMS_MAP.md)
+- [RCR Draft](/Users/mac/Documents/GitHub/C2Q/docs/RCR_DRAFT.md)
 
-## Features
-- Submit **standard Python code** describing a problem.
-- Automatically **parse**, the problem into **Quantum-Compatible Formats (QCFs)**.
-- **Select suitable quantum algorithms** (e.g., QAOA, VQE, Grover).
-- **Recommend appropriate quantum devices** across platforms (e.g., IBM, IonQ, Rigetti).
-- **Transpile and execute** on hardware or simulators.
+## What To Run
 
----
+Use these commands as the main entry points for the paper-backed artifact paths:
 
-## Architecture
+| Purpose | Command                                                                | Model required | Main output |
+|---|------------------------------------------------------------------------|---|---|
+| Optional Docker image build | `make docker-build`                                                    | No | Docker image `c2q:latest` |
+| Experiment 1: parser training notebook and saved results | notebook/manual assets in `src/parser/parser_train_results_12_1.ipynb` | No | ``src/parser/parser_train_results_12_1.ipynb`` |
+| Experiment 2: Python-code smoke reproduction | `make reproduce-smoke`                                                 | Yes | `artifacts/reproduce/smoke/` |
+| Experiment 2: Python-code full reproduction | `make reproduce-paper`                                                 | Yes | `artifacts/reproduce/paper/` |
+| Experiment 2: JSON smoke reproduction | `make reproduce-json-smoke`                                            | No | `artifacts/reproduce/json/smoke/` |
+| Experiment 2: JSON full reproduction | `make reproduce-json-paper`                                            | No | `artifacts/reproduce/json/paper/` |
+| Experiment 3: recommender multi-device variation | `make recommender-maxcut`                                              | No | `artifacts/recommender_maxcut/` |
+| Supporting validation only | `make validate-dataset`                                                | Yes | `artifacts/parser_validation/` |
 
-![Framework Overview](./src/assets/workflow_editted-1.png)
+All generated outputs from the `make`-based experiment paths are written under `artifacts/`.
 
-Refer to [`src/assets/workflow_editted-1.png`](src/assets/classiq_flow.pdf) for detailed component diagrams and workflow explanations.
+## Repository Layout
 
----
-## Modular Reuse
+- `src/` – framework source code
+- `src/parser/` – parser code, training notebook, checkpoints, model helpers
+- `src/c2q-dataset/` – JSON inputs and dataset assets
+- `tools/` – reproducibility and environment helpers
+- `scripts/` – experiment orchestration scripts
+- `artifacts/` – generated outputs from reproducibility commands
 
-For modular reuse, individual components of **C2|Q>** can be accessed independently:
+## Reviewer Start Options
 
-- **Encoder Module**
-  - Parser (`parser.py`)
-  - QCF translation logic embedded within problem functions (in the `problems/` directory)
-  - Circuit generator (`generator.py`)
-  - Transpilation layer built on existing SDK interfaces
+Choose one of these two entry paths:
 
-- **Deployment Module**
-  - Hardware recommender (`recommender_engine.py`)
-  - Execution interfaces provided by external quantum vendors
+- Lowest setup burden: Docker. This avoids installing Python 3.12 locally.
+- Fastest local iteration: source checkout with Python 3.12.
 
-- **Decoder Module**
-  - Result interpretation logic embedded within each problem-specific function (in the `problems/` directory)
-## Getting Started
+For the TOSEM RCR report, the recommended primary reproduction path is the source checkout path in Option B.
+Use the Docker path in Option A as the lowest-barrier sanity check.
 
-### Prerequisites
-- Python 3.10+
-- Git
+## Option A: Docker (Lowest Setup Burden)
 
-### Quickstart
+Use Docker if you do not want to install Python 3.12 on the host machine.
+
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
-pip install -r requirements-lock.txt
-pip install -e .
+make docker-build
 ```
 
-## PyPI Usage
+Minimal Docker verification:
 
-Install from PyPI:
 ```bash
-python -m pip install c2q-framework
+make docker-reproduce-json-smoke
 ```
 
-Check the installed CLI:
+Notes:
+- Docker commands use `/tmp/c2q-venv` inside the container
+- host `.venv` is untouched
+- outputs are still written under `artifacts/`
+- `make docker-reproduce-json-smoke` does not require the parser model
+- after installing the parser model, the next Docker check is `make docker-smoke`
+
+## Option B: Source Checkout (Fastest Local Path)
+
+Use this path if Python 3.12 is already available locally.
+
+```bash
+git clone https://github.com/C2-Q/C2Q.git
+cd C2Q
+python3.12 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+Environment sanity check:
+
+```bash
+make doctor
+```
+
+If you only need the model-free JSON report path, you can stop here and run:
+
+```bash
+make reproduce-json-smoke
+make reproduce-json-paper
+```
+
+This source-checkout path is the recommended path for the main TOSEM RCR reproduction steps.
+
+## Parser Model Setup
+
+The parser model is not bundled in the Git repository or in PyPI because of file size.
+
+Current published model archive:
+- [saved_models_2025_12.zip (Zenodo)](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
+
+Recommended reviewer setup:
+
+```bash
+make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
+```
+
+What `make model-setup` does:
+- installs into the default path: `src/parser/saved_models_2025_12`
+- first looks for a local archive in common locations such as `~/Downloads/saved_models_2025_12.zip`
+- if you already have the archive somewhere else, pass it explicitly:
+
+```bash
+make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
+```
+
+- if no local archive is found, it tries the published Zenodo URL as a best-effort fallback
+
+Reviewer note:
+- use the Zenodo link above in a browser to download the zip
+- command-line access to the Zenodo file may return `403 Forbidden` in some environments
+- for TOSEM review, browser download plus `make model-setup MODEL_ARCHIVE=...` is the recommended path
+- if you later publish the same archive as a GitHub Release asset, reviewers can download that zip instead and use the same `make model-setup MODEL_ARCHIVE=...` command
+
+Most robust installation path:
+1. Download the archive in a browser from the Zenodo link above.
+2. Install it with:
+
+```bash
+make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
+```
+
+3. Verify it:
+
+```bash
+make model-check
+```
+
+Equivalent manual helper:
+
+```bash
+python tools/setup_model.py --archive /path/to/saved_models_2025_12.zip --model-path src/parser/saved_models_2025_12
+```
+
+Optional helper:
+
+```bash
+make model-setup
+make model-download
+```
+
+Use `make model-download` only as a convenience path. `make model-setup` without `MODEL_ARCHIVE` is also a convenience path. Browser download plus `MODEL_ARCHIVE=...` remains the most robust route across environments.
+
+Required files inside the model directory:
+- `config.json`
+- `tokenizer_config.json`
+- one weight file: `model.safetensors` or `pytorch_model.bin`
+
+Commands that require the parser model:
+- `make smoke`
+- `make reproduce-smoke`
+- `make reproduce-paper`
+- `make validate-dataset`
+- `make verify-model`
+- `make docker-smoke`
+
+Commands that do not require the parser model:
+- `make reproduce-json-smoke`
+- `make reproduce-json-paper`
+- `make recommender-maxcut`
+- `make docker-reproduce-json-smoke`
+- `make docker-recommender-maxcut`
+
+Additional Docker commands:
+
+```bash
+make docker-reproduce-json-smoke
+make docker-reproduce-json-paper
+make docker-recommender-maxcut
+make docker-validate-dataset
+make docker-paper
+```
+
+## Experiments Used In The Paper
+
+### Experiment 1: Parser Training Process and Results
+
+The file `src/parser/parser_train_results_12_1.ipynb` contains both the parser training process and the recorded results for Experiment 1.
+
+Main assets:
+- notebook: `src/parser/parser_train_results_12_1.ipynb`
+- intermediate checkpoints: `src/parser/results/`
+- released trained model archive: [Zenodo model zip](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
+
+This experiment is notebook-driven rather than make-driven.
+
+### Experiment 2: Report Reproduction (Python and JSON Paths)
+
+Python-code report path:
+
+```bash
+make reproduce-smoke
+make reproduce-paper
+```
+
+This path requires the parser model.
+
+Outputs:
+- smoke path: `artifacts/reproduce/smoke/`
+- paper path: `artifacts/reproduce/paper/`
+
+JSON example report path:
+
+```bash
+make reproduce-json-smoke
+make reproduce-json-paper
+```
+
+This path does **not** require the parser model.
+
+Outputs:
+- smoke path: `artifacts/reproduce/json/smoke/`
+- paper path: `artifacts/reproduce/json/paper/`
+
+The curated JSON smoke subset currently includes one example each for `ADD`, `Factor`, `MaxCut`, and `MIS`.
+
+The full Python paper run is time-consuming and takes roughly **10 hours**.
+The full JSON paper run is slower than the smoke path and is intentionally not run by default here.
+
+The Python-code report path reproduces the artifacts corresponding to the [C2Q data record](https://zenodo.org/records/18780001) used in paper evaluation.
+
+### Experiment 3: Recommender Multi-Device Variation
+
+Run:
+
+```bash
+make recommender-maxcut
+```
+
+This path does **not** require the parser model.
+
+Outputs:
+- raw recommender CSVs and plots: `artifacts/recommender_maxcut/raw_csv/`
+- post-processed Algorithm 1 outputs: `artifacts/recommender_maxcut/algorithm1/`
+
+Key files:
+- `artifacts/recommender_maxcut/raw_csv/errors_wide.csv`
+- `artifacts/recommender_maxcut/raw_csv/times_wide.csv`
+- `artifacts/recommender_maxcut/raw_csv/prices_wide.csv`
+- `artifacts/recommender_maxcut/raw_csv/recommender_output_errors.pdf`
+- `artifacts/recommender_maxcut/raw_csv/recommender_output_prices.pdf`
+- `artifacts/recommender_maxcut/raw_csv/recommender_output_times.pdf`
+- `artifacts/recommender_maxcut/algorithm1/winners.csv`
+- `artifacts/recommender_maxcut/algorithm1/details.csv`
+
+### Supporting Validation (Not a Numbered Paper Experiment)
+
+Run:
+
+```bash
+make validate-dataset
+```
+
+This path requires the parser model.
+
+Outputs:
+- implementation-level validation: `artifacts/parser_validation/implementation/`
+- algorithmic/structural validation: `artifacts/parser_validation/diversity/`
+
+Key files:
+- `artifacts/parser_validation/implementation/snippet_metrics.csv`
+- `artifacts/parser_validation/implementation/family_summary.csv`
+- `artifacts/parser_validation/implementation/syntax_failures.csv`
+- `artifacts/parser_validation/diversity/summary_by_tag.csv`
+- `artifacts/parser_validation/diversity/algorithm_diversity_summary.csv`
+- `artifacts/parser_validation/diversity/algorithm_signals_per_instance.csv`
+
+## Tests
+
+Fast default tests:
+
+```bash
+PYTHONPATH=. pytest
+```
+
+Model-backed tests:
+
+```bash
+make verify-model
+```
+
+## PyPI Installation
+
+For lightweight CLI/API use without cloning the repo:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install --upgrade c2q-framework
+```
+
+Optional extras:
+
+```bash
+python -m pip install --upgrade "c2q-framework[parser]"
+python -m pip install --upgrade "c2q-framework[recommender]"
+python -m pip install --upgrade "c2q-framework[artifact]"
+python -m pip install --upgrade "c2q-framework[cloud]"
+```
+
+Use them as follows:
+- `parser`: local parser model support
+- `recommender`: CSV export and experiment helpers
+- `artifact`: paper-backed local artifact path from a source checkout
+- `cloud`: optional live-provider SDK integrations
+
+Check the installed version:
+
+```bash
+python -m pip show c2q-framework
+```
+
+CLI help:
+
 ```bash
 c2q-json -h
 ```
 
-Minimal JSON smoke case:
-```json
-{
-  "family": "ADD",
-  "instance": {
-    "operands": [1, 1],
-    "bits": 2
-  }
-}
-```
-
-Run it:
-```bash
-c2q-json --input min_add.json
-```
-
 ## Programming Interface
 
-Use JSON DSL helpers from Python:
+Current import namespace is `src.*`.
+
+JSON DSL from Python:
+
 ```python
 from src.json_engine import load_input, normalise_task
 
@@ -115,233 +355,89 @@ family, instance, params, goal = normalise_task(task)
 print(family, instance)
 ```
 
-Use parser API for Python-code classification:
+Parser usage:
+
 ```python
 from src.parser.parser import Parser
 
-# Requires downloaded model files (saved_models_2025_12)
-parser = Parser(model_path="src/parser/saved_models_2025_12")
-family, data = parser.parse("def add(a,b):\n    return a+b\n\nprint(add(1,2))")
+parser = Parser(model_path="/path/to/saved_models_2025_12")
+family, data = parser.parse("def add(a,b):\n    return a+b\n")
 print(family, type(data).__name__)
 ```
 
-Parser model note:
-- The parser model is not stored in GitHub/PyPI due to size.
-- Download it from Google Drive and set `C2Q_MODEL_PATH` when needed.
+The parser API requires the `parser` extra in PyPI installs.
 
-### Maintainer: Trusted Publishing
+Generate a report via Python API:
 
-PyPI release is configured for GitHub Trusted Publishing via:
-- `.github/workflows/release.yml`
-- `id-token: write` permission
-- `pypa/gh-action-pypi-publish@release/v1`
+```python
+from src.graph import Graph
+from src.problems.maximal_independent_set import MIS
 
-One-time PyPI setup:
-1. Go to `PyPI -> Your project -> Manage -> Publishing`.
-2. Add a Trusted Publisher for:
-   - Owner: `C2-Q`
-   - Repository: `C2Q`
-   - Workflow: `release.yml`
-
-Release flow:
-1. Keep project metadata in `pyproject.toml` up to date (`project.urls` included).
-2. Create a GitHub Release (published).
-3. GitHub Actions publishes to PyPI automatically.
-
-### Running Tests
-Test tiers are separated for contributor usability:
-- `unit` (default): fast tests, no model required.
-- `model`: parser model required.
-- `paper`: long-running paper-scale tests.
-
-Default fast tier:
-```bash
-PYTHONPATH=. pytest
+edges = [[0, 1], [1, 2], [2, 3], [0, 3], [0, 2]]
+problem = MIS(Graph(edges).G)
+problem.report_latex(output_path="API_demo_report")
 ```
 
-Model tier (opt-in):
-```bash
-C2Q_MODEL_PATH=src/parser/saved_models_2025_12 PYTHONPATH=. pytest -m model -p no:warnings
-# or use helper target:
-make verify-model
-```
+## JSON DSL CLI Example
 
-One-command diagnostics before testing/reproduction:
-```bash
-make doctor
-```
-
-## Reproducibility
-
-Use the reproducibility pipeline to run key experiments and export final artifacts.
-
-Quick smoke run (small scale, around 4 reports):
-```bash
-make reproduce-smoke
-```
-
-Full paper run (up to 434 reports, time-consuming, roughly 10 hours):
-```bash
-make reproduce-paper
-```
-
-What this pipeline does:
-- Creates/updates a local virtual environment and installs dependencies.
-- Runs implementation-level validation (`src/validation/implementation_validation.py`).
-- Runs algorithmic/structural validation (`src/validation/diversity_validation.py`).
-- Generates report artifacts via `src/tests/tests_reports.py`.
-- Exports metadata and artifact index under `artifacts/reproduce/{smoke|paper}`.
-
-Input policy:
-- Primary CSV: `src/parser/python_programs.csv`
-- Backup CSV: `src/parser/data.csv`
-- JSON inputs are kept under `src/c2q-dataset/inputs/json/`
-- Dataset archive uploaded to Zenodo: [C2Q data record](https://zenodo.org/records/18780001)
-
-Model requirement:
-- The parser model is not committed to GitHub because of file size.
-- Download the model from Google Drive: [saved_models_2025_12](https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link)
-- Place it at `src/parser/saved_models_2025_12/` (default path), or pass:
-  - `MODEL_PATH=/path/to/saved_models_2025_12` for `make reproduce-*`
-  - `C2Q_MODEL_PATH=/path/to/saved_models_2025_12` for direct `pytest` / script runs
-- Expected model files: `config.json`, `tokenizer_config.json`, and one weight file (`model.safetensors` or `pytorch_model.bin`).
-- Integrity checks: `tools/model_checksums.json` stores SHA256 checksums for the distributed model files.
-- Collaboration helpers:
-  - `make model-check` verifies model files exist and are complete.
-  - `make model-download` downloads model archive from Google Drive via `gdown` and installs it (`pip install gdown` if missing).
-  - `make doctor` checks Python/LaTeX/model/checksum readiness in one command.
-  - Manual mode: `python tools/setup_model.py --archive /path/to/model_archive.zip`
-
-Quick verification commands:
-```bash
-PYTHONPATH=. pytest
-C2Q_MODEL_PATH=src/parser/saved_models_2025_12 PYTHONPATH=. pytest -m model -p no:warnings
-MODEL_PATH=src/parser/saved_models_2025_12 make reproduce-smoke
-```
-
----
-## Using JSON DSL Input
-
-In addition to Python code snippets, **C2|Q>** supports a lightweight **JSON-based Domain-Specific Language (DSL)** that allows developers to describe quantum problem instances without writing any quantum code.
-
-### 📄 Example Format
-
-Each JSON file must contain two fields:
-
-- `"problem_type"`: the problem class (e.g., `"maxcut"`, `"add"`, `"factor"`)
-- `"data"`: problem-specific parameters
-
-Example — MaxCut on a 4-node graph:
-
-```json
-{
-  "problem_type": "maxcut",
-  "data": {
-    "nodes": 4,
-    "edges": [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]]
-  }
-}
-```
-
-Supported problem types:
-- `maxcut`
-- `mis` (Maximum Independent Set)
-- `tsp`
-- `clique`
-- `kcolor`
-- `vc` (Minimum Vertex Cover)
-- `factor` (Integer Factorization)
-- `add` (Integer Addition)
-- `mul` (Integer Multiplication)
-- `sub` (Integer Subtraction)
-
-Sample files are available in: `src/c2q-dataset/inputs/json/`
-
----
-
-### 🚀 Running JSON Inputs via CLI
-
-To execute a JSON-defined problem instance using the full C2|Q> workflow, run:
+Repository example:
 
 ```bash
-python -m src.json_engine --input src/c2q-dataset/inputs/json/mis/mis_04.json
+c2q-json --input src/c2q-dataset/inputs/json/mis/mis_04.json
 ```
 
-This command:
-- Parses and validates the input
-- Classifies the problem and extracts relevant data
-- Generates a quantum circuit using the correct algorithm
-- Selects the best-fit backend (simulator or hardware)
-- Transpiles, executes, and generates reports
+This command parses the JSON problem, generates the quantum workflow, and writes a PDF report.
 
----
+Regenerate the maintained JSON DSL example set under `src/c2q-dataset/inputs/json_dsl/`:
 
-### 📁 Output
-
-A detailed PDF report will be saved in:
-
-```
-./MIS_report.pdf
+```bash
+make json-dsl-examples
 ```
 
-Each report includes:
-- Problem summary and visualization
-- Quantum circuit diagram
-- Device recommendation and parameters
-- Execution results (e.g., bitstring outcomes, optimal solution)
-- Runtime, fidelity, and cost breakdown
+Generate PDF reports for a curated smoke subset of those JSON DSL examples:
 
----
+```bash
+make reproduce-json-smoke
+```
 
-## Contributing
-We welcome contributions from researchers, developers, and practitioners interested in quantum software engineering.
+The curated smoke subset currently includes one example each for `ADD`, `Factor`, `MaxCut`, and `MIS`.
 
-### Development Workflow
-1. **Fork** the repository on GitHub.
-2. **Clone** your fork and install dependencies:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/C2Q.git
-   cd C2Q
-   python -m venv venv
-   source venv/bin/activate  # On Windows use venv\Scripts\activate
-   pip install -r requirements-lock.txt
-   make doctor
-   make verify
-   ```
-3. **Create** a feature branch:
-   ```bash
-   git checkout -b feature/my-feature
-   ```
-4. **Commit** your changes:
-   ```bash
-   git add .
-   git commit -m "Add explanation / fix bug / implement feature"
-   ```
-5. **Push** and open a pull request:
-   ```bash
-   git push origin feature/my-feature
-   ```
+If you want the lowest-setup reviewer check, use:
 
-### Guidelines
-- Follow PEP8 coding conventions.
-- Document public functions and modules clearly.
-- Keep commits focused and descriptive.
-- Be respectful in discussions and code reviews.
+```bash
+make docker-reproduce-json-smoke
+```
 
----
+This path does not require a local Python installation or the parser model.
 
-## License
-This project is licensed under the [Apache 2.0 License](LICENSE).
+Generate PDF reports for the full JSON DSL example set:
+
+```bash
+make reproduce-json-paper
+```
+
+Outputs are written to:
+- smoke: `artifacts/reproduce/json/smoke/`
+- paper: `artifacts/reproduce/json/paper/`
+
+The full JSON reproduction path is intentionally not run by default here because it is slow and takes roughly 2 hours.
+
+## Architecture
+
+![Framework Overview](./src/assets/workflow_editted-1.png)
+
+Detailed component diagrams are available in `src/assets/classiq_flow.pdf`.
 
 ## Contact
-For research collaboration or substantial contributions, contact the maintainer:
 
-📧 boshuai.ye@oulu.fi
+For research collaboration or substantial contributions:
 
-📧 Teemu.Pihkakoski@oulu.fi
+- boshuai.ye@oulu.fi
+- Teemu.Pihkakoski@oulu.fi
+- arif.khan@oulu.fi (Project Principal Investigator, PI)
+- matti.silveri@oulu.fi (Project Principal Investigator, PI)
+- liangp@whu.edu.cn (Outside Collaborator, Peng Liang)
 
-📧 arif.khan@oulu.fi (Project Principal Investigator (PI))
+## License
 
-📧 matti.silveri@oulu.fi (Project Principal Investigator (PI))
-
-📧 liangp@whu.edu.cn (Outside Collaborator, Peng Liang)
+This project is licensed under the [Apache 2.0 License](LICENSE).

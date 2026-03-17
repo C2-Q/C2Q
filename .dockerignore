@@ -1,0 +1,11 @@
+.git
+.github
+.venv
+.docker-venv
+__pycache__
+*.pyc
+.DS_Store
+artifacts
+src/parser/saved_models_2025_12
+src/parser/saved_models_2025_12.zip
+src/parser/results

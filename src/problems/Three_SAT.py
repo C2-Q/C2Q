@@ -452,7 +452,8 @@ class ThreeSat(NP):
             grover_fig.add_caption("Grover\'s Algorithm Circuit Visualization")
         # Generate PDF
         output_path = "3sat_report_with_latex.pdf"
-        doc.generate_pdf(output_path, compiler="/Library/TeX/texbin/pdflatex", clean_tex=True)
+        latex_compiler = os.getenv("C2Q_PDFLATEX", "pdflatex")
+        doc.generate_pdf(output_path, compiler=latex_compiler, clean_tex=True)
 
         # Cleanup temporary files
         if os.path.exists(qaoa_circuit_image_path):

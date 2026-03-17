@@ -1,0 +1,32 @@
+{
+  "family": "VC",
+  "goal": "find a minimum vertex cover of the graph",
+  "description": "Auto-generated VC example #2",
+  "instance": {
+    "graph_rep": "edge_list",
+    "graphs": {
+      "G1": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ]
+      ]
+    }
+  }
+}

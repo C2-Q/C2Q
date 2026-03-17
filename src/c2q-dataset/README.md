@@ -9,6 +9,7 @@ This dataset contains the artefacts used in the evaluation of the paper:
 ## Contents
 - **inputs/python/** – 434 Python code snippets used as encoder evaluation inputs.  
 - **inputs/json/** – 100 structured JSON instances for deterministic benchmarking.  
+- **inputs/json_dsl/** – Generated JSON-DSL examples maintained from `src/json_engine.py`.  
 - **reports/pdf/** – Generated PDF reports from the C2\|Q> pipeline.  
 - **usability/** – Baseline manual Qiskit implementation, written by the third author following best practices, independently reviewed by multiple authors, and used for the usability comparison in Section X of the paper. Includes both source code and example outputs for transparency.  
 - **MANIFEST.csv** – Mapping between input cases and generated reports.  
@@ -41,7 +42,7 @@ By default, reproducibility uses:
 - backup input: `src/parser/data.csv`
 - JSON inputs from `src/c2q-dataset/inputs/json/`
 - parser model from `src/parser/saved_models_2025_12/` (or override with `MODEL_PATH=...`)
-- model download (not pushed to GitHub due size): [Google Drive](https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link)
+- model download (not pushed to GitHub due size): [Google Drive](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 
 Artifacts are exported under `artifacts/reproduce/{smoke|paper}`.
 
@@ -49,6 +50,32 @@ Example smoke reproducibility command:
 ```bash
 MODEL_PATH=src/parser/saved_models_2025_12 make reproduce-smoke
 ```
+
+JSON-DSL example maintenance:
+
+```bash
+make json-dsl-examples
+```
+
+JSON-DSL smoke reproduction:
+
+```bash
+make reproduce-json-smoke
+```
+
+The curated smoke subset currently includes one example each for `ADD`, `Factor`, `MaxCut`, and `MIS`.
+
+JSON-DSL full reproduction:
+
+```bash
+make reproduce-json-full
+```
+
+These reports are written to:
+- `artifacts/reproduce/json/smoke/`
+- `artifacts/reproduce/json/full/`
+
+The full JSON report run is intentionally separate because it is slow and takes roughly 2 hours.
 
 ## License
 - Data, reports, and baseline code: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).  

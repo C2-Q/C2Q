@@ -23,9 +23,6 @@ import time
 from pathlib import Path
 from typing import Dict, List
 
-from setup_model import _default_checksum_file, verify_model_checksums
-
-
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
@@ -63,7 +60,7 @@ def validate_model_dir(model_path: Path) -> None:
             "Model directory not found for parser classification:\n"
             f" - {model_path}\n"
             "Set C2Q_MODEL_PATH or pass --model-path to an existing saved_models directory.\n"
-            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            "Download model: https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
         )
 
     required = ["config.json", "tokenizer_config.json"]
@@ -78,27 +75,15 @@ def validate_model_dir(model_path: Path) -> None:
             "Model directory is missing required files for parser classification:\n"
             f" - {model_path}\n"
             f"Missing: {missing_txt}\n"
-            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            "Download model: https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
         )
     if not has_weights:
         raise RuntimeError(
             "Model directory is missing model weights for parser classification:\n"
             f" - {model_path}\n"
             "Missing one of: model.safetensors, pytorch_model.bin\n"
-            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            "Download model: https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
         )
-    checksum_file = _default_checksum_file()
-    checksum_issues = verify_model_checksums(model_path, checksum_file)
-    if checksum_file.is_file() and checksum_issues:
-        raise RuntimeError(
-            "Model checksum verification failed:\n"
-            f" - manifest: {checksum_file}\n"
-            f" - issues: {', '.join(checksum_issues)}\n"
-            "Re-download model from: "
-            "https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
-        )
-
-
 def resolve_input_csv(primary_csv: Path, backup_csv: Path) -> Path:
     if primary_csv.exists():
         return primary_csv
@@ -120,11 +105,17 @@ def run_cmd(step_name: str, cmd: List[str], env: Dict[str, str]) -> None:
 
 def get_git_rev() -> str:
     try:
-        return (
-            subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(repo_root()))
-            .decode("utf-8")
-            .strip()
+        git_dir = repo_root() / ".git"
+        if not git_dir.exists():
+            return "unknown"
+        completed = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(repo_root()),
+            check=True,
+            capture_output=True,
+            text=True,
         )
+        return completed.stdout.strip()
     except Exception:
         return "unknown"
 

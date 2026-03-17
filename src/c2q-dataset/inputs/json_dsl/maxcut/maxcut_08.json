@@ -1,0 +1,32 @@
+{
+  "family": "MaxCut",
+  "goal": "maximize cut value between two partitions of the graph",
+  "description": "Auto-generated MaxCut example #7",
+  "instance": {
+    "graph_rep": "edge_list",
+    "graphs": {
+      "G1": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          0
+        ]
+      ]
+    }
+  }
+}

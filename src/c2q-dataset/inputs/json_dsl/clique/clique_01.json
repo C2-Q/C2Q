@@ -1,0 +1,24 @@
+{
+  "family": "Clique",
+  "goal": "find a maximum clique in the graph",
+  "description": "Auto-generated Clique example #0",
+  "instance": {
+    "graph_rep": "edge_list",
+    "graphs": {
+      "G1": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    }
+  }
+}

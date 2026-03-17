@@ -327,7 +327,7 @@ def run_batch_report_generation(config: BatchRunConfig) -> Dict[str, Path]:
         raise FileNotFoundError(
             "Parser model directory not found. Expected fine-tuned model at "
             f"{config.model_path}. Set C2Q_MODEL_PATH or pass --model-path.\n"
-            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            "Download model: https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
         )
     required = ["config.json", "tokenizer_config.json"]
     missing = [name for name in required if not (config.model_path / name).is_file()]
@@ -339,13 +339,13 @@ def run_batch_report_generation(config: BatchRunConfig) -> Dict[str, Path]:
         raise FileNotFoundError(
             "Parser model directory is incomplete at "
             f"{config.model_path}. Missing: {', '.join(missing)}.\n"
-            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            "Download model: https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
         )
     if not has_weights:
         raise FileNotFoundError(
             "Parser model directory is missing weights at "
             f"{config.model_path}. Missing one of: model.safetensors, pytorch_model.bin.\n"
-            "Download model: https://drive.google.com/file/d/11xkJgioQkVdCGykGSLjJD1CcXu76RAIB/view?usp=drive_link"
+            "Download model: https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1"
         )
 
     random.seed(0)

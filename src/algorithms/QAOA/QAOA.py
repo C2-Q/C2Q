@@ -1,9 +1,9 @@
 from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
+from qiskit_aer.primitives import Estimator as AerEstimator, Sampler as AerSampler
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import PauliEvolutionGate
 from qiskit.quantum_info import SparsePauliOp
-from qiskit_ibm_runtime import EstimatorV2 as Estimator, SamplerV2 as Sampler
 
 from scipy.optimize import minimize
 
@@ -12,6 +12,45 @@ import os
 import numpy as np
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _load_runtime_primitives():
+    from qiskit_ibm_runtime import EstimatorV2, SamplerV2
+    return EstimatorV2, SamplerV2
+
+
+def _is_aer_backend(backend) -> bool:
+    return getattr(backend, "name", "") == "aer_simulator"
+
+
+def _create_estimator(backend):
+    try:
+        runtime_estimator, _ = _load_runtime_primitives()
+        estimator = runtime_estimator(mode=backend)
+        estimator.options.default_shots = 1000
+        return "runtime_v2", estimator
+    except Exception as exc:
+        if _is_aer_backend(backend):
+            LOGGER.info("Falling back to qiskit-aer Estimator because runtime primitives are unavailable: %s", exc)
+            return "aer_v1", AerEstimator()
+        raise RuntimeError(
+            "qiskit-ibm-runtime is required for QAOA optimization on non-Aer backends."
+        ) from exc
+
+
+def _create_sampler(backend):
+    try:
+        _, runtime_sampler = _load_runtime_primitives()
+        sampler = runtime_sampler(mode=backend)
+        sampler.options.default_shots = 1024
+        return "runtime_v2", sampler
+    except Exception as exc:
+        if _is_aer_backend(backend):
+            LOGGER.info("Falling back to qiskit-aer Sampler because runtime primitives are unavailable: %s", exc)
+            return "aer_v1", AerSampler()
+        raise RuntimeError(
+            "qiskit-ibm-runtime is required for QAOA sampling on non-Aer backends."
+        ) from exc
 
 
 def convert_qubo_to_ising(qubo):
@@ -109,21 +148,25 @@ def initialize_parameters_zhou(layers, seed=None):
     return np.array(theta)
 
 
-def cost_estimator(theta, qc_transpiled, ising, estimator, exp_value_list):
+def cost_estimator(theta, qc_transpiled, ising, estimator, estimator_kind, exp_value_list):
     # Calculate the expectation value
 
     isa_hamiltonian = ising.apply_layout(qc_transpiled.layout)
-    job = estimator.run([(qc_transpiled, isa_hamiltonian, theta)])
-
-    result = job.result()[0]
-    cost = result.data.evs
+    if estimator_kind == "runtime_v2":
+        job = estimator.run([(qc_transpiled, isa_hamiltonian, theta)])
+        result = job.result()[0]
+        cost = float(result.data.evs)
+    else:
+        job = estimator.run(qc_transpiled, isa_hamiltonian, theta)
+        result = job.result()
+        cost = float(result.values[0])
 
     exp_value_list.append(cost)
 
     return cost
 
 
-def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
+def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator, estimator_kind):
     # Save the expectation values the optimization gives us so that we can visualize the optimization
     exp_value_list = []
 
@@ -131,7 +174,7 @@ def optimize_parameters(qc_transpiled, ising, parameters, theta, estimator):
     # SPSA by default, but here we use powell optimizer for testing...
     min_minimized_optimization = minimize(cost_estimator, theta, method="Powell",
                                           options={'maxiter': 500, 'maxfev': 500},
-                                          args=(qc_transpiled, ising, estimator, exp_value_list))
+                                          args=(qc_transpiled, ising, estimator, estimator_kind, exp_value_list))
 
     # Save the objective value the optimization finally gives us
     minimum_objective_value = min_minimized_optimization.fun
@@ -219,13 +262,13 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
     qc.measure_all()
     qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
 
-    estimator = Estimator(backend)
-    estimator.options.default_shots = 1000
+    estimator_kind, estimator = _create_estimator(backend)
 
     # Optimize the parameters
     #theta, minimum_objective_value, exp_value_list = optimize_parameters(qc, qubo, parameters, theta, backend)
-    theta, minimum_objective_value, exp_value_list = optimize_parameters(qc_transpiled, ising, parameters, theta,
-                                                                         estimator)
+    theta, minimum_objective_value, exp_value_list = optimize_parameters(
+        qc_transpiled, ising, parameters, theta, estimator, estimator_kind
+    )
 
     qaoa_dict = {
         "qc": qc,
@@ -243,19 +286,25 @@ def qaoa_optimize(qubo, layers, backend=AerSimulator()):
 def sample_results(qc, parameters, theta, backend=AerSimulator()):
     qc_transpiled = transpile(qc, backend, seed_transpiler=77, layout_method='sabre', routing_method='sabre')
 
-    sampler = Sampler(mode=backend)
-    sampler.options.default_shots = 1024
+    sampler_kind, sampler = _create_sampler(backend)
 
     if backend.name == 'aer_simulator':
         qc_transpiled_parameters = qc_transpiled.decompose(reps=1).assign_parameters({parameters: theta})
     else:
         qc_transpiled_parameters = qc_transpiled.assign_parameters({parameters: theta})
 
-    job = sampler.run([qc_transpiled_parameters])
-
-    result = job.result()[0]
-
-    counts = result.data.meas.get_counts()
+    if sampler_kind == "runtime_v2":
+        job = sampler.run([qc_transpiled_parameters])
+        result = job.result()[0]
+        counts = result.data.meas.get_counts()
+    else:
+        job = sampler.run(qc_transpiled_parameters)
+        result = job.result()
+        quasi_dist = result.quasi_dists[0]
+        counts = {
+            format(int(state), f"0{qc_transpiled_parameters.num_qubits}b"): probability
+            for state, probability in quasi_dist.items()
+        }
     if os.getenv("C2Q_VERBOSE_COUNTS", "0") == "1":
         LOGGER.info("QAOA sample counts: %s", counts)
     highest_possible_solution = 0
