@@ -84,6 +84,24 @@ Notes:
 
 Use this path if Python 3.12 is already available locally.
 
+Check it first:
+
+```bash
+python3.12 --version
+```
+
+If `python3.12` is missing:
+- macOS:
+  - `brew install python@3.12`
+  - or install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
+- Windows:
+  - install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
+  - then check with `py -3.12 --version`
+- Linux:
+  - install Python 3.12 using your distribution packages
+  - then check with `python3.12 --version`
+  - if Python 3.12 is not easily available, use the Docker path instead
+
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
 cd C2Q

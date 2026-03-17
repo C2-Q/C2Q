@@ -46,7 +46,25 @@ git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
 ```
 
-2. Create a clean Python 3.12 virtual environment:
+2. Confirm that Python 3.12 is installed:
+
+```bash
+python3.12 --version
+```
+
+If `python3.12` is not available:
+- macOS:
+  - `brew install python@3.12`
+  - or install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
+- Windows:
+  - install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
+  - then check with `py -3.12 --version`
+- Linux:
+  - install Python 3.12 from your distribution packages
+  - then check with `python3.12 --version`
+  - if Python 3.12 is difficult to install locally, use the Docker reviewer path instead
+
+3. Create a clean Python 3.12 virtual environment:
 
 ```bash
 python3.12 -m venv .venv
@@ -55,7 +73,7 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-3. If you need parser-backed commands, install the parser model archive.
+4. If you need parser-backed commands, install the parser model archive.
 Preferred one-command setup:
 
 ```bash
@@ -87,7 +105,7 @@ Model archives:
 - [saved_models_2025_12.zip (GitHub Release)](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip)
 - [saved_models_2025_12.zip (Zenodo archival copy)](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 
-4. Verify the environment:
+5. Verify the environment:
 
 ```bash
 make doctor
