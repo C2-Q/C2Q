@@ -84,33 +84,22 @@ Notes:
 
 Use this path if Python 3.12 is already available locally.
 
-Check it first.
+Primary shell path: `bash` or `zsh` on macOS / Linux.
 
-macOS / Linux:
+Check it first:
 
 ```bash
 python3.12 --version
-```
-
-Windows PowerShell:
-
-```powershell
-py -3.12 --version
 ```
 
 If `python3.12` is missing:
 - macOS:
   - `brew install python@3.12`
   - or install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
-- Windows:
-  - install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
-  - then check with `py -3.12 --version`
 - Linux:
   - install Python 3.12 using your distribution packages
   - then check with `python3.12 --version`
   - if Python 3.12 is not easily available, use the Docker path instead
-
-macOS / Linux:
 
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
@@ -121,9 +110,11 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-Windows PowerShell:
+Windows PowerShell is supported as a secondary path.
+Equivalent commands:
 
 ```powershell
+py -3.12 --version
 git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
 py -3.12 -m venv .venv
@@ -131,6 +122,8 @@ py -3.12 -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
+
+If Python 3.12 is missing on Windows, install it from [python.org downloads](https://www.python.org/downloads/), then re-run `py -3.12 --version`.
 
 If PowerShell blocks activation, run:
 

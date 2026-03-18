@@ -48,33 +48,22 @@ cd C2Q
 
 2. Confirm that Python 3.12 is installed:
 
-macOS / Linux:
+Primary shell path: `bash` or `zsh` on macOS / Linux.
 
 ```bash
 python3.12 --version
-```
-
-Windows PowerShell:
-
-```powershell
-py -3.12 --version
 ```
 
 If `python3.12` is not available:
 - macOS:
   - `brew install python@3.12`
   - or install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
-- Windows:
-  - install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
-  - then check with `py -3.12 --version`
 - Linux:
   - install Python 3.12 from your distribution packages
   - then check with `python3.12 --version`
   - if Python 3.12 is difficult to install locally, use the Docker reviewer path instead
 
 3. Create a clean Python 3.12 virtual environment:
-
-macOS / Linux:
 
 ```bash
 python3.12 -m venv .venv
@@ -83,14 +72,18 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-Windows PowerShell:
+Windows PowerShell is supported as a secondary path.
+Equivalent commands:
 
 ```powershell
+py -3.12 --version
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
+
+If Python 3.12 is missing on Windows, install it from [python.org downloads](https://www.python.org/downloads/), then re-run `py -3.12 --version`.
 
 If PowerShell blocks activation:
 
