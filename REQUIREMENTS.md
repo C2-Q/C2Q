@@ -44,9 +44,9 @@ Docker path:
 - Docker 29 or newer is recommended
 
 Python packages are pinned through:
-- [pyproject.toml](/Users/mac/Documents/GitHub/C2Q/pyproject.toml)
-- [requirements-artifact.txt](/Users/mac/Documents/GitHub/C2Q/requirements-artifact.txt)
-- [requirements-dev.txt](/Users/mac/Documents/GitHub/C2Q/requirements-dev.txt)
+- [pyproject.toml](pyproject.toml)
+- [requirements-artifact.txt](requirements-artifact.txt)
+- [requirements-dev.txt](requirements-dev.txt)
 
 ## External Data / Models
 

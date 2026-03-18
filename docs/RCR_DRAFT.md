@@ -34,7 +34,7 @@ Short summary:
 - [INSERT CLAIM 4]
 
 See also:
-- [docs/CLAIMS_MAP.md](/Users/mac/Documents/GitHub/C2Q/docs/CLAIMS_MAP.md)
+- [docs/CLAIMS_MAP.md](CLAIMS_MAP.md)
 
 ## Key Results Supported by This Artifact
 
@@ -64,8 +64,8 @@ See also:
 - optional Docker for isolated reviewer execution
 
 See:
-- [INSTALL.md](/Users/mac/Documents/GitHub/C2Q/INSTALL.md)
-- [REQUIREMENTS.md](/Users/mac/Documents/GitHub/C2Q/REQUIREMENTS.md)
+- [INSTALL.md](../INSTALL.md)
+- [REQUIREMENTS.md](../REQUIREMENTS.md)
 
 ## Setup
 

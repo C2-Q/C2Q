@@ -15,11 +15,11 @@ This repository accompanies the article:
 > Preprint: [arXiv:2510.02854](https://arxiv.org/abs/2510.02854)
 
 Artifact-review companion documents:
-- [INSTALL](/Users/mac/Documents/GitHub/C2Q/INSTALL.md)
-- [REQUIREMENTS](/Users/mac/Documents/GitHub/C2Q/REQUIREMENTS.md)
-- [STATUS](/Users/mac/Documents/GitHub/C2Q/STATUS.md)
-- [Claims Map](/Users/mac/Documents/GitHub/C2Q/docs/CLAIMS_MAP.md)
-- [RCR Draft](/Users/mac/Documents/GitHub/C2Q/docs/RCR_DRAFT.md)
+- [INSTALL](INSTALL.md)
+- [REQUIREMENTS](REQUIREMENTS.md)
+- [STATUS](STATUS.md)
+- [Claims Map](docs/CLAIMS_MAP.md)
+- [RCR Draft](docs/RCR_DRAFT.md)
 
 ## What To Run
 
@@ -84,10 +84,18 @@ Notes:
 
 Use this path if Python 3.12 is already available locally.
 
-Check it first:
+Check it first.
+
+macOS / Linux:
 
 ```bash
 python3.12 --version
+```
+
+Windows PowerShell:
+
+```powershell
+py -3.12 --version
 ```
 
 If `python3.12` is missing:
@@ -102,13 +110,33 @@ If `python3.12` is missing:
   - then check with `python3.12 --version`
   - if Python 3.12 is not easily available, use the Docker path instead
 
+macOS / Linux:
+
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
 python3.12 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
+```
+
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/C2-Q/C2Q.git
+cd C2Q
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+If PowerShell blocks activation, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\.venv\Scripts\Activate.ps1
 ```
 
 Environment sanity check:

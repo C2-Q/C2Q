@@ -48,8 +48,16 @@ cd C2Q
 
 2. Confirm that Python 3.12 is installed:
 
+macOS / Linux:
+
 ```bash
 python3.12 --version
+```
+
+Windows PowerShell:
+
+```powershell
+py -3.12 --version
 ```
 
 If `python3.12` is not available:
@@ -66,11 +74,29 @@ If `python3.12` is not available:
 
 3. Create a clean Python 3.12 virtual environment:
 
+macOS / Linux:
+
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
+```
+
+Windows PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+If PowerShell blocks activation:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\.venv\Scripts\Activate.ps1
 ```
 
 4. If you need parser-backed commands, install the parser model archive.
@@ -132,8 +158,8 @@ make smoke
 ```
 
 Expected outputs:
-- [artifacts/smoke/summary.json](/Users/mac/Documents/GitHub/C2Q/artifacts/smoke/summary.json)
-- [artifacts/reproduce/json/smoke](/Users/mac/Documents/GitHub/C2Q/artifacts/reproduce/json/smoke)
+- [artifacts/smoke/summary.json](artifacts/smoke/summary.json)
+- [artifacts/reproduce/json/smoke](artifacts/reproduce/json/smoke)
 
 The smoke summary should describe a `MaxCut` instance with a 4x4 QUBO and a 4-qubit QAOA circuit.
 
