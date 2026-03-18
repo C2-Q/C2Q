@@ -395,16 +395,53 @@ CLI help:
 c2q-json -h
 ```
 
+Minimal model-free PyPI run:
+
+```bash
+cat > mis_01.json <<'EOF'
+{
+  "family": "MIS",
+  "goal": "find a maximum independent set of the graph",
+  "description": "Minimal MIS example",
+  "instance": {
+    "graph_rep": "edge_list",
+    "graphs": {
+      "G1": [[0, 1], [1, 2], [2, 3]]
+    }
+  }
+}
+EOF
+
+c2q-json --input mis_01.json
+```
+
+Expected result:
+- generates a PDF report in the current working directory
+- does not require the parser model
+
+If you are on Windows PowerShell, create `mis_01.json` with the same content in any text editor, then run:
+
+```powershell
+c2q-json --input mis_01.json
+```
+
 ## Programming Interface
 
 Current import namespace is `src.*`.
 
-JSON DSL from Python:
+JSON DSL from Python, without any repository-local files:
 
 ```python
-from src.json_engine import load_input, normalise_task
+from src.json_engine import normalise_task
 
-task = load_input("src/c2q-dataset/inputs/json_dsl/mis/mis_01.json")
+task = {
+    "family": "MIS",
+    "goal": "find a maximum independent set of the graph",
+    "instance": {
+        "graph_rep": "edge_list",
+        "graphs": {"G1": [[0, 1], [1, 2], [2, 3]]},
+    },
+}
 family, instance, params, goal = normalise_task(task)
 print(family, instance)
 ```
