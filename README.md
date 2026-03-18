@@ -404,7 +404,7 @@ JSON DSL from Python:
 ```python
 from src.json_engine import load_input, normalise_task
 
-task = load_input("min_add.json")
+task = load_input("src/c2q-dataset/inputs/json_dsl/mis/mis_01.json")
 family, instance, params, goal = normalise_task(task)
 print(family, instance)
 ```
@@ -437,7 +437,7 @@ problem.report_latex(output_path="API_demo_report")
 Repository example:
 
 ```bash
-c2q-json --input src/c2q-dataset/inputs/json/mis/mis_04.json
+c2q-json --input src/c2q-dataset/inputs/json_dsl/mis/mis_01.json
 ```
 
 This command parses the JSON problem, generates the quantum workflow, and writes a PDF report.
