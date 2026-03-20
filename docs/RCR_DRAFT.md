@@ -15,8 +15,8 @@ Repository:
 
 Primary artifact goals:
 - verify that the framework can construct quantum-ready representations from supported inputs
-- reproduce the recommender multi-device variation experiment
-- reproduce the smoke-scale paper workflow
+- reproduce the paper’s deployment evaluation outputs
+- reproduce the smoke-scale full-workflow validation path
 - reproduce implementation-level and algorithmic/structural validation outputs
 
 ## Citation and Summary of the TOSEM Paper
@@ -38,9 +38,9 @@ See also:
 
 ## Key Results Supported by This Artifact
 
-- parser-backed smoke pipeline output
-- recommender multi-device variation outputs
-- smoke-scale report reproduction outputs
+- encoder-evaluation training and results provenance
+- deployment-evaluation recommender outputs
+- smoke-scale full-workflow reproduction outputs
 - dataset validation CSV outputs
 - supplementary JSON DSL smoke outputs
 
@@ -53,7 +53,7 @@ See also:
 | Paper reproduction runner | `tools/reproduce_paper.py` | Smoke and paper-scale report reproduction |
 | Recommender experiment pipeline | `scripts/recommender_maxcut_pipeline.py` | Experiment 2 regeneration |
 | Smoke pipeline | `scripts/artifact_smoke.py` | Fast reviewer verification |
-| Dataset validation | `src/parser/validate_dataset.py` | Experiment 4 regeneration |
+| Dataset validation | `src/parser/validate_dataset.py` | Supporting validation, not a numbered paper experiment |
 | JSON DSL interface | `src/json_engine.py` | Supplementary JSON-based reproduction path |
 
 ## Prerequisites and Requirements

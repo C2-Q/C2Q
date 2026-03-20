@@ -28,12 +28,12 @@ Use these commands as the main entry points for the paper-backed artifact paths:
 | Purpose | Command                                                                | Model required | Main output |
 |---|------------------------------------------------------------------------|---|---|
 | Optional Docker image build | `make docker-build`                                                    | No | Docker image `c2q:latest` |
-| Experiment 1: parser training notebook and saved results | notebook/manual assets in `src/parser/parser_train_results_12_1.ipynb` | No | ``src/parser/parser_train_results_12_1.ipynb`` |
-| Experiment 2: Python-code smoke reproduction | `make reproduce-smoke`                                                 | Yes | `artifacts/reproduce/smoke/` |
-| Experiment 2: Python-code full reproduction | `make reproduce-paper`                                                 | Yes | `artifacts/reproduce/paper/` |
-| Experiment 2: JSON smoke reproduction | `make reproduce-json-smoke`                                            | No | `artifacts/reproduce/json/smoke/` |
-| Experiment 2: JSON full reproduction | `make reproduce-json-paper`                                            | No | `artifacts/reproduce/json/paper/` |
-| Experiment 3: recommender multi-device variation | `make recommender-maxcut`                                              | No | `artifacts/recommender_maxcut/` |
+| Experiment 1: encoder evaluation assets | notebook/manual assets in `src/parser/parser_train_results_12_1.ipynb` | No | `src/parser/parser_train_results_12_1.ipynb` |
+| Experiment 2: deployment evaluation | `make recommender-maxcut`                                              | No | `artifacts/recommender_maxcut/` |
+| Experiment 3: Python-code smoke reproduction | `make reproduce-smoke`                                                 | Yes | `artifacts/reproduce/smoke/` |
+| Experiment 3: Python-code full reproduction | `make reproduce-paper`                                                 | Yes | `artifacts/reproduce/paper/` |
+| Experiment 3: JSON smoke reproduction | `make reproduce-json-smoke`                                            | No | `artifacts/reproduce/json/smoke/` |
+| Experiment 3: JSON full reproduction | `make reproduce-json-paper`                                            | No | `artifacts/reproduce/json/paper/` |
 | Supporting validation only | `make validate-dataset`                                                | Yes | `artifacts/parser_validation/` |
 
 All generated outputs from the `make`-based experiment paths are written under `artifacts/`.
@@ -253,18 +253,44 @@ make docker-paper
 
 ## Experiments Used In The Paper
 
-### Experiment 1: Parser Training Process and Results
+### Experiment 1: Encoder Evaluation
 
-The file `src/parser/parser_train_results_12_1.ipynb` contains both the parser training process and the recorded results for Experiment 1.
+In the paper, Experiment 1 evaluates the input-analysis / encoder module on 434 synthetic Python code snippets. The reported headline results are a weighted-average F1 score of 98.2% for problem classification and a 93.8% completion rate for data extraction.
 
 Main assets:
-- notebook: `src/parser/parser_train_results_12_1.ipynb`
+- notebook with training and recorded evaluation outputs: `src/parser/parser_train_results_12_1.ipynb`
 - intermediate checkpoints: `src/parser/results/`
 - released trained model archive: [GitHub Release zip](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip)
 
-This experiment is notebook-driven rather than make-driven.
+This experiment is primarily supported through archived notebook/results provenance rather than a first-line `make` target. The minimal reviewer path uses the released model rather than retraining.
 
-### Experiment 2: Report Reproduction (Python and JSON Paths)
+### Experiment 2: Deployment Evaluation
+
+Run:
+
+```bash
+make recommender-maxcut
+```
+
+This path does **not** require the parser model.
+
+Outputs:
+- raw recommender CSVs and plots: `artifacts/recommender_maxcut/raw_csv/`
+- post-processed Algorithm 1 outputs: `artifacts/recommender_maxcut/algorithm1/`
+
+Key files:
+- `artifacts/recommender_maxcut/raw_csv/errors_wide.csv`
+- `artifacts/recommender_maxcut/raw_csv/times_wide.csv`
+- `artifacts/recommender_maxcut/raw_csv/prices_wide.csv`
+- `artifacts/recommender_maxcut/raw_csv/recommender_output_errors.pdf`
+- `artifacts/recommender_maxcut/raw_csv/recommender_output_prices.pdf`
+- `artifacts/recommender_maxcut/raw_csv/recommender_output_times.pdf`
+- `artifacts/recommender_maxcut/algorithm1/winners.csv`
+- `artifacts/recommender_maxcut/algorithm1/details.csv`
+
+This corresponds to the paper’s deployment / hardware recommender evaluation on workloads scaling up to 56 qubits.
+
+### Experiment 3: Full Workflow Validation (Python and JSON Paths)
 
 Python-code report path:
 
@@ -297,31 +323,10 @@ The curated JSON smoke subset currently includes one example each for `ADD`, `Fa
 The full Python paper run is time-consuming and takes roughly **10 hours**.
 The full JSON paper run is slower than the smoke path and is intentionally not run by default here.
 
-The Python-code report path reproduces the artifacts corresponding to the [C2Q data record](https://zenodo.org/records/18780001) used in paper evaluation.
+This path corresponds to the paper’s end-to-end validation on 434 Python programs and 100 JSON problem instances.
+The associated paper data record is [C2|Q> Dataset: Reports and Evaluation Inputs (v1.0.0)](https://doi.org/10.5281/zenodo.17071667).
 
-### Experiment 3: Recommender Multi-Device Variation
-
-Run:
-
-```bash
-make recommender-maxcut
-```
-
-This path does **not** require the parser model.
-
-Outputs:
-- raw recommender CSVs and plots: `artifacts/recommender_maxcut/raw_csv/`
-- post-processed Algorithm 1 outputs: `artifacts/recommender_maxcut/algorithm1/`
-
-Key files:
-- `artifacts/recommender_maxcut/raw_csv/errors_wide.csv`
-- `artifacts/recommender_maxcut/raw_csv/times_wide.csv`
-- `artifacts/recommender_maxcut/raw_csv/prices_wide.csv`
-- `artifacts/recommender_maxcut/raw_csv/recommender_output_errors.pdf`
-- `artifacts/recommender_maxcut/raw_csv/recommender_output_prices.pdf`
-- `artifacts/recommender_maxcut/raw_csv/recommender_output_times.pdf`
-- `artifacts/recommender_maxcut/algorithm1/winners.csv`
-- `artifacts/recommender_maxcut/algorithm1/details.csv`
+The paper also reports a proxy-based usability analysis. Those supporting materials are part of the archived evaluation record rather than a primary `make` target in this repository.
 
 ### Supporting Validation (Not a Numbered Paper Experiment)
 

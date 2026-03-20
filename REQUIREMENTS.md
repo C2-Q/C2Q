@@ -55,7 +55,7 @@ Required for parser-backed paths:
 - archival copy: [saved_models_2025_12.zip (Zenodo)](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 
 Referenced paper evaluation data record:
-- [C2Q data record on Zenodo](https://zenodo.org/records/18780001)
+- [C2|Q> Dataset: Reports and Evaluation Inputs (v1.0.0)](https://doi.org/10.5281/zenodo.17071667)
 
 ## Credentials / External Services
 
