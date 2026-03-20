@@ -76,7 +76,18 @@ See:
 python -m pip install -e ".[dev]"
 ```
 
-3. Install the released parser model with `tools/setup_model.py`.
+3. Install the released parser model with:
+
+```bash
+make model-setup
+```
+
+If scripted download is blocked in a given environment, download the model archive in a browser and then run:
+
+```bash
+make model-setup MODEL_ARCHIVE=/path/to/saved_models_2025_12.zip
+```
+
 4. Run:
 
 ```bash
@@ -94,9 +105,24 @@ make reproduce-json-smoke
 
 ### Main Experiment Paths
 
+Experiment 1 is supported primarily through archived notebook/results provenance:
+
+```text
+src/parser/parser_train_results_12_1.ipynb
+src/parser/results/
+```
+
+Experiment 2:
+
 ```bash
 make recommender-maxcut
+```
+
+Experiment 3:
+
+```bash
 make reproduce-smoke
+make reproduce-json-smoke
 make validate-dataset
 ```
 

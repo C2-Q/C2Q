@@ -11,7 +11,7 @@ Status:
 
 Why:
 - source repository is available
-- parser model is archived separately on Zenodo
+- parser model is distributed via a GitHub Release asset, with Zenodo retained as the archival copy
 - paper evaluation data record is archived on Zenodo with DOI `10.5281/zenodo.17071667`
 - primary artifact commands and output locations are documented
 
