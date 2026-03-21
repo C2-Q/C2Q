@@ -390,6 +390,11 @@ Use them as follows:
 
 The `parser` extra does **not** download or install the trained model automatically. For parser-backed use, install the model archive separately with `make model-setup` from a source checkout, or extract the released model archive into your chosen `model_path` and pass that path to the `Parser` API.
 
+If you are using the PyPI path without cloning the repository:
+- download the parser model archive from [GitHub Release](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip) or the [Zenodo archival copy](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
+- extract it manually into a directory of your choice
+- pass that directory to the parser API as `model_path`
+
 Check the installed version:
 
 ```bash
