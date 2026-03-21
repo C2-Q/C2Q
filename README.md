@@ -321,7 +321,7 @@ Outputs:
 The curated JSON smoke subset currently includes one example each for `ADD`, `Factor`, `MaxCut`, and `MIS`.
 
 The full Python paper run is time-consuming and takes roughly **10 hours**.
-The full JSON paper run is slower than the smoke path and is intentionally not run by default here.
+The full JSON paper run is slower than the smoke path, takes roughly **2 hours**, and is intentionally not run by default here.
 
 This path corresponds to the paper’s end-to-end validation on 434 Python programs and 100 JSON problem instances.
 The associated paper data record is [C2|Q> Dataset: Reports and Evaluation Inputs (v1.0.0)](https://doi.org/10.5281/zenodo.17071667).
@@ -383,10 +383,12 @@ python -m pip install --upgrade "c2q-framework[cloud]"
 ```
 
 Use them as follows:
-- `parser`: local parser model support
+- `parser`: installs the parser-related Python dependencies only; the parser model archive is still downloaded and installed separately
 - `recommender`: CSV export and experiment helpers
 - `artifact`: paper-backed local artifact path from a source checkout
 - `cloud`: optional live-provider SDK integrations
+
+The `parser` extra does **not** download or install the trained model automatically. For parser-backed use, install the model archive separately with `make model-setup` from a source checkout, or extract the released model archive into your chosen `model_path` and pass that path to the `Parser` API.
 
 Check the installed version:
 
