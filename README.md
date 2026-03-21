@@ -373,6 +373,8 @@ python -m pip install --upgrade pip
 python -m pip install --upgrade c2q-framework
 ```
 
+PyPI installs are supported on **Python 3.12** for this release.
+
 Optional extras:
 
 ```bash
@@ -385,7 +387,7 @@ python -m pip install --upgrade "c2q-framework[cloud]"
 Use them as follows:
 - `parser`: installs the parser-related Python dependencies only; the parser model archive is still downloaded and installed separately
 - `recommender`: CSV export and experiment helpers
-- `artifact`: paper-backed local artifact path from a source checkout
+- `artifact`: installs the heavier parser + recommender Python dependencies used by the repository artifact path; it is most useful together with a source checkout, not as a pure PyPI-only workflow
 - `cloud`: optional live-provider SDK integrations
 
 The `parser` extra does **not** download or install the trained model automatically. For parser-backed use, install the model archive separately with `make model-setup` from a source checkout, or extract the released model archive into your chosen `model_path` and pass that path to the `Parser` API.
@@ -394,6 +396,8 @@ If you are using the PyPI path without cloning the repository:
 - download the parser model archive from [GitHub Release](https://github.com/C2-Q/C2Q/releases/download/v1.0-artifact/saved_models_2025_12.zip) or the [Zenodo archival copy](https://zenodo.org/records/19061126/files/saved_models_2025_12.zip?download=1)
 - extract it manually into a directory of your choice
 - pass that directory to the parser API as `model_path`
+
+PyPI is intended for lightweight CLI/API use. The paper-backed `make reproduce-*`, `make validate-dataset`, and Docker reviewer paths belong to the source repository workflow, not the pure PyPI workflow.
 
 Check the installed version:
 
