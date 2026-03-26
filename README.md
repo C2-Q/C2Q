@@ -11,7 +11,8 @@
 This repository accompanies the article:
 
 > **"C2|Q>: A Robust Framework for Bridging Classical and Quantum Software Development"**  
-> Accepted at *ACM Transactions on Software Engineering and Methodology (TOSEM)* (in press).  
+> Published in *ACM Transactions on Software Engineering and Methodology (TOSEM)*.  
+> DOI: [10.1145/3803018](https://dl.acm.org/doi/10.1145/3803018)  
 > Preprint: [arXiv:2510.02854](https://arxiv.org/abs/2510.02854)
 
 Artifact-review companion documents:
