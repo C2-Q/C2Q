@@ -15,6 +15,24 @@ This repository accompanies the article:
 > DOI: [10.1145/3803018](https://dl.acm.org/doi/10.1145/3803018)  
 > Preprint: [arXiv:2510.02854](https://arxiv.org/abs/2510.02854)
 
+If you use this project, cite the published TOSEM paper:
+
+```bibtex
+@article{10.1145/3803018,
+  author = {Ye, Boshuai and Khan, Arif Ali and Pihkakoski, Teemu and Liang, Peng and Azeem Akbar, Muhammad and Silveri, Matti and Malmi, Lauri},
+  title = {C2|Q>: A Robust Framework for Bridging Classical and Quantum Software Development},
+  year = {2026},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  issn = {1049-331X},
+  url = {https://doi.org/10.1145/3803018},
+  doi = {10.1145/3803018},
+  journal = {ACM Trans. Softw. Eng. Methodol.},
+  month = mar,
+  keywords = {Quantum Computing, Quantum Software Development, Quantum Programming, Quantum Software Engineering}
+}
+```
+
 Artifact-review companion documents:
 - [INSTALL](INSTALL.md)
 - [REQUIREMENTS](REQUIREMENTS.md)
