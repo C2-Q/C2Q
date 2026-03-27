@@ -40,6 +40,11 @@ Artifact-review companion documents:
 - [Claims Map](docs/CLAIMS_MAP.md)
 - [RCR Draft](docs/RCR_DRAFT.md)
 
+Optional community mirrors (not the primary artifact reproduction path):
+- [Hugging Face paper page](https://huggingface.co/papers/10.1145/3803018)
+- [Hugging Face model repo](https://huggingface.co/boshuai1/c2q-parser-codebert)
+- [Hugging Face dataset repo](https://huggingface.co/datasets/boshuai1/c2q-dataset)
+
 ## What To Run
 
 Use these commands as the main entry points for the paper-backed artifact paths:
@@ -75,6 +80,7 @@ Choose one of these two entry paths:
 
 For the TOSEM RCR report, the recommended primary reproduction path is the source checkout path in Option B.
 Use the Docker path in Option A as the lowest-barrier sanity check.
+Hugging Face mirrors are optional community access points and are not part of the primary reviewer workflow.
 
 ## Option A: Docker (Lowest Setup Burden)
 
