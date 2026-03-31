@@ -157,18 +157,20 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\.venv\Scripts\Activate.ps1
 ```
 
-Environment sanity check:
-
-```bash
-make doctor
-```
-
 If you only need the model-free JSON report path, you can stop here and run:
 
 ```bash
 make reproduce-json-smoke
 make reproduce-json-paper
 ```
+
+If you want to continue to the model-backed Python-code path, install the parser model first in the next section, then run:
+
+```bash
+make doctor
+```
+
+`make doctor` checks Python, LaTeX, and parser-model availability for the model-backed route.
 
 This source-checkout path is the recommended path for the main TOSEM RCR reproduction steps.
 
