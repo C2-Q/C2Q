@@ -1,7 +1,7 @@
 import os
 
 # Path to the folder with problem example scripts
-folder_path = '../usability_comparision/problem_examples_usability'
+folder_path = '/problem_examples_usability'
 
 # Dictionary to store results
 loc_counts = {}
