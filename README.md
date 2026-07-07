@@ -1,7 +1,7 @@
 # C2|Q>: Classical-to-Quantum Software Development Framework
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12-3.13](https://img.shields.io/badge/Python-3.12--3.13-blue.svg)](https://www.python.org/downloads/)
 [![Status: Research Prototype](https://img.shields.io/badge/status-research--prototype-orange)]()
 
 ## Overview
@@ -75,16 +75,17 @@ All generated outputs from the `make`-based experiment paths are written under `
 
 Choose one of these two entry paths:
 
-- Lowest setup burden: Docker. This avoids installing Python 3.12 locally.
-- Fastest local iteration: source checkout with Python 3.12.
+- Lowest setup burden: Docker. This avoids installing Python locally.
+- Fastest local iteration: source checkout with Python 3.12 or 3.13.
 
 For the TOSEM RCR report, the recommended primary reproduction path is the source checkout path in Option B.
+Python 3.12 remains the primary validated RCR environment; Python 3.13 is also supported through conditional dependency pins.
 Use the Docker path in Option A as the lowest-barrier sanity check.
 Hugging Face mirrors are optional community access points and are not part of the primary reviewer workflow.
 
 ## Option A: Docker (Lowest Setup Burden)
 
-Use Docker if you do not want to install Python 3.12 on the host machine.
+Use Docker if you do not want to install a compatible Python interpreter on the host machine.
 
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
@@ -109,7 +110,7 @@ Notes:
 
 ## Option B: Source Checkout (Fastest Local Path)
 
-Use this path if Python 3.12 is already available locally.
+Use this path if Python 3.12 or 3.13 is already available locally. Python 3.12 is the recommended RCR path; Python 3.13 can be used by replacing `python3.12` with `python3.13` and passing `PYTHON=python3.13` to `make` targets.
 
 Primary shell path: `bash` or `zsh` on macOS / Linux.
 
@@ -117,16 +118,18 @@ Check it first:
 
 ```bash
 python3.12 --version
+# or
+python3.13 --version
 ```
 
-If `python3.12` is missing:
+If neither `python3.12` nor `python3.13` is available:
 - macOS:
   - `brew install python@3.12`
   - or install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
 - Linux:
-  - install Python 3.12 using your distribution packages
-  - then check with `python3.12 --version`
-  - if Python 3.12 is not easily available, use the Docker path instead
+  - install Python 3.12 or 3.13 using your distribution packages
+  - then check with `python3.12 --version` or `python3.13 --version`
+  - if Python 3.12 or 3.13 is not easily available, use the Docker path instead
 
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
@@ -137,8 +140,17 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
+For Python 3.13, use:
+
+```bash
+python3.13 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
 Windows PowerShell is supported as a secondary path.
-Equivalent commands:
+Equivalent Python 3.12 commands:
 
 ```powershell
 py -3.12 --version
@@ -150,7 +162,9 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-If Python 3.12 is missing on Windows, install it from [python.org downloads](https://www.python.org/downloads/), then re-run `py -3.12 --version`.
+For Python 3.13 on Windows, replace `py -3.12` with `py -3.13` in the PowerShell commands above. The `make` targets are primarily documented for Unix-like shells; Windows users who want the exact RCR make workflow should use WSL or Docker.
+
+If Python 3.12/3.13 is missing on Windows, install Python from [python.org downloads](https://www.python.org/downloads/), then re-run `py -3.12 --version` or `py -3.13 --version`.
 
 If PowerShell blocks activation, run:
 
@@ -404,7 +418,7 @@ python -m pip install --upgrade pip
 python -m pip install --upgrade c2q-framework
 ```
 
-PyPI installs are supported on **Python 3.12** for this release.
+PyPI installs are supported on **Python 3.12 and 3.13** for this release. Python 3.14 is not currently part of the supported artifact path.
 
 Optional extras:
 
@@ -419,7 +433,7 @@ Use them as follows:
 - `parser`: installs the parser-related Python dependencies only; the parser model archive is still downloaded and installed separately
 - `recommender`: CSV export and experiment helpers
 - `artifact`: installs the heavier parser + recommender Python dependencies used by the repository artifact path; it is most useful together with a source checkout, not as a pure PyPI-only workflow
-- `cloud`: optional live-provider SDK integrations
+- `cloud`: optional live-provider SDK integrations; currently supported only on Python 3.12 because some provider SDK dependency chains do not yet support Python 3.13
 
 The `parser` extra does **not** download or install the trained model automatically. For parser-backed use, install the model archive separately with `make model-setup` from a source checkout, or extract the released model archive into your chosen `model_path` and pass that path to the `Parser` API.
 

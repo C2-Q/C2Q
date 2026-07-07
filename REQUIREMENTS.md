@@ -3,12 +3,13 @@
 ## Operating System
 
 Supported and exercised paths:
-- macOS with Python 3.12 for local source execution
+- macOS with Python 3.12 or 3.13 for local source execution
 - Linux-compatible container path via Docker
 
-Recommended Python version:
-- Python 3.12
-- Python 3.13+ is not part of the supported path for this release
+Supported Python versions:
+- Python 3.12: primary validated RCR environment
+- Python 3.13: supported through conditional dependency pins
+- Python 3.14+: not part of the supported path for this release
 
 ## Hardware
 
@@ -36,7 +37,7 @@ Practical recommendation:
 ## Required Software
 
 Source path:
-- Python 3.12
+- Python 3.12 or 3.13
 - `venv`
 - LaTeX toolchain with `pdflatex`
 
@@ -49,6 +50,8 @@ Python packages are pinned through:
 - [pyproject.toml](pyproject.toml)
 - [requirements-artifact.txt](requirements-artifact.txt)
 - [requirements-dev.txt](requirements-dev.txt)
+
+For Python 3.13, selected dependencies use newer pinned versions because the Python 3.12 wheels for packages such as NumPy, SciPy, pandas, torch, matplotlib, python-sat, and Qiskit Aer are not consistently available for Python 3.13 across the supported platforms.
 
 ## External Data / Models
 
@@ -68,5 +71,7 @@ Primary reviewer path requirements:
 
 Optional only:
 - cloud-provider SDK extras for IBM / IonQ / Quantinuum / AWS integrations
+- cloud-provider SDK extras are currently Python 3.12-only because parts of
+  the provider dependency chain do not yet support Python 3.13
 
 These are not part of the required RCR path.

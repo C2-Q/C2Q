@@ -1,4 +1,5 @@
 PYTHON ?= python3.12
+SUPPORTED_PYTHON_MINORS ?= 3.12 3.13
 VENV ?= .venv
 VENV_PY := $(VENV)/bin/python
 VENV_PIP := $(VENV_PY) -m pip
@@ -37,16 +38,20 @@ $(VENV_PY):
 	@set -e; \
 	if ! command -v $(PYTHON) >/dev/null 2>&1; then \
 		echo "[venv] required interpreter '$(PYTHON)' not found."; \
-		echo "[venv] install Python 3.12 for the source path, or use the lowest-setup reviewer path:"; \
+		echo "[venv] install Python 3.12 or 3.13 for the source path, or use the lowest-setup reviewer path:"; \
 		echo "       make docker-build && make docker-reproduce-json-smoke"; \
 		exit 1; \
 	fi; \
-	if [ "$$($(PYTHON) -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')" != "3.12" ]; then \
+	py_minor="$$($(PYTHON) -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"; \
+	case " $(SUPPORTED_PYTHON_MINORS) " in \
+		*" $$py_minor "*) ;; \
+		*) \
 		echo "[venv] unsupported interpreter '$$($(PYTHON) -c 'import sys; print(sys.executable)')'"; \
-		echo "[venv] C2Q source/reviewer path requires Python 3.12."; \
-		echo "[venv] use 'PYTHON=python3.12 make ...' or use Docker instead."; \
+		echo "[venv] C2Q source/reviewer path supports Python minors: $(SUPPORTED_PYTHON_MINORS)."; \
+		echo "[venv] use 'PYTHON=python3.12 make ...' or 'PYTHON=python3.13 make ...', or use Docker instead."; \
 		exit 1; \
-	fi; \
+		;; \
+	esac; \
 	echo "[venv] preparing $(VENV) using $$($(PYTHON) -c 'import sys; print(sys.executable)')"; \
 	if ! $(PYTHON) -m venv --clear $(VENV); then \
 		echo "[venv] standard bootstrap failed, retrying without ensurepip"; \

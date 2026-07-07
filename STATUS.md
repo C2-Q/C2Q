@@ -33,7 +33,8 @@ Primary functional commands:
 The artifact significantly exceeds minimal functionality. The modular pipeline
 (encoder, deployment, decoder) is documented independently. Multiple execution
 routes (Docker, source checkout, PyPI) lower the barrier for different
-environments. All dependencies are pinned (pyproject.toml uses == throughout).
+environments. Dependencies are pinned, with conditional pins for Python 3.12
+and 3.13 where upstream wheels differ.
 The make target structure separates smoke checks, paper reproduction, and
 dataset validation. Archived outputs allow comparison without re-running.
 Environment assumptions and platform boundaries are documented in REQUIREMENTS.
@@ -47,3 +48,6 @@ Environment assumptions and platform boundaries are documented in REQUIREMENTS.
   reproducibility path.
 - Real-hardware validation (IBM Brisbane, Finland Helmi) requires device
   access and cannot be independently replicated.
+- Python 3.12 is the primary validated RCR environment. Python 3.13 is
+  supported with conditional dependency pins, but Python 3.14+ is not claimed
+  for this release.

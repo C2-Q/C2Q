@@ -7,14 +7,15 @@ This file gives the shortest reviewer-oriented installation path for the C2|Q> a
 Two supported entry paths are documented:
 
 - Lowest setup burden: Docker
-- Fastest local path: source checkout with Python 3.12
+- Fastest local path: source checkout with Python 3.12 or 3.13
 
 For the main TOSEM RCR reproduction path, use the source checkout route.
+Python 3.12 remains the primary validated RCR environment; Python 3.13 is also supported through conditional dependency pins.
 Use Docker as the lowest-barrier preliminary verification route.
 
 ## Option A: Docker (Lowest Setup Burden)
 
-This path avoids installing Python 3.12 on the host machine.
+This path avoids installing Python on the host machine.
 
 ```bash
 git clone https://github.com/C2-Q/C2Q.git
@@ -50,24 +51,26 @@ git clone https://github.com/C2-Q/C2Q.git
 cd C2Q
 ```
 
-2. Confirm that Python 3.12 is installed:
+2. Confirm that Python 3.12 or 3.13 is installed:
 
 Primary shell path: `bash` or `zsh` on macOS / Linux.
 
 ```bash
 python3.12 --version
+# or
+python3.13 --version
 ```
 
-If `python3.12` is not available:
+If neither `python3.12` nor `python3.13` is available:
 - macOS:
   - `brew install python@3.12`
   - or install Python 3.12 from [python.org downloads](https://www.python.org/downloads/)
 - Linux:
-  - install Python 3.12 from your distribution packages
-  - then check with `python3.12 --version`
-  - if Python 3.12 is difficult to install locally, use the Docker reviewer path instead
+  - install Python 3.12 or 3.13 from your distribution packages
+  - then check with `python3.12 --version` or `python3.13 --version`
+  - if Python 3.12/3.13 is difficult to install locally, use the Docker reviewer path instead
 
-3. Create a clean Python 3.12 virtual environment:
+3. Create a clean Python virtual environment:
 
 ```bash
 python3.12 -m venv .venv
@@ -76,8 +79,10 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
+For Python 3.13, replace `python3.12` with `python3.13`. For `make` targets, pass `PYTHON=python3.13`, for example `PYTHON=python3.13 make reproduce-json-smoke`.
+
 Windows PowerShell is supported as a secondary path.
-Equivalent commands:
+Equivalent Python 3.12 commands:
 
 ```powershell
 py -3.12 --version
@@ -87,7 +92,7 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-If Python 3.12 is missing on Windows, install it from [python.org downloads](https://www.python.org/downloads/), then re-run `py -3.12 --version`.
+For Python 3.13 on Windows, replace `py -3.12` with `py -3.13` in the PowerShell commands above. The `make` targets are primarily documented for Unix-like shells; Windows users who want the exact RCR make workflow should use WSL or Docker. If Python 3.12/3.13 is missing on Windows, install it from [python.org downloads](https://www.python.org/downloads/), then re-run the version check.
 
 If PowerShell blocks activation:
 
