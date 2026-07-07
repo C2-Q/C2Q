@@ -34,14 +34,14 @@ If you use this project, cite the published TOSEM paper:
 ```
 
 Artifact-review companion documents:
-- [INSTALL](INSTALL.md)
-- [REQUIREMENTS](REQUIREMENTS.md)
-- [STATUS](STATUS.md)
-- [Claims Map](docs/CLAIMS_MAP.md)
-- [RCR Draft](docs/RCR_DRAFT.md)
+- [INSTALL](https://github.com/C2-Q/C2Q/blob/main/INSTALL.md)
+- [REQUIREMENTS](https://github.com/C2-Q/C2Q/blob/main/REQUIREMENTS.md)
+- [STATUS](https://github.com/C2-Q/C2Q/blob/main/STATUS.md)
+- [Claims Map](https://github.com/C2-Q/C2Q/blob/main/docs/CLAIMS_MAP.md)
+- [RCR Draft](https://github.com/C2-Q/C2Q/blob/main/docs/RCR_DRAFT.md)
 
 Optional community mirrors (not the primary artifact reproduction path):
-- [Hugging Face paper page](https://huggingface.co/papers/10.1145/3803018)
+- [Hugging Face paper page](https://huggingface.co/papers/2510.02854)
 - [Hugging Face model repo](https://huggingface.co/boshuai1/c2q-parser-codebert)
 - [Hugging Face dataset repo](https://huggingface.co/datasets/boshuai1/c2q-dataset)
 
@@ -104,6 +104,8 @@ Notes:
 - outputs are still written under `artifacts/`
 - `make docker-reproduce-json-smoke` does not require the parser model
 - after installing the parser model, the next Docker check is `make docker-smoke`
+- on Linux/WSL, Docker Buildx may need to be installed separately; check with `docker buildx version`
+- on Linux/WSL, if Docker daemon access is denied, either run the Docker make targets with `sudo` or add the user to the `docker` group and reopen the shell
 
 ## Option B: Source Checkout (Fastest Local Path)
 
@@ -316,6 +318,8 @@ Key files:
 - `artifacts/recommender_maxcut/algorithm1/details.csv`
 
 This corresponds to the paper’s deployment / hardware recommender evaluation on workloads scaling up to 56 qubits.
+
+For the RCR path, the recommender uses versioned provider/device metadata stored in the repository and package data. Live provider APIs, calibration snapshots, queue state, device availability, and pricing can change over time and often require credentials. The cached metadata makes Experiment 2 runnable offline and comparable against the archived outputs. Extending the recommender to new devices is done by adding or refreshing the corresponding provider metadata/device descriptor files and rerunning the recommender pipeline.
 
 ### Experiment 3: Full Workflow Validation (Python and JSON Paths)
 

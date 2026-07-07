@@ -42,6 +42,8 @@ Source path:
 
 Docker path:
 - Docker 29 or newer is recommended
+- Docker Buildx is required for the documented image build path; check with `docker buildx version`
+- on Linux/WSL, Docker commands may require `sudo` unless the user has access to the Docker daemon through the `docker` group
 
 Python packages are pinned through:
 - [pyproject.toml](pyproject.toml)

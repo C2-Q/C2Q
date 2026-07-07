@@ -31,6 +31,10 @@ make docker-reproduce-json-smoke
 Docker writes outputs back into the repository under `artifacts/`.
 `make docker-reproduce-json-smoke` is the lowest-setup check because it does not require a local Python installation or the parser model.
 
+Linux/WSL notes:
+- Docker Buildx may need to be installed separately; check with `docker buildx version`.
+- If Docker daemon access is denied, either run the Docker make targets with `sudo` or add the user to the `docker` group and reopen the shell.
+
 If you want the next Docker check after that, install the parser model archive and then run:
 
 ```bash
