@@ -1,6 +1,6 @@
 from qiskit.circuit.library import TwoLocal
 from qiskit.circuit import ParameterVector
-from qiskit.primitives import Estimator
+from qiskit_aer.primitives import Estimator
 from qiskit import transpile
 from qiskit_aer import AerSimulator
 

@@ -51,7 +51,7 @@ Python packages are pinned through:
 - [requirements-artifact.txt](requirements-artifact.txt)
 - [requirements-dev.txt](requirements-dev.txt)
 
-For Python 3.13, selected dependencies use newer pinned versions because the Python 3.12 wheels for packages such as NumPy, SciPy, pandas, torch, matplotlib, python-sat, and Qiskit Aer are not consistently available for Python 3.13 across the supported platforms.
+The core scientific stack is pinned to NumPy 2-compatible versions for both Python 3.12 and 3.13 because Qiskit 2.5 requires NumPy 2 or newer. NumPy is pinned to 2.4.6 rather than the newest 2.x release so that the optional cloud-provider dependency chain remains resolvable on Python 3.12. The Qiskit stack is pinned to Qiskit 2.5.0 and Qiskit Aer 0.17.2 for both supported Python versions.
 
 ## External Data / Models
 
@@ -72,6 +72,6 @@ Primary reviewer path requirements:
 Optional only:
 - cloud-provider SDK extras for IBM / IonQ / Quantinuum / AWS integrations
 - cloud-provider SDK extras are currently Python 3.12-only because parts of
-  the provider dependency chain do not yet support Python 3.13
+  the provider dependency chain do not yet support Python 3.13 consistently
 
 These are not part of the required RCR path.

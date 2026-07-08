@@ -13,7 +13,6 @@ from src.problems.problem import Problem
 from qiskit.circuit.library import PhaseOracle, GroverOperator
 #from qiskit_algorithms import AmplificationProblem, Grover
 from qiskit import qasm2, QuantumCircuit, transpile
-from qiskit.primitives import Sampler
 
 
 # src/algorithms/base_algorithm.py
