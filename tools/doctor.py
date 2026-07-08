@@ -24,6 +24,8 @@ from setup_model import (  # noqa: E402
     check_model_dir,
 )
 
+SUPPORTED_PYTHON_MINORS = {(3, 12), (3, 13)}
+
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
@@ -64,11 +66,11 @@ def main() -> int:
     checks: list[tuple[str, bool, str]] = []
 
     py = sys.version_info
-    if py[:2] != (3, 12):
+    if py[:2] not in SUPPORTED_PYTHON_MINORS:
         checks.append(
             _fail(
                 "python",
-                f"{py.major}.{py.minor}.{py.micro} (need exactly Python 3.12 for the source/reviewer path)",
+                f"{py.major}.{py.minor}.{py.micro} (supported source/reviewer path: Python 3.12 or 3.13)",
             )
         )
     else:
